@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   if (!prompt.trim()) return NextResponse.json({ error: "missing_prompt" }, { status: 400 });
 
   try {
-    const aiRes = await fetch(process.env.AI_API_URL ?? "http://localhost:3000/api/generate", {
+    const aiRes = await fetch(process.env.AI_API_URL ?? "https://zorinai.vercel.app/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: prompt.trim(), model, mode: "generate" }),
