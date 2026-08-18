@@ -110,7 +110,7 @@ export async function middleware(req: NextRequest) {
     }
 
     return NextResponse.redirect(
-      `http://localhost:3000/link-plugin?code=${code}`,
+      `https://zorinai.vercel.app/link-plugin?code=${code}`,
       { status: 307 }
     );
   }
@@ -164,13 +164,13 @@ export async function middleware(req: NextRequest) {
 
   if (host === "zorin.lol" || host === "www.zorin.lol") {
     if (pathname.startsWith("/auth/")) {
-      return NextResponse.redirect(`http://localhost:3000${pathname}`);
+      return NextResponse.redirect(`https://zorinai.vercel.app${pathname}`);
     }
 
     return NextResponse.next();
   }
 
-  if (host === "dash.zorin.lol" || host.includes("localhost")) {
+  if (host === "dash.zorin.lol" || host.includes("zorinai.vercel.app")) {
     if (profile?.banned && !isTester && !pathname.startsWith("/banned")) {
       const url = new URL("/banned", req.url);
       url.searchParams.set("reason", profile.ban_reason ?? "violation");
