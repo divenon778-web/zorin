@@ -100,7 +100,7 @@ function UtmReferralCard() {
               Try it in Zorin
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
-<p style={{ marginTop: 14, fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: INTER }}></p>
+<div style={{ marginTop: 14, fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: INTER, height: 0, overflow: "hidden" }}>&nbsp;</div>
           </div>
         </div>
       </div>
