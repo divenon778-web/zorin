@@ -84,7 +84,7 @@ export async function POST() {
     console.log("[plugin/link] success — code:", deviceCode);
     return NextResponse.json({
       code: deviceCode,
-      authUrl: `http://localhost:3000/link-plugin?code=${deviceCode}`,
+      authUrl: `https://zorinai.vercel.app/link-plugin?code=${deviceCode}`,
     });
 
   } catch (err) {
