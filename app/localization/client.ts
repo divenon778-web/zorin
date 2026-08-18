@@ -110,8 +110,12 @@ const translations: Record<SupportedLocale, Record<string, string>> = {
 };
 
 /* Fallback: if a locale is missing a key, use English */
-function t(locale: SupportedLocale, key: string): string {
-  return translations[locale]?.[key] ?? translations.en[key] ?? key;
+function t(locale: SupportedLocale, key: string, options?: { query?: string }): string {
+  let text = translations[locale]?.[key] ?? translations.en[key] ?? key;
+  if (options?.query !== undefined) {
+    text = text.replace(/{query}/, options.query);
+  }
+  return text;
 }
 
 let listeners: Array<() => void> = [];
@@ -131,7 +135,7 @@ export function useI18n() {
   }, []);
 
   const translate = useCallback(
-    (key: string) => t(locale, key),
+    (key: string, options?: { query?: string }) => t(locale, key, options),
     [locale],
   );
 
