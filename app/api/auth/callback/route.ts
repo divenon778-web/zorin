@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DASH_URL  = "http://localhost:3000";
+const DASH_URL  = "https://zorinai.vercel.app";
 const ERROR_URL = `${DASH_URL}/oautherror`;
 
 export async function GET(req: NextRequest) {
@@ -83,9 +83,8 @@ export async function GET(req: NextRequest) {
       sameSite: "none",
       maxAge:   tokenData.expires_in,
       path:     "/",
-      domain:   "localhost",
+domain:   "zorinai.vercel.app",
     });
-
 
     response.cookies.set("roblox_oauth_state", "", {
       httpOnly: true,
@@ -93,7 +92,7 @@ export async function GET(req: NextRequest) {
       sameSite: "none",
       maxAge:   0,
       path:     "/",
-      domain:   "localhost",
+      domain:   "zorinai.vercel.app",
     });
 
     return response;
