@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     sameSite: "none",
     maxAge:   60 * 10,
     path:     "/",
-    domain:   "localhost",
+    domain:   "zorinai.vercel.app",
   });
 
   return response;
