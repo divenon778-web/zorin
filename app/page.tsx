@@ -100,11 +100,11 @@ function UtmReferralCard() {
               Try it in Zorin
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
-            <p style={{ marginTop: 14, fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: INTER }}>Free to start Â· No credit card required</p>
+<p style={{ marginTop: 14, fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: INTER }}></p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -220,8 +220,6 @@ const COMP_ROWS = [
   { label: "Typed, idiomatic Luau output",    zorin: true,  roblox: false },
   { label: "Context-aware generation",        zorin: true,  roblox: false },
   { label: "Studio plugin integration",       zorin: true,  roblox: true  },
-  { label: "10+ AI model options",            zorin: true,  roblox: false },
-  { label: "Completely free",                 zorin: true,  roblox: true  },
 ];
 
 function Check({ yes }: { yes: boolean }) {
@@ -367,12 +365,10 @@ export default function HomePage() {
               Open Dashboard
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
-            <p style={{ marginTop: 14, fontSize: 11, color: "#fff", fontWeight: 500, fontFamily: INTER }}>Free to start Â· No credit card required</p>
+<p style={{ marginTop: 14, fontSize: 11, color: "#fff", fontWeight: 500, fontFamily: INTER }}></p>
           </div>
         </div>
-      </section>
-
-      <Footer />
+      </div>
     </div>
   );
 }
