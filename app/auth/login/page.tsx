@@ -11,14 +11,24 @@ function resolveRedirect(raw: string | null): string {
   return `https://zorinai.vercel.app${raw}`;
 }
 
-function clearStaleAuthCookies() {
+function clearAllAuthCookies() {
   const projectRef = process.env.NEXT_PUBLIC_SUPABASE_URL?.match(/https:\/\/([^.]+)\.supabase\.co/)?.[1];
-  const names = [
+  const baseNames = [
     projectRef ? `sb-${projectRef}-auth-token` : "",
+    "supabase.auth.token",
   ].filter(Boolean);
-  for (const name of names) {
-    for (const domain of ["zorinai.vercel.app", ".zorinai.vercel.app"]) {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${domain}; sameSite=lax`;
+  
+  // Clear with all possible domains and paths
+  const domains = ["zorinai.vercel.app", ".zorinai.vercel.app", ""];
+  const paths = ["/", "/dashboard", "/auth"];
+  
+  for (const name of baseNames) {
+    for (const domain of domains) {
+      for (const path of paths) {
+        const domainStr = domain ? `domain=${domain};` : "";
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}; ${domainStr} sameSite=lax`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}; ${domainStr} sameSite=none; Secure`;
+      }
     }
   }
 }
@@ -37,20 +47,28 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!mounted) return;
-    clearStaleAuthCookies();
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    clearAllAuthCookies();
+    
+    // Wait a tick for cookies to clear, then check for valid session
+    setTimeout(() => {
       if (!mounted) return;
-      if (session) {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (!error && user) {
-          const params = new URLSearchParams(window.location.search);
-          window.location.href = resolveRedirect(params.get("redirect"));
-          return;
+      supabase.auth.getSession().then(async ({ data: { session } }) => {
+        if (!mounted) return;
+        if (session) {
+          // Verify the session is actually valid by getting the user
+          const { data: { user }, error } = await supabase.auth.getUser();
+          if (!error && user) {
+            const params = new URLSearchParams(window.location.search);
+            window.location.href = resolveRedirect(params.get("redirect"));
+            return;
+          }
+          // Session exists but invalid - sign out and clear cookies again
+          await supabase.auth.signOut();
+          clearAllAuthCookies();
         }
-        await supabase.auth.signOut();
-      }
-      setChecking(false);
-    });
+        setChecking(false);
+      });
+    }, 100);
   }, [mounted]);
 
   const handleLogin = async (e: React.FormEvent) => {
