@@ -56,7 +56,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "gpt-5.6-luna", label: "GPT 5.6 Luna", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/chatgpt.svg" },
+  { id: "gpt-5.6-luna", label: "GPT 5.6 Luna", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg" },
   { id: "nvidia/nemotron-3-ultra-550b-a55b", label: "Nemotron 3 Ultra", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/nvidia.svg" },
   { id: "deepseek-v4-flash", label: "DeepSeek V4 Flash", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/deepseek.svg" },
   { id: "kat-coder-pro-v2.5", label: "Kat Coder Pro v2.5", logo: null },
