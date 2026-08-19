@@ -378,7 +378,7 @@ async function callAgent(
   const model = routeModel(type)
   const messages = [{ role: "user" as const, content: prompt }]
 
-  const { output, model: usedModel } = await callNvidiaWithFallback(system, messages, 45000, model)
+  const { output, model: usedModel } = await callNvidiaWithFallback(system, messages, 25000, model)
   const parsed = extractJson(output)
   return normaliseResponse(parsed, usedModel)
 }

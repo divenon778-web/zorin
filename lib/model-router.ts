@@ -16,11 +16,11 @@ const MODEL_MAP: Record<TaskType, string> = {
   code:        "gpt-5.6-luna",
   world:       "gpt-5.6-luna",
   ui:          "gpt-5.6-luna",
-  test:        "minimaxai/minimax-m3",
+  test:        "DeepSeek-V4-Pro",
   reviewer:    "gpt-5.6-luna",
   performance: "DeepSeek-V4-Pro",
   security:    "DeepSeek-V4-Pro",
-  economy:     "minimaxai/minimax-m3",
+  economy:     "DeepSeek-V4-Pro",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -58,7 +58,7 @@ export function estimateCost(taskType: string): { model: string; estimatedTokens
 
 export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
   if (fast && FAST_TASKS.includes(taskType)) {
-    return "minimaxai/minimax-m3"
+    return "DeepSeek-V4-Pro"
   }
   return MODEL_MAP[taskType] ?? "gpt-5.6-luna"
 }
@@ -73,22 +73,7 @@ export function getModelInfo(model: string): { name: string; provider: string; s
     "DeepSeek-V4-Pro": {
       name: "DeepSeek V4 Pro",
       provider: "hcnsec.cn",
-      strengths: "Performance analysis, security scanning, complex reasoning",
-    },
-    "nvidia/nemotron-3-ultra-550b-a55b": {
-      name: "Nemotron 3 Ultra 550B",
-      provider: "NVIDIA",
-      strengths: "Fallback reasoning (requires NVIDIA_API_KEY)",
-    },
-    "z-ai/glm-5.2": {
-      name: "GLM 5.2",
-      provider: "NVIDIA",
-      strengths: "Fallback creative (requires NVIDIA_API_KEY)",
-    },
-    "minimaxai/minimax-m3": {
-      name: "MiniMax M3",
-      provider: "NVIDIA",
-      strengths: "Fast all-rounder, testing, economy (requires NVIDIA_API_KEY)",
+      strengths: "Performance, security, testing, economy, fallback",
     },
   }
 

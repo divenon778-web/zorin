@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
   const messages = [{ role: "user" as const, content: userPrompt }]
 
   try {
-    const { output, model, fellBack } = await callNvidiaWithFallback(EXPLAIN_SYSTEM, messages, 45000)
+    const { output, model, fellBack } = await callNvidiaWithFallback(EXPLAIN_SYSTEM, messages, 25000)
     const parsed = extractJson(output)
 
     if (parsed.type && parsed.type !== "explanation") {
