@@ -73,32 +73,48 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     if (loading) return;
     setLoading(true);
     setError(null);
 
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password });
-    if (err) { setError(err.message); setLoading(false); return; }
-
-    // Verify user exists and session is active by calling getUser()
-    const params = new URLSearchParams(window.location.search);
-    const targetUrl = resolveRedirect(params.get("redirect"));
-    
-    // Poll for session/user to be available (supabase sets cookie asynchronously)
-    const waitForAuth = async () => {
-      for (let i = 0; i < 15; i++) {
-        await new Promise(r => setTimeout(r, 200));
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (user && !error) {
-          window.location.replace(targetUrl); // use replace to avoid back-button issues
-          return;
-        }
+    try {
+      const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+      if (err) { 
+        console.error("Login error:", err);
+        setError(err.message); 
+        setLoading(false); 
+        return; 
       }
-      // Final attempt - redirect anyway
-      window.location.replace(targetUrl);
-    };
-    
-    waitForAuth();
+
+      console.log("Login successful, waiting for session...");
+      
+      // Verify user exists and session is active by calling getUser()
+      const params = new URLSearchParams(window.location.search);
+      const targetUrl = resolveRedirect(params.get("redirect"));
+      
+      // Poll for session/user to be available (supabase sets cookie asynchronously)
+      const waitForAuth = async () => {
+        for (let i = 0; i < 15; i++) {
+          await new Promise(r => setTimeout(r, 200));
+          const { data: { user }, error } = await supabase.auth.getUser();
+          if (user && !error) {
+            console.log("User verified, redirecting to:", targetUrl);
+            window.location.replace(targetUrl);
+            return;
+          }
+        }
+        // Final attempt - redirect anyway
+        console.log("Timeout waiting for session, redirecting anyway");
+        window.location.replace(targetUrl);
+      };
+      
+      waitForAuth();
+    } catch (err) {
+      console.error("Unexpected login error:", err);
+      setError("An unexpected error occurred");
+      setLoading(false);
+    }
   };
 
   if (!mounted || checking) return null;
