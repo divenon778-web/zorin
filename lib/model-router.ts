@@ -12,14 +12,14 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "DeepSeek-V4-Pro",
-  code:        "DeepSeek-V4-Pro",
-  world:       "DeepSeek-V4-Pro",
-  ui:          "DeepSeek-V4-Pro",
+  planner:     "gpt-5.6-luna",
+  code:        "gpt-5.6-luna",
+  world:       "gpt-5.6-luna",
+  ui:          "gpt-5.6-luna",
   test:        "minimaxai/minimax-m3",
-  reviewer:    "DeepSeek-V4-Pro",
-  performance: "nvidia/nemotron-3-ultra-550b-a55b",
-  security:    "nvidia/nemotron-3-ultra-550b-a55b",
+  reviewer:    "gpt-5.6-luna",
+  performance: "DeepSeek-V4-Pro",
+  security:    "DeepSeek-V4-Pro",
   economy:     "minimaxai/minimax-m3",
 }
 
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "DeepSeek-V4-Pro"
+  return "gpt-5.6-luna"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -60,30 +60,35 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
   if (fast && FAST_TASKS.includes(taskType)) {
     return "minimaxai/minimax-m3"
   }
-  return MODEL_MAP[taskType] ?? "DeepSeek-V4-Pro"
+  return MODEL_MAP[taskType] ?? "gpt-5.6-luna"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
+    "gpt-5.6-luna": {
+      name: "GPT-5.6 Luna",
+      provider: "SeekAI",
+      strengths: "Primary — code generation, planning, review, creative tasks",
+    },
     "DeepSeek-V4-Pro": {
       name: "DeepSeek V4 Pro",
       provider: "hcnsec.cn",
-      strengths: "Primary model — code generation, planning, review, creative tasks",
+      strengths: "Performance analysis, security scanning, complex reasoning",
     },
     "nvidia/nemotron-3-ultra-550b-a55b": {
       name: "Nemotron 3 Ultra 550B",
       provider: "NVIDIA",
-      strengths: "Complex reasoning, security analysis, performance optimization",
+      strengths: "Fallback reasoning (requires NVIDIA_API_KEY)",
     },
     "z-ai/glm-5.2": {
       name: "GLM 5.2",
       provider: "NVIDIA",
-      strengths: "Creative generation, UI/world building",
+      strengths: "Fallback creative (requires NVIDIA_API_KEY)",
     },
     "minimaxai/minimax-m3": {
       name: "MiniMax M3",
       provider: "NVIDIA",
-      strengths: "Fast all-rounder, testing, economy calculations",
+      strengths: "Fast all-rounder, testing, economy (requires NVIDIA_API_KEY)",
     },
   }
 
