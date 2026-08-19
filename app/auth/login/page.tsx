@@ -89,15 +89,28 @@ export default function LoginPage() {
 
       console.log("Login successful, redirecting...");
       
-      // Direct redirect - let middleware on dashboard handle session validation
       const params = new URLSearchParams(window.location.search);
       const targetUrl = resolveRedirect(params.get("redirect"));
       
-      // Small delay to let Supabase set the auth cookie
-      await new Promise(r => setTimeout(r, 500));
+      // Wait for cookie to be set
+      await new Promise(r => setTimeout(r, 800));
       
-      console.log("Redirecting to:", targetUrl);
-      window.location.href = targetUrl;
+      console.log("Navigating to:", targetUrl);
+      
+      // Use assign (adds to history) and also set a fallback
+      window.location.assign(targetUrl);
+      
+      // Fallback: if assign doesn't work, use meta refresh after 1s
+      setTimeout(() => {
+        if (window.location.href.includes("/auth/login")) {
+          console.log("Assign failed, trying meta refresh");
+          const meta = document.createElement("meta");
+          meta.httpEquiv = "refresh";
+          meta.content = `0;url=${targetUrl}`;
+          document.head.appendChild(meta);
+        }
+      }, 1000);
+      
     } catch (err) {
       console.error("Unexpected login error:", err);
       setError("An unexpected error occurred");
