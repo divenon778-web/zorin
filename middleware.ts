@@ -124,7 +124,9 @@ export async function middleware(req: NextRequest) {
     {
       cookieOptions: {
         path: "/",
-        sameSite: "lax",
+        sameSite: "none",
+        secure: true,
+        domain: "zorinai.vercel.app",
       },
       cookies: {
         getAll: () => req.cookies.getAll(),
@@ -132,7 +134,7 @@ export async function middleware(req: NextRequest) {
           cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value));
           response = NextResponse.next({ request: { headers: req.headers } });
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options as any)
+            response.cookies.set(name, value, { ...options, domain: "zorinai.vercel.app", sameSite: "none", secure: true } as any)
           );
         },
       },
