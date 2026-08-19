@@ -13,46 +13,61 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
+        console.log("[Dashboard] Starting auth check...");
+        
         // Wait a bit for cookie to be available
         await new Promise(r => setTimeout(r, 300));
         
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
+        console.log("[Dashboard] Checking session...");
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        console.log("[Dashboard] getUser result:", { user: !!user, error: userError?.message });
+        
+        if (!user || userError) {
+          console.log("[Dashboard] No valid user, redirecting to login");
           window.location.replace("/auth/login?redirect=/dashboard");
           return;
         }
 
         const { data: { session } } = await supabase.auth.getSession();
+        console.log("[Dashboard] getSession result:", { session: !!session });
+        
         if (!session) {
+          console.log("[Dashboard] No session, redirecting to login");
           window.location.replace("/auth/login?redirect=/dashboard");
           return;
         }
 
+        console.log("[Dashboard] Fetching profile...");
         // Fetch profile
         const client = supabase;
-        const { data: profileData } = await client
+        const { data: profileData, error: profileError } = await client
           .from("profiles")
           .select("*")
           .eq("id", user.id)
           .single();
 
-        if (!profileData) {
+        console.log("[Dashboard] Profile fetch result:", { profile: !!profileData, error: profileError?.message });
+
+        if (!profileData || profileError) {
+          console.log("[Dashboard] No profile, redirecting to login");
           window.location.replace("/auth/login?redirect=/dashboard");
           return;
         }
 
         setProfile(profileData);
 
+        console.log("[Dashboard] Fetching projects...");
         // Fetch projects
-        const { data: projectsData } = await client
+        const { data: projectsData, error: projectsError } = await client
           .from("projects")
           .select("id, name, description, created_at, updated_at, user_id, place_id")
           .eq("user_id", user.id)
           .order("updated_at", { ascending: false });
 
+        console.log("[Dashboard] Projects fetch result:", { count: projectsData?.length, error: projectsError?.message });
         setProjects((projectsData as Project[]) ?? []);
       } catch (err) {
-        console.error("Dashboard load error:", err);
+        console.error("[Dashboard] Unexpected error:", err);
         window.location.replace("/auth/login?redirect=/dashboard");
       } finally {
         setLoading(false);
