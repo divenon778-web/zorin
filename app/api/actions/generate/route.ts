@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { runGenerate, isValidModel } from "@/lib/ai"
 import { CORS_HEADERS, handleOptions } from "@/lib/cors"
 
