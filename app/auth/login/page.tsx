@@ -87,29 +87,32 @@ export default function LoginPage() {
         return; 
       }
 
-      console.log("Login successful, redirecting...");
+      console.log("Login successful, forcing redirect...");
       
       const params = new URLSearchParams(window.location.search);
       const targetUrl = resolveRedirect(params.get("redirect"));
       
-      // Wait for cookie to be set
-      await new Promise(r => setTimeout(r, 800));
+      // Wait for cookie
+      await new Promise(r => setTimeout(r, 1000));
       
-      console.log("Navigating to:", targetUrl);
+      console.log("Force navigating to:", targetUrl);
       
-      // Use assign (adds to history) and also set a fallback
-      window.location.assign(targetUrl);
+      // Method 1: Direct href
+      window.location.href = targetUrl;
       
-      // Fallback: if assign doesn't work, use meta refresh after 1s
+      // Method 2: assign
       setTimeout(() => {
-        if (window.location.href.includes("/auth/login")) {
-          console.log("Assign failed, trying meta refresh");
-          const meta = document.createElement("meta");
-          meta.httpEquiv = "refresh";
-          meta.content = `0;url=${targetUrl}`;
-          document.head.appendChild(meta);
+        if (window.location.pathname.startsWith("/auth/")) {
+          window.location.assign(targetUrl);
         }
-      }, 1000);
+      }, 500);
+      
+      // Method 3: meta refresh (always works)
+      setTimeout(() => {
+        if (window.location.pathname.startsWith("/auth/")) {
+          document.body.innerHTML = `<meta http-equiv="refresh" content="0;url=${targetUrl}">`;
+        }
+      }, 1500);
       
     } catch (err) {
       console.error("Unexpected login error:", err);
