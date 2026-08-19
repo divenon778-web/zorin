@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getAdminSupabase } from "@/lib/supabase"
-import { callGroqWithFallback, extractJson } from "@/lib/ai.js"
+import { callNvidiaWithFallback, extractJson } from "@/lib/ai.js"
 
 const EXPLAIN_SYSTEM = `You are Zeugo AI — an expert Roblox Luau architect.
 
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
   const messages = [{ role: "user" as const, content: userPrompt }]
 
   try {
-    const { output, model, fellBack } = await callGroqWithFallback(EXPLAIN_SYSTEM, messages, 45000)
+    const { output, model, fellBack } = await callNvidiaWithFallback(EXPLAIN_SYSTEM, messages, 45000)
     const parsed = extractJson(output)
 
     if (parsed.type && parsed.type !== "explanation") {

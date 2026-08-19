@@ -80,26 +80,6 @@ export function getModelInfo(model: string): { name: string; provider: string; s
       provider: "NVIDIA",
       strengths: "Fast all-rounder, testing, economy calculations",
     },
-    "openai/gpt-oss-120b": {
-      name: "GPT-OSS 120B",
-      provider: "Groq",
-      strengths: "General purpose (legacy fallback)",
-    },
-    "openai/gpt-oss-20b": {
-      name: "GPT-OSS 20B",
-      provider: "Groq",
-      strengths: "Fast generation (legacy fallback)",
-    },
-    "qwen/qwen3.6-27b": {
-      name: "Qwen 3.6 27B",
-      provider: "Groq",
-      strengths: "Code understanding (legacy fallback)",
-    },
-    "groq/compound": {
-      name: "Groq Compound",
-      provider: "Groq",
-      strengths: "Tool-augmented (legacy fallback)",
-    },
   }
 
   return info[model] || { name: model, provider: "unknown", strengths: "General purpose" }

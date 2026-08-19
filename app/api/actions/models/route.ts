@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { CORS_HEADERS, handleOptions } from "@/lib/cors"
-import { ALL_MODELS, getModelProvider } from "@/lib/ai.js"
+import { ALL_MODELS } from "@/lib/ai.js"
 import { getModelInfo } from "@/lib/model-router"
 
 export async function OPTIONS() {
@@ -15,7 +15,6 @@ export async function GET() {
       name: info.name,
       provider: info.provider,
       strengths: info.strengths,
-      isNvidia: getModelProvider(model) === "nvidia",
     }
   })
 

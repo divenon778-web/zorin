@@ -1,4 +1,4 @@
-import { callGroqWithFallback } from "./ai.js"
+import { callNvidiaWithFallback } from "./ai.js"
 
 export interface TestResult {
   id: string
@@ -153,7 +153,7 @@ Write complete Luau code. Never truncate with comments.`
   const user = `## Script\n\`\`\`lua\n${code}\n\`\`\`\n\n## Failures\n${failSummary}`
 
   try {
-    const { output } = await callGroqWithFallback(system, [{ role: "user", content: user }], 30000)
+    const { output } = await callNvidiaWithFallback(system, [{ role: "user", content: user }], 30000)
     const cleaned = output
       .trim()
       .replace(/^```(?:json)?\s*/m, "")

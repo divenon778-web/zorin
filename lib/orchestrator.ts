@@ -1,4 +1,4 @@
-import { callGroqWithFallback, extractJson, normaliseResponse, buildContext, buildScanContext } from "./ai.js"
+import { callNvidiaWithFallback, extractJson, normaliseResponse, buildContext, buildScanContext } from "./ai.js"
 import { routeModel } from "./model-router"
 import { scanSecurity, scanPerformance, ScanResult } from "./scanners"
 
@@ -378,7 +378,7 @@ async function callAgent(
   const model = routeModel(type)
   const messages = [{ role: "user" as const, content: prompt }]
 
-  const { output, model: usedModel } = await callGroqWithFallback(system, messages, 45000, model)
+  const { output, model: usedModel } = await callNvidiaWithFallback(system, messages, 45000, model)
   const parsed = extractJson(output)
   return normaliseResponse(parsed, usedModel)
 }
