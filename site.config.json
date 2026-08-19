@@ -20,7 +20,7 @@
   "stats": [
     { "value": "< 3s",  "label": "Avg generation time" },
     { "value": "Luau",  "label": "Native language output" },
-    { "value": "Free",  "label": "No credit card required" }
+    { "value": "Free Trial",  "label": "No credit card required" }
   ],
   "features": [
     {
