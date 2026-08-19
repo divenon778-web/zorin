@@ -37,23 +37,59 @@ export default function DashboardPage() {
           return;
         }
 
-        console.log("[Dashboard] Fetching profile...");
-        // Fetch profile
+        console.log("[Dashboard] Fetching/creating profile...");
+        // Fetch or create profile
         const client = supabase;
-        const { data: profileData, error: profileError } = await client
+        let { data: profileData, error: profileError } = await client
           .from("profiles")
           .select("*")
           .eq("id", user.id)
           .single();
 
-        console.log("[Dashboard] Profile fetch result:", { profile: !!profileData, error: profileError?.message });
-
+        // If no profile, create a basic one
         if (!profileData || profileError) {
-          console.log("[Dashboard] No profile, redirecting to login");
-          window.location.replace("/auth/login?redirect=/dashboard");
-          return;
+          console.log("[Dashboard] Profile not found, creating one...");
+          const username = user.user_metadata?.username || user.email?.split('@')[0] || `user_${user.id.slice(0, 8)}`;
+          const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || `User ${user.id.slice(0, 8)}`;
+          
+          const { data: newProfile, error: createError } = await client
+            .from("profiles")
+            .insert({
+              id: user.id,
+              username,
+              display_name: displayName,
+              avatar_url: user.user_metadata?.avatar_url || null,
+              roblox_user_id: null,
+              discord_id: null,
+              discord_username: null,
+              discord_avatar: null,
+              is_admin: false,
+              created_at: new Date().toISOString(),
+            })
+            .select()
+            .single();
+          
+          if (createError) {
+            console.log("[Dashboard] Profile create error, using temp:", createError.message);
+            // Use temp profile to allow access
+            profileData = {
+              id: user.id,
+              username,
+              display_name: displayName,
+              avatar_url: null,
+              roblox_user_id: null,
+              discord_id: null,
+              discord_username: null,
+              discord_avatar: null,
+              is_admin: false,
+              created_at: new Date().toISOString(),
+            } as Profile;
+          } else {
+            profileData = newProfile as Profile;
+          }
         }
 
+        console.log("[Dashboard] Profile ready:", { profile: !!profileData });
         setProfile(profileData);
 
         console.log("[Dashboard] Fetching projects...");
@@ -68,7 +104,9 @@ export default function DashboardPage() {
         setProjects((projectsData as Project[]) ?? []);
       } catch (err) {
         console.error("[Dashboard] Unexpected error:", err);
-        window.location.replace("/auth/login?redirect=/dashboard");
+        // Don't redirect on error - let user see dashboard
+        console.log("[Dashboard] Allowing access despite error");
+        setLoading(false);
       } finally {
         setLoading(false);
       }
