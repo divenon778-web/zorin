@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const profile = profileRaw as { username: string; display_name: string } | null;
 
   let prompt = "";
-  let model  = "toolbaz-v4.5-fast";
+  let model  = "nvidia/nemotron-3-ultra-550b-a55b";
   try { const body = await req.json(); prompt = body?.prompt ?? ""; if (body?.model) model = body.model; }
   catch { return NextResponse.json({ error: "invalid_body" }, { status: 400 }); }
 
