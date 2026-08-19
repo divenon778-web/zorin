@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "gpt-5.6-luna",
-  code:        "gpt-5.6-luna",
-  world:       "gpt-5.6-luna",
-  ui:          "gpt-5.6-luna",
-  test:        "DeepSeek-V4-Pro",
-  reviewer:    "gpt-5.6-luna",
-  performance: "DeepSeek-V4-Pro",
-  security:    "DeepSeek-V4-Pro",
-  economy:     "DeepSeek-V4-Pro",
+  planner:     "kat-coder-pro-v2.5",
+  code:        "kat-coder-pro-v2.5",
+  world:       "kat-coder-pro-v2.5",
+  ui:          "kat-coder-pro-v2.5",
+  test:        "kat-coder-pro-v2.5",
+  reviewer:    "kat-coder-pro-v2.5",
+  performance: "kat-coder-pro-v2.5",
+  security:    "kat-coder-pro-v2.5",
+  economy:     "kat-coder-pro-v2.5",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "gpt-5.6-luna"
+  return "kat-coder-pro-v2.5"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -57,23 +57,20 @@ export function estimateCost(taskType: string): { model: string; estimatedTokens
 }
 
 export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
-  if (fast && FAST_TASKS.includes(taskType)) {
-    return "DeepSeek-V4-Pro"
-  }
-  return MODEL_MAP[taskType] ?? "gpt-5.6-luna"
+  return MODEL_MAP[taskType] ?? "kat-coder-pro-v2.5"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "gpt-5.6-luna": {
-      name: "GPT-5.6 Luna",
-      provider: "SeekAI",
-      strengths: "Primary — code generation, planning, review, creative tasks",
+    "kat-coder-pro-v2.5": {
+      name: "Kat Coder Pro v2.5",
+      provider: "hcnsec.cn",
+      strengths: "Primary — code generation, planning, review, all tasks",
     },
     "DeepSeek-V4-Pro": {
       name: "DeepSeek V4 Pro",
       provider: "hcnsec.cn",
-      strengths: "Performance, security, testing, economy, fallback",
+      strengths: "Fallback — complex reasoning (slower)",
     },
   }
 
