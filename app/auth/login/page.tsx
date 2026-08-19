@@ -80,25 +80,25 @@ export default function LoginPage() {
     const { error: err } = await supabase.auth.signInWithPassword({ email, password });
     if (err) { setError(err.message); setLoading(false); return; }
 
-    // Wait for session to be established before redirecting
+    // Verify user exists and session is active by calling getUser()
     const params = new URLSearchParams(window.location.search);
     const targetUrl = resolveRedirect(params.get("redirect"));
     
-    // Poll for session to be available
-    const waitForSession = async () => {
-      for (let i = 0; i < 10; i++) {
+    // Poll for session/user to be available (supabase sets cookie asynchronously)
+    const waitForAuth = async () => {
+      for (let i = 0; i < 15; i++) {
         await new Promise(r => setTimeout(r, 200));
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          window.location.href = targetUrl;
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (user && !error) {
+          window.location.replace(targetUrl); // use replace to avoid back-button issues
           return;
         }
       }
-      // Fallback redirect even if session not detected
-      window.location.href = targetUrl;
+      // Final attempt - redirect anyway
+      window.location.replace(targetUrl);
     };
     
-    waitForSession();
+    waitForAuth();
   };
 
   if (!mounted || checking) return null;
