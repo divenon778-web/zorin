@@ -103,7 +103,7 @@ function UtmReferralCard() {
           </div>
         </div>
       </div>
-  </>;
+  </>);
 }
 
 function studioIcon(type: string) {
@@ -365,7 +365,8 @@ export default function HomePage() {
             </a>
           </div>
         </div>
-      </div>
+      </section>
+      <Footer />
     </div>
   );
 }
