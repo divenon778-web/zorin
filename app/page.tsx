@@ -96,16 +96,15 @@ function UtmReferralCard() {
             <Image src={`${CDN}/icons/logo-white.png`} alt="Zorin AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
             <h2 style={{ fontSize: "clamp(18px,4vw,22px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#fff", marginBottom: 8, lineHeight: 1.25 }}>{source.title}</h2>
             <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, marginBottom: 24, maxWidth: 300 }}>{source.sub}</p>
-            <a href="http://localhost:3000" className="utm-btn" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", color: "#08080e", fontSize: 14, fontWeight: 700, padding: "12px 24px", borderRadius: 10, textDecoration: "none", letterSpacing: "-0.2px", transition: "opacity 0.15s", width: "100%", justifyContent: "center" }}>
+            <a href="https://zorinai.vercel.app" className="utm-btn" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", color: "#08080e", fontSize: 14, fontWeight: 700, padding: "12px 24px", borderRadius: 10, textDecoration: "none", letterSpacing: "-0.2px", transition: "opacity 0.15s", width: "100%", justifyContent: "center" }}>
               Try it in Zorin
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
-
           </div>
         </div>
       </div>
     </div>
-  );
+  </>;
 }
 
 function studioIcon(type: string) {
@@ -365,7 +364,6 @@ export default function HomePage() {
               Open Dashboard
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
-<p style={{ marginTop: 14, fontSize: 11, color: "#fff", fontWeight: 500, fontFamily: INTER }}></p>
           </div>
         </div>
       </div>
