@@ -17,7 +17,7 @@ function clearStaleAuthCookies() {
     projectRef ? `sb-${projectRef}-auth-token` : "",
   ].filter(Boolean);
   for (const name of names) {
-    for (const domain of ["localhost", ".localhost"]) {
+    for (const domain of ["zorinai.vercel.app", ".zorinai.vercel.app"]) {
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${domain}; sameSite=lax`;
     }
   }
@@ -29,10 +29,17 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     clearStaleAuthCookies();
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!mounted) return;
       if (session) {
         const { data: { user }, error } = await supabase.auth.getUser();
         if (!error && user) {
@@ -44,7 +51,7 @@ export default function LoginPage() {
       }
       setChecking(false);
     });
-  }, []);
+  }, [mounted]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +66,7 @@ export default function LoginPage() {
     window.location.href = resolveRedirect(params.get("redirect"));
   };
 
-  if (checking) return null;
+  if (!mounted || checking) return null;
 
   return (
     <div style={S.screen}>
