@@ -12,12 +12,12 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "Kimi-K2.6",
-  code:        "Kimi-K2.6",
-  world:       "Kimi-K2.6",
-  ui:          "Kimi-K2.6",
+  planner:     "DeepSeek-V4-Pro",
+  code:        "DeepSeek-V4-Pro",
+  world:       "DeepSeek-V4-Pro",
+  ui:          "DeepSeek-V4-Pro",
   test:        "minimaxai/minimax-m3",
-  reviewer:    "Kimi-K2.6",
+  reviewer:    "DeepSeek-V4-Pro",
   performance: "nvidia/nemotron-3-ultra-550b-a55b",
   security:    "nvidia/nemotron-3-ultra-550b-a55b",
   economy:     "minimaxai/minimax-m3",
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "Kimi-K2.6"
+  return "DeepSeek-V4-Pro"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -60,14 +60,14 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
   if (fast && FAST_TASKS.includes(taskType)) {
     return "minimaxai/minimax-m3"
   }
-  return MODEL_MAP[taskType] ?? "Kimi-K2.6"
+  return MODEL_MAP[taskType] ?? "DeepSeek-V4-Pro"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "Kimi-K2.6": {
-      name: "Kimi K2.6",
-      provider: "Kimi",
+    "DeepSeek-V4-Pro": {
+      name: "DeepSeek V4 Pro",
+      provider: "hcnsec.cn",
       strengths: "Primary model — code generation, planning, review, creative tasks",
     },
     "nvidia/nemotron-3-ultra-550b-a55b": {
