@@ -55,6 +55,15 @@ const PROJECT_TYPES = [
 ] as const
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
+const AVAILABLE_MODELS = [
+  { id: "gpt-5.6-luna", label: "GPT 5.6 Luna", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/chatgpt.svg" },
+  { id: "nvidia/nemotron-3-ultra-550b-a55b", label: "Nemotron 3 Ultra", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/nvidia.svg" },
+  { id: "deepseek-v4-flash", label: "DeepSeek V4 Flash", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/deepseek.svg" },
+  { id: "kat-coder-pro-v2.5", label: "Kat Coder Pro v2.5", logo: null },
+  { id: "DeepSeek-V4-Pro", label: "DeepSeek V4 Pro", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/deepseek.svg" },
+] as const
+type ModelId = typeof AVAILABLE_MODELS[number]["id"]
+
 const BUILDING_PROMPTS = [
   "What are we building today?", "what we cooking?", "What's the move?", "Drop the idea.",
   "Let's get to work.", "What's on the agenda?", "What are we shipping?", "What's the vision?",
@@ -764,6 +773,8 @@ export default function ProjectChatPage() {
   const [modeMenuOpen,      setModeMenuOpen]      = useState(false)
   const [projectType,       setProjectType]       = useState<ProjectTypeId>("scripting")
   const [typeMenuOpen,      setTypeMenuOpen]      = useState(false)
+  const [selectedModel,     setSelectedModel]     = useState("gpt-5.6-luna")
+  const [modelMenuOpen,     setModelMenuOpen]     = useState(false)
   const [feedbackOpen,      setFeedbackOpen]      = useState(false)
   const [feedbackMsgId,     setFeedbackMsgId]     = useState<string | null>(null)
   const [feedbackSending,   setFeedbackSending]   = useState(false)
@@ -800,6 +811,7 @@ export default function ProjectChatPage() {
   const abortRef       = useRef<AbortController | null>(null)
   const modeMenuRef    = useRef<HTMLDivElement>(null)
   const typeMenuRef    = useRef<HTMLDivElement>(null)
+  const modelMenuRef   = useRef<HTMLDivElement>(null)
   const profileMenuRef = useRef<HTMLDivElement>(null)
   const prevMsgCountRef = useRef(0)
   const prevPluginRef   = useRef<boolean | null>(null)
@@ -808,6 +820,7 @@ export default function ProjectChatPage() {
   const isUnlimited = profile?.unlimited_prompts === true
   const isOverLimit = !isUnlimited && pluginConnected === false && promptUsed >= PROMPT_LIMIT_UNCONNECTED
   const showLimitBanner = !isUnlimited && pluginConnected === false && promptUsed > 0
+  const selectedModelLabel = AVAILABLE_MODELS.find(m => m.id === selectedModel)?.label || "GPT 5.6 Luna"
 
   useEffect(() => {
     if (!projectId) return
@@ -1054,6 +1067,7 @@ export default function ProjectChatPage() {
               locale, language: LOCALES.find(l => l.code === locale)?.label || "English",
               mode: mode === "thinking" ? "generate" : mode,
               type: projectType,
+              model: selectedModel,
               projectId: currentProjectId, projectName: currentProjectName,
               history: historyForBackend.length > 0 ? historyForBackend : undefined,
               datamodel: Object.keys(datamodelSnapshot).length > 0 ? datamodelSnapshot : undefined,
@@ -1530,6 +1544,50 @@ export default function ProjectChatPage() {
                   <span style={{ fontSize: 11, color: "rgba(74,222,128,0.65)", fontWeight: 600 }}>Game scanned</span>
                 </div>
               )}
+
+              {/* model selector */}
+              <div ref={modelMenuRef} style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  onClick={() => setModelMenuOpen(v => !v)}
+                  className="model-pill"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px",
+                    ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600,
+                    cursor: "pointer", color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/chatgpt.svg"
+                    alt="ChatGPT"
+                    style={{ width: 16, height: 16, filter: "brightness(0) invert(1)" }}
+                  />
+                  <span>{selectedModelLabel}</span>
+                  <i className="bi bi-chevron-up" style={{ fontSize: 10, opacity: 0.36, transition: "transform .22s ease", transform: modelMenuOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
+                </button>
+                {modelMenuOpen && (
+                  <div style={{ position: "absolute", bottom: "calc(100% + 9px)", left: 0, width: 220, ...glassModal, borderRadius: 15, padding: 6, zIndex: 100, animation: "menuUp .22s cubic-bezier(.16,1,.3,1)", fontFamily: "'Inter', sans-serif" }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.28)", textTransform: "uppercase", letterSpacing: "0.08em", padding: "5px 10px 5px", marginBottom: 2 }}>Model</div>
+                    {AVAILABLE_MODELS.map((m, i) => (
+                      <button key={m.id} type="button" onClick={() => { setSelectedModel(m.id); setModelMenuOpen(false) }}
+                        style={{ width: "100%", padding: "9px 11px", borderRadius: 10, border: "none", background: selectedModel === m.id ? "rgba(255,255,255,0.07)" : "transparent", cursor: "pointer", textAlign: "left", fontFamily: "'Inter', sans-serif", animation: `fadeSlideUp .18s ${i * 0.04}s cubic-bezier(.16,1,.3,1) both` }} className="g-menu-item">
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", color: "#e8e9ec" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13, fontWeight: 500 }}>
+                            {m.logo ? (
+                              <img src={m.logo} alt={m.label} style={{ width: 16, height: 16, filter: "brightness(0) invert(1)" }} />
+                            ) : (
+                              <i className="bi bi-cpu" style={{ fontSize: 14 }} />
+                            )}
+                            {m.label}
+                          </div>
+                          {selectedModel === m.id && <i className="bi bi-check-lg" style={{ fontSize: 13, animation: "checkPop .2s cubic-bezier(.34,1.56,.64,1) both" }} />}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* text input row */}
