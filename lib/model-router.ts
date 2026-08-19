@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "kat-coder-pro-v2.5",
-  code:        "kat-coder-pro-v2.5",
-  world:       "kat-coder-pro-v2.5",
-  ui:          "kat-coder-pro-v2.5",
-  test:        "kat-coder-pro-v2.5",
-  reviewer:    "kat-coder-pro-v2.5",
-  performance: "kat-coder-pro-v2.5",
-  security:    "kat-coder-pro-v2.5",
-  economy:     "kat-coder-pro-v2.5",
+  planner:     "deepseek-v4-flash",
+  code:        "deepseek-v4-flash",
+  world:       "deepseek-v4-flash",
+  ui:          "deepseek-v4-flash",
+  test:        "deepseek-v4-flash",
+  reviewer:    "deepseek-v4-flash",
+  performance: "deepseek-v4-flash",
+  security:    "deepseek-v4-flash",
+  economy:     "deepseek-v4-flash",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "kat-coder-pro-v2.5"
+  return "deepseek-v4-flash"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -62,6 +62,11 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
+    "deepseek-v4-flash": {
+      name: "DeepSeek V4 Flash",
+      provider: "api.b.ai",
+      strengths: "Fast — code generation, planning, all tasks",
+    },
     "kat-coder-pro-v2.5": {
       name: "Kat Coder Pro v2.5",
       provider: "hcnsec.cn",
