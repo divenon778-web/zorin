@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
   const { data: rowData, error } = await db
     .from("plugin_tokens")
-    .select("token, authorized, expires_at, user_id, roblox_user_id")
+    .select("token, authorized, expires_at, user_id")
     .eq("device_code", code)
     .single()
 
@@ -20,7 +20,6 @@ export async function GET(req: NextRequest) {
   if (error || !rowData) {
     return NextResponse.json({ status: "expired" }, { status: 410 })
   }
-
 
   const expiresAt = new Date(rowData.expires_at).getTime()
   if (isNaN(expiresAt) || expiresAt < Date.now()) {
@@ -31,31 +30,16 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ status: "pending" })
   }
 
-  const data = rowData
+  const { error: sessionError } = await db
+    .from("plugin_sessions")
+    .upsert(
+      { token: rowData.token, user_id: rowData.user_id },
+      { onConflict: "token" }
+    )
 
+  if (sessionError) {
+    console.error("[poll] plugin_sessions upsert:", sessionError.message)
+  }
 
-  await Promise.all([
-    db
-      .from("plugin_sessions")
-      .upsert(
-        { token: data.token, user_id: data.user_id },
-        { onConflict: "token" }
-      )
-      .then(({ error }) => {
-        if (error) console.error("[poll] plugin_sessions upsert:", error.message)
-      }),
-
-    data.roblox_user_id
-      ? db
-          .from("profiles")
-          .update({ roblox_user_id: data.roblox_user_id })
-          .eq("id", data.user_id)
-          .then(({ error }) => {
-            if (error)
-              console.error("[poll] roblox_user_id update:", error.message)
-          })
-      : Promise.resolve(),
-  ])
-
-  return NextResponse.json({ status: "authorized", token: data.token })
+  return NextResponse.json({ status: "authorized", token: rowData.token })
 }
