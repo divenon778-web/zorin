@@ -7,8 +7,8 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 function resolveRedirect(raw: string | null): string {
-  if (!raw || !raw.startsWith("/")) return "https://zorinai.vercel.app/dashboard";
-  return `https://zorinai.vercel.app${raw}`;
+  if (!raw || !raw.startsWith("/")) return "https://zeugoai.vercel.app/dashboard";
+  return `https://zeugoai.vercel.app${raw}`;
 }
 
 function clearAllAuthCookies() {
@@ -19,7 +19,7 @@ function clearAllAuthCookies() {
   ].filter(Boolean);
   
   // Clear with all possible domains and paths
-  const domains = ["zorinai.vercel.app", ".zorinai.vercel.app", ""];
+  const domains = ["zeugoai.vercel.app", ".zeugoai.vercel.app", ""];
   const paths = ["/", "/dashboard", "/auth"];
   
   for (const name of baseNames) {
@@ -126,7 +126,7 @@ export default function LoginPage() {
   return (
     <div style={S.screen}>
       <header style={S.topbar}>
-        <a href="https://zorinai.vercel.app" style={S.brand}>
+        <a href="https://zeugoai.vercel.app" style={S.brand}>
           <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
           <span style={S.brandName}>Zeugo AI</span>
         </a>

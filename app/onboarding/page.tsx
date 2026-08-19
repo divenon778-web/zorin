@@ -91,7 +91,7 @@ export default function OnboardingPage() {
     const url = new URL("https://discord.com/oauth2/authorize");
     url.searchParams.set("client_id",     clientId);
     url.searchParams.set("response_type", "code");
-    url.searchParams.set("redirect_uri",  "https://zorinai.vercel.app/api/auth/discord/callback");
+    url.searchParams.set("redirect_uri",  "https://zeugoai.vercel.app/api/auth/discord/callback");
     url.searchParams.set("scope",         "identify guilds.join");
     url.searchParams.set("state",         userId);
 
@@ -105,7 +105,7 @@ export default function OnboardingPage() {
 
       <div style={S.screen}>
         <header style={S.topbar}>
-          <a href="https://zorinai.vercel.app" style={S.brand}>
+          <a href="https://zeugoai.vercel.app" style={S.brand}>
             <Image
               src="/icons/logo-white.png"
               alt="Zeugo AI"

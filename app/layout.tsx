@@ -1867,7 +1867,7 @@ export const metadata: Metadata = {
     title: "Zeugo AI",
     description: "AI-powered Roblox script generation",
     type: "website",
-    url: "https://zorinai.vercel.app",
+    url: "https://zeugoai.vercel.app",
     images: [
       {
         url: "/icons/CD1CB55E-5059-4BAA-B236-7C57F0A49F5B.png",

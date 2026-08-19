@@ -57,7 +57,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
                 <YoutubeIcon />
               </a>
               <a
-                href="https://zorinai.vercel.app"
+                href="https://zeugoai.vercel.app"
                 target="_blank"
                 rel="noreferrer"
                 style={S.socialLink}
@@ -79,7 +79,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
 
           <div style={S.col}>
             <span style={S.colHead}>Product</span>
-            <a href="https://zorinai.vercel.app" style={S.link}>Dashboard</a>
+            <a href="https://zeugoai.vercel.app" style={S.link}>Dashboard</a>
             <Link href="/" style={S.link}>Home</Link>
           </div>
 

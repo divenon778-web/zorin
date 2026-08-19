@@ -1,7 +1,7 @@
 local HttpService  = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 
-local BASE_URL            = "https://zorinai.vercel.app"
+local BASE_URL            = "https://zeugoai.vercel.app"
 local LINK_URL            = BASE_URL .. "/api/plugin/link"
 local POLL_URL            = BASE_URL .. "/api/plugin/poll"
 local PROJECTS_URL        = BASE_URL .. "/api/plugin/projects"

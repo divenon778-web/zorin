@@ -195,7 +195,7 @@ export function LinkPluginClient({
             </button>
           ) : (
             <a
-              href={`https://zorinai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${effectiveCode || ""}`)}`}
+              href={`https://zeugoai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${effectiveCode || ""}`)}`}
               style={S.btnPrimary}
             >
               Sign in to continue
@@ -218,7 +218,7 @@ export function LinkPluginClient({
           <h1 style={S.title}>Sign in first</h1>
           <p style={S.sub}>You need a Zeugo AI account before Studio can connect.</p>
           <a
-            href={`https://zorinai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${code}`)}`}
+            href={`https://zeugoai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${code}`)}`}
             style={S.btnPrimary}
           >
             Sign in to continue
@@ -250,7 +250,7 @@ export function LinkPluginClient({
             </div>
           </div>
 
-          <a href="https://zorinai.vercel.app" style={S.btnGhost}>Open dashboard</a>
+          <a href="https://zeugoai.vercel.app" style={S.btnGhost}>Open dashboard</a>
         </Card>
       </Shell>
     );
@@ -472,7 +472,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
       <div className="glc-shell">
         <header className="glc-topbar">
-          <a href="https://zorinai.vercel.app" className="glc-brand">
+          <a href="https://zeugoai.vercel.app" className="glc-brand">
             <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
             <span className="glc-brand-name">Zeugo AI</span>
           </a>

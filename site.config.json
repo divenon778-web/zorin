@@ -6,9 +6,9 @@
     "sub": "by Zeugo Studios"
   },
   "links": {
-    "home": "https://zorinai.vercel.app",
-    "dashboard": "https://zorinai.vercel.app/dashboard",
-    "getStarted": "https://zorinai.vercel.app/auth/login?redirect=/dashboard",
+    "home": "https://zeugoai.vercel.app",
+    "dashboard": "https://zeugoai.vercel.app/dashboard",
+    "getStarted": "https://zeugoai.vercel.app/auth/login?redirect=/dashboard",
     "roblox": "https://create.roblox.com/store/asset/131066175415119/Galaxium-AI",
     "github": null
   },

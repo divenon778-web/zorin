@@ -29,7 +29,7 @@ export default function SignupPage() {
     if (err) { setError(err.message); setLoading(false); return; }
 
     const token = makeToken();
-    window.location.href = `https://zorinai.vercel.app/onboarding?${token}`;
+    window.location.href = `https://zeugoai.vercel.app/onboarding?${token}`;
   };
 
   const fields = [
@@ -41,7 +41,7 @@ export default function SignupPage() {
   return (
     <div style={S.screen}>
       <header style={S.topbar}>
-        <a href="https://zorinai.vercel.app" style={S.brand}>
+        <a href="https://zeugoai.vercel.app" style={S.brand}>
           <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
           <span style={S.brandName}>Zeugo AI</span>
         </a>

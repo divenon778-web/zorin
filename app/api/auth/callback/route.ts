@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DASH_URL  = "https://zorinai.vercel.app";
+const DASH_URL  = "https://zeugoai.vercel.app";
 const ERROR_URL = `${DASH_URL}/oautherror`;
 
 export async function GET(req: NextRequest) {
@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
       sameSite: "none",
       maxAge:   tokenData.expires_in,
       path:     "/",
-domain:   "zorinai.vercel.app",
+domain:   "zeugoai.vercel.app",
     });
 
     response.cookies.set("roblox_oauth_state", "", {
@@ -92,7 +92,7 @@ domain:   "zorinai.vercel.app",
       sameSite: "none",
       maxAge:   0,
       path:     "/",
-      domain:   "zorinai.vercel.app",
+      domain:   "zeugoai.vercel.app",
     });
 
     return response;

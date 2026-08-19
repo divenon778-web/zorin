@@ -32,46 +32,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
   }, []);
 
   const defaultActions = (
-    <a
-      href="https://zorinai.vercel.app"
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 6,
-        padding: "7px 14px",
-        background: "rgba(255,255,255,0.07)",
-        border: "1px solid rgba(255,255,255,0.10)",
-        borderRadius: 9,
-        color: "#fff",
-        fontSize: 13,
-        fontWeight: 600,
-        cursor: "pointer",
-        fontFamily: "inherit",
-        textDecoration: "none",
-        transition: "background 0.18s, border-color 0.18s, transform 0.18s, box-shadow 0.18s",
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
-      }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLAnchorElement;
-        el.style.background = "rgba(255,255,255,0.10)";
-        el.style.borderColor = "rgba(255,255,255,0.20)";
-        el.style.transform = "translateY(-1px)";
-        el.style.boxShadow = "0 4px 16px rgba(0,0,0,0.3)";
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLAnchorElement;
-        el.style.background = "rgba(255,255,255,0.07)";
-        el.style.borderColor = "rgba(255,255,255,0.10)";
-        el.style.transform = "translateY(0)";
-        el.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.10)";
-      }}
-    >
-      Get Started
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-        <line x1="5" y1="12" x2="19" y2="12" />
-        <polyline points="12 5 19 12 12 19" />
-      </svg>
-    </a>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px" }} />
   );
 
   const actions = rightSlot ?? defaultActions;
@@ -227,7 +188,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
             Home
           </Link>
           <a
-            href="https://zorinai.vercel.app"
+            href="https://zeugoai.vercel.app"
             className="g-nav-link"
             style={navLinkStyle(activePage === "dashboard")}
           >
@@ -258,7 +219,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
             Home
           </Link>
           <a
-            href="https://zorinai.vercel.app"
+            href="https://zeugoai.vercel.app"
             className="g-nav-link"
             style={{ ...navLinkStyle(activePage === "dashboard"), padding: "10px 12px", borderRadius: 10 }}
             onClick={() => setMenuOpen(false)}

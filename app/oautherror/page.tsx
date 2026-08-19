@@ -27,7 +27,7 @@ function OAuthErrorContent() {
     <div style={S.screen}>
 
       <header style={S.topbar}>
-        <a href="https://zorinai.vercel.app" style={S.brand}>
+        <a href="https://zeugoai.vercel.app" style={S.brand}>
           <Image src="/icons/logo-white.png" alt="Zeugo AI" width={26} height={26} style={{ objectFit: "contain" }} />
           <span style={S.brandName}>Zeugo AI</span>
         </a>
@@ -55,13 +55,13 @@ function OAuthErrorContent() {
         <p  style={S.desc}>{info.desc}</p>
 
         <div style={S.actions}>
-          <a href="https://zorinai.vercel.app" style={S.btnPrimary}>
+          <a href="https://zeugoai.vercel.app" style={S.btnPrimary}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
             Try Again
           </a>
-          <a href="https://zorinai.vercel.app" style={S.btnGhost}>
+          <a href="https://zeugoai.vercel.app" style={S.btnGhost}>
             Go Home
           </a>
         </div>
