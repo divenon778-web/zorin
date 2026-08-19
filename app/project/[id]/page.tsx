@@ -1059,41 +1059,9 @@ export default function ProjectChatPage() {
               datamodel: Object.keys(datamodelSnapshot).length > 0 ? datamodelSnapshot : undefined,
               gameModel: gameModelJson || undefined,
               pluginToken: pluginToken || undefined,
-              stream: true,
             }),
           })
           if (!res.ok) throw new Error("server error")
-
-          const contentType = res.headers.get("content-type") || ""
-          if (contentType.includes("text/plain") && res.body) {
-            const reader = res.body.getReader()
-            const decoder = new TextDecoder()
-            let meta: { __model?: string; __provider?: string } | null = null
-            let output = ""
-
-            while (true) {
-              const { done, value } = await reader.read()
-              if (done) break
-              const chunk = decoder.decode(value, { stream: true })
-              const lines = chunk.split("\n")
-              for (const line of lines) {
-                if (!meta && line.startsWith("{")) {
-                  try { meta = JSON.parse(line) } catch {}
-                } else if (line.trim()) {
-                  output += line
-                }
-              }
-            }
-
-            try {
-              const parsed = JSON.parse(output)
-              if (meta) { parsed.__model = meta.__model; parsed.__provider = meta.__provider }
-              return parsed
-            } catch {
-              return { type: "chat", message: output || "Empty response", __model: meta?.__model || "" }
-            }
-          }
-
           return await res.json()
         } finally { clearTimeout(timeout) }
       }

@@ -11,6 +11,7 @@ local GAME_MODEL_URL      = BASE_URL .. "/api/plugin/game-model"
 local SET_ROBLOX_USER_URL = BASE_URL .. "/api/plugin/set-roblox-user"
 
 local ORCHESTRATE_URL    = BASE_URL .. "/api/plugin/orchestrate"
+local GENERATE_URL       = BASE_URL .. "/api/plugin/generate"
 local CHECKPOINT_URL     = BASE_URL .. "/api/plugin/checkpoint"
 local MEMORY_URL         = BASE_URL .. "/api/plugin/memory"
 local SCAN_URL           = BASE_URL .. "/api/plugin/scan"

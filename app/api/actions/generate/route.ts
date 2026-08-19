@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server"
-import { runGenerateStream, runGenerate, isValidModel } from "@/lib/ai"
-import { CORS_HEADERS, handleOptions } from "@/lib/cors"
+import { NextRequest } from "next/server"
+import { runGenerate, isValidModel } from "@/lib/ai"
+import { CORS_HEADERS } from "@/lib/cors"
 
-export const maxDuration = 60
+export const runtime = "edge"
 
 export async function OPTIONS() {
-  return handleOptions()
+  return new Response(null, { status: 204, headers: CORS_HEADERS })
 }
 
 export async function POST(req: NextRequest) {
@@ -18,24 +18,18 @@ export async function POST(req: NextRequest) {
     const datamodel   = body.datamodel   || null
     const gameModel   = body.gameModel   || null
     const history     = body.history     || []
-    const stream      = body.stream      !== false
 
     if (!prompt) {
-      return NextResponse.json({ error: "prompt required" }, { status: 400, headers: CORS_HEADERS })
+      return Response.json({ error: "prompt required" }, { status: 400, headers: CORS_HEADERS })
     }
 
     const effectiveModel = model && isValidModel(model) ? model : ""
 
-    if (stream) {
-      const result = await runGenerateStream({ prompt, model: effectiveModel, projectName, datamodel, gameModel, history })
-      return result
-    }
-
     const result = await runGenerate({ prompt, model: effectiveModel, projectName, datamodel, gameModel, history })
-    return NextResponse.json(result, { headers: CORS_HEADERS })
+    return Response.json(result, { headers: CORS_HEADERS })
   } catch (err) {
     console.error("[/api/actions/generate]", err)
-    return NextResponse.json(
+    return Response.json(
       { type: "chat", message: "Something went wrong. Please try again.", __model: "error" },
       { status: 500, headers: CORS_HEADERS }
     )
