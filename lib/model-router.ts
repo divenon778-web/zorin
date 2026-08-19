@@ -65,12 +65,12 @@ export function getModelInfo(model: string): { name: string; provider: string; s
     "kat-coder-pro-v2.5": {
       name: "Kat Coder Pro v2.5",
       provider: "hcnsec.cn",
-      strengths: "Primary — code generation, planning, review, all tasks",
+      strengths: "Fast — code generation, planning, all tasks",
     },
     "DeepSeek-V4-Pro": {
-      name: "DeepSeek V4 Pro",
+      name: "DeepSeek V4 Pro (Nemotron 3 Ultra)",
       provider: "hcnsec.cn",
-      strengths: "Fallback — complex reasoning (slower)",
+      strengths: "High quality fallback — complex reasoning, better code (slower)",
     },
   }
 
