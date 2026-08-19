@@ -1059,9 +1059,49 @@ export default function ProjectChatPage() {
               datamodel: Object.keys(datamodelSnapshot).length > 0 ? datamodelSnapshot : undefined,
               gameModel: gameModelJson || undefined,
               pluginToken: pluginToken || undefined,
+              stream: true,
             }),
           })
           if (!res.ok) throw new Error("server error")
+
+          const contentType = res.headers.get("content-type") || ""
+          if (contentType.includes("text/event-stream") && res.body) {
+            const reader = res.body.getReader()
+            const decoder = new TextDecoder()
+            let meta: { __model?: string; __provider?: string } | null = null
+            let output = ""
+            let buffer = ""
+
+            while (true) {
+              const { done, value } = await reader.read()
+              if (done) break
+              buffer += decoder.decode(value, { stream: true })
+
+              const lines = buffer.split("\n")
+              buffer = lines.pop() || ""
+
+              for (const line of lines) {
+                if (!line.startsWith("data: ")) continue
+                const data = line.slice(6).trim()
+                if (data === "[DONE]") continue
+                try {
+                  const parsed = JSON.parse(data)
+                  const delta = parsed.choices?.[0]?.delta
+                  if (delta?.content) output += delta.content
+                  if (!meta && parsed.__model) meta = parsed
+                } catch {}
+              }
+            }
+
+            try {
+              const parsed = JSON.parse(output)
+              if (meta) { parsed.__model = meta.__model; parsed.__provider = meta.__provider }
+              return parsed
+            } catch {
+              return { type: "chat", message: output || "Empty response", __model: meta?.__model || "" }
+            }
+          }
+
           return await res.json()
         } finally { clearTimeout(timeout) }
       }
