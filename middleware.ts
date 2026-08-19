@@ -179,12 +179,8 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (pathname === "/") {
-      const url = new URL(user ? "/dashboard" : "/auth/login", req.url);
-      if (!user) url.searchParams.set("redirect", "/dashboard");
-      return NextResponse.redirect(url);
-    }
-
+    // Allow dashboard and other protected routes through - client-side will verify session
+    // This prevents redirect loops while Supabase cookie propagates
     return response;
   }
 
