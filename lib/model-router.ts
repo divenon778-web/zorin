@@ -12,12 +12,12 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "nvidia/nemotron-3-ultra-550b-a55b",
-  code:        "z-ai/glm-5.2",
-  world:       "z-ai/glm-5.2",
-  ui:          "z-ai/glm-5.2",
+  planner:     "Kimi-K2.6",
+  code:        "Kimi-K2.6",
+  world:       "Kimi-K2.6",
+  ui:          "Kimi-K2.6",
   test:        "minimaxai/minimax-m3",
-  reviewer:    "nvidia/nemotron-3-ultra-550b-a55b",
+  reviewer:    "Kimi-K2.6",
   performance: "nvidia/nemotron-3-ultra-550b-a55b",
   security:    "nvidia/nemotron-3-ultra-550b-a55b",
   economy:     "minimaxai/minimax-m3",
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "nvidia/nemotron-3-ultra-550b-a55b"
+  return "Kimi-K2.6"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -60,20 +60,25 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
   if (fast && FAST_TASKS.includes(taskType)) {
     return "minimaxai/minimax-m3"
   }
-  return MODEL_MAP[taskType] ?? "nvidia/nemotron-3-ultra-550b-a55b"
+  return MODEL_MAP[taskType] ?? "Kimi-K2.6"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
+    "Kimi-K2.6": {
+      name: "Kimi K2.6",
+      provider: "Kimi",
+      strengths: "Primary model — code generation, planning, review, creative tasks",
+    },
     "nvidia/nemotron-3-ultra-550b-a55b": {
       name: "Nemotron 3 Ultra 550B",
       provider: "NVIDIA",
-      strengths: "Complex reasoning, planning, code review, security analysis",
+      strengths: "Complex reasoning, security analysis, performance optimization",
     },
     "z-ai/glm-5.2": {
       name: "GLM 5.2",
       provider: "NVIDIA",
-      strengths: "Creative generation, code writing, UI/world building",
+      strengths: "Creative generation, UI/world building",
     },
     "minimaxai/minimax-m3": {
       name: "MiniMax M3",
