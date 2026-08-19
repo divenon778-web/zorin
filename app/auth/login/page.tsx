@@ -87,29 +87,17 @@ export default function LoginPage() {
         return; 
       }
 
-      console.log("Login successful, waiting for session...");
+      console.log("Login successful, redirecting...");
       
-      // Verify user exists and session is active by calling getUser()
+      // Direct redirect - let middleware on dashboard handle session validation
       const params = new URLSearchParams(window.location.search);
       const targetUrl = resolveRedirect(params.get("redirect"));
       
-      // Poll for session/user to be available (supabase sets cookie asynchronously)
-      const waitForAuth = async () => {
-        for (let i = 0; i < 15; i++) {
-          await new Promise(r => setTimeout(r, 200));
-          const { data: { user }, error } = await supabase.auth.getUser();
-          if (user && !error) {
-            console.log("User verified, redirecting to:", targetUrl);
-            window.location.replace(targetUrl);
-            return;
-          }
-        }
-        // Final attempt - redirect anyway
-        console.log("Timeout waiting for session, redirecting anyway");
-        window.location.replace(targetUrl);
-      };
+      // Small delay to let Supabase set the auth cookie
+      await new Promise(r => setTimeout(r, 500));
       
-      waitForAuth();
+      console.log("Redirecting to:", targetUrl);
+      window.location.href = targetUrl;
     } catch (err) {
       console.error("Unexpected login error:", err);
       setError("An unexpected error occurred");
