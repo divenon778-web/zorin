@@ -103,7 +103,6 @@ function UtmReferralCard() {
           </div>
         </div>
       </div>
-    </div>
   </>;
 }
 
