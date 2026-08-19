@@ -192,6 +192,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon\\.ico|icons/|api/).*)"],
-  //                                                              ^^^^^ also excludes /api/* at the matcher level
+  matcher: ["/((?!_next/static|_next/image|favicon\\.ico|icons/|api/|auth/).*)"],
+  //                                                              ^^^^^^^^^^^ also excludes /auth/* at the matcher level
 };
