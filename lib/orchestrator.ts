@@ -1,6 +1,6 @@
 import { callGroqWithFallback, extractJson, normaliseResponse, buildContext, buildScanContext } from "./ai.js"
-import { routeModel } from "./model-router.js"
-import { scanSecurity, scanPerformance, ScanResult } from "./scanners.js"
+import { routeModel } from "./model-router"
+import { scanSecurity, scanPerformance, ScanResult } from "./scanners"
 
 export type AgentType =
   | "planner"
