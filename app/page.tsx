@@ -317,14 +317,19 @@ export default function HomePage() {
           <p className="anim-fade-up delay-2" style={{ fontSize: "clamp(15px,3vw,17px)", color: "#fff", lineHeight: 1.7, marginBottom: 36, maxWidth: 500, fontFamily: INTER }}>
             {hero.sub}
           </p>
-          <div className="anim-fade-up delay-3 hero-ctas-mobile" style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center", marginBottom: 48 }}>
-            <a href={links.dashboard} style={{ background: "#fff", color: "#08080e", fontWeight: 700, fontSize: 14, borderRadius: 10, padding: "12px 24px", border: "none", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", letterSpacing: "-0.2px", fontFamily: INTER }}>
+<div className="anim-fade-up delay-3 hero-ctas-mobile" style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center", marginBottom: 48 }}>
+            <a href={links.getStarted} style={{ background: "#fff", color: "#08080e", fontWeight: 700, fontSize: 14, borderRadius: 10, padding: "12px 24px", border: "none", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", letterSpacing: "-0.2px", fontFamily: INTER }}>
+              Get Started
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+            </a>
+            <a href={links.dashboard} style={{ border: "1px solid rgba(255,255,255,0.10)", color: "#fff", fontWeight: 500, fontSize: 14, borderRadius: 10, padding: "12px 24px", background: "rgba(255,255,255,0.03)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8, fontFamily: INTER }}>
               Open Dashboard
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
             {links.roblox && (
               <a href={links.roblox} target="_blank" rel="noreferrer" style={{ border: "1px solid rgba(255,255,255,0.10)", color: "#fff", fontWeight: 500, fontSize: 14, borderRadius: 10, padding: "12px 24px", background: "rgba(255,255,255,0.03)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8, fontFamily: INTER }}>
                 Studio Plugin
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
               </a>
             )}
           </div>
