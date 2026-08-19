@@ -1,0 +1,76 @@
+{
+  "maintenance": false,
+  "tbdown": false,
+  "brand": {
+    "name": "Zorin AI",
+    "sub": "by Zorin Studios"
+  },
+  "links": {
+    "home": "https://zorinai.vercel.app",
+    "dashboard": "https://zorinai.vercel.app",
+    "roblox": "https://create.roblox.com/store/asset/131066175415119/Galaxium-AI",
+    "github": null
+  },
+  "hero": {
+    "badge": "Now in Beta · Free to use",
+    "heading": "Generate Roblox scripts",
+    "headingGradient": "with a single prompt.",
+    "sub": "Zorin AI writes production-ready Luau code, full instance trees, and wired-up service architectures — just describe what you want to build."
+  },
+  "stats": [
+    { "value": "< 3s",  "label": "Avg generation time" },
+    { "value": "Luau",  "label": "Native language output" },
+    { "value": "Free",  "label": "No credit card required" }
+  ],
+  "features": [
+    {
+      "title": "Quick Sign Up",
+      "desc": "Create a free account with just your email. No Roblox OAuth, no third-party logins — get started in seconds.",
+      "color": "#f5a623",
+      "glow": "rgba(245,166,35,0.10)",
+      "icon": "roblox"
+    },
+    {
+      "title": "Studio Plugin",
+      "desc": "Generate scripts directly inside Roblox Studio with our official plugin. No copy-pasting — code lands exactly where you need it.",
+      "color": "#8b7ff5",
+      "glow": "rgba(139,127,245,0.12)",
+      "icon": "plugin"
+    },
+    {
+      "title": "Completely Free",
+      "desc": "No credit card required. Zorin AI is completely free to use for every Roblox developer.",
+      "color": "#3ecf8e",
+      "glow": "rgba(62,207,142,0.10)",
+      "icon": "free"
+    },
+    {
+      "title": "Multiple AI Models",
+      "desc": "Choose from multiple AI models depending on your task — fast generation for quick scripts, or more powerful models for complex systems.",
+      "color": "#5b96f7",
+      "glow": "rgba(91,150,247,0.12)",
+      "icon": "models"
+    },
+    {
+      "title": "Very Simple to Use",
+      "desc": "No prompt engineering needed. Just describe what you want to build in plain English and Zorin AI handles the rest.",
+      "color": "#a78bfa",
+      "glow": "rgba(167,139,250,0.10)",
+      "icon": "simple"
+    },
+    {
+      "title": "Luau-Native Output",
+      "desc": "Every script is written in idiomatic Luau — typed, clean, and ready to paste straight into Studio.",
+      "color": "#7eb3fa",
+      "glow": "rgba(126,179,250,0.10)",
+      "icon": "code"
+    }
+  ],
+  "cta": {
+    "heading": "Ready to build?",
+    "sub": "Sign up free and generate your first script in under a minute."
+  },
+  "footer": {
+    "copy": "Zorin Studios"
+  }
+}
