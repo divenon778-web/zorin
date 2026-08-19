@@ -364,7 +364,7 @@ function AdminPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
               <div style={{ width: 32, height: 32, borderRadius: 10, ...glassPill, display: "flex", alignItems: "center", justifyContent: "center" }}><i className="bi bi-shield-check" style={{ fontSize: 15 }} /></div>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 800, letterSpacing: "-0.02em", color: "#fff" }}>Admin</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,.35)" }}>zorin control panel</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,.35)" }}>zeugo control panel</div>
               </div>
             </div>
             <button type="button" onClick={close} style={{ width: 30, height: 30, borderRadius: 8, ...glassPill, border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, transition: "all .18s" }}><i className="bi bi-x-lg" /></button>
@@ -628,8 +628,8 @@ export default function DashboardShell({ profile, initialProjects }: { profile: 
           animation: "gHeaderIn 0.45s cubic-bezier(0.16,1,0.3,1) both",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9, animation: "gFloat 6s ease-in-out infinite" }}>
-            <Image src={`${CDN}/icons/logo-white.png`} alt="Zorin" width={22} height={22} style={{ objectFit: "contain" }} />
-            <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.02em", color: "#fff" }}>Zorin</span>
+            <Image src={`${CDN}/icons/logo-white.png`} alt="Zeugo" width={22} height={22} style={{ objectFit: "contain" }} />
+            <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.02em", color: "#fff" }}>Zeugo</span>
           </div>
 
 

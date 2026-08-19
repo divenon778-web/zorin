@@ -198,7 +198,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
         >
           <Image
             src={`${CDN}/icons/logo-white.png`}
-            alt="Zorin AI"
+            alt="Zeugo AI"
             width={22}
             height={22}
             style={{ objectFit: "contain" }}
@@ -211,7 +211,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
               color: "#fff",
             }}
           >
-            Zorin AI
+            Zeugo AI
           </span>
         </Link>
         <nav

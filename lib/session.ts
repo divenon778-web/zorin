@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-export interface ZorinSession {
+export interface ZeugoSession {
   userId:      string;
   username:    string;
   displayName: string;
@@ -13,13 +13,13 @@ export interface ZorinSession {
 
 
 
-export async function getSession(): Promise<ZorinSession | null> {
+export async function getSession(): Promise<ZeugoSession | null> {
   const cookieStore = await cookies();
-  const raw = cookieStore.get("zorin_session")?.value;
+  const raw = cookieStore.get("zeugo_session")?.value;
   if (!raw) return null;
 
   try {
-    const session: ZorinSession = JSON.parse(raw);
+    const session: ZeugoSession = JSON.parse(raw);
 
     if (Date.now() > session.expiresAt - 60_000) return null;
     return session;

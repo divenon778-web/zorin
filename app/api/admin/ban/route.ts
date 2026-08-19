@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `User ${discord_id} banned on Zorin.`
+      message: `User ${discord_id} banned on Zeugo.`
     });
 
   } catch (err: any) {

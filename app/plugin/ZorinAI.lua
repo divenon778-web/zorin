@@ -1,7 +1,7 @@
 local HttpService  = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 
-local BASE_URL            = "http://localhost:3000"
+local BASE_URL            = "https://zorinai.vercel.app"
 local LINK_URL            = BASE_URL .. "/api/plugin/link"
 local POLL_URL            = BASE_URL .. "/api/plugin/poll"
 local PROJECTS_URL        = BASE_URL .. "/api/plugin/projects"
@@ -10,8 +10,8 @@ local HEARTBEAT_URL       = BASE_URL .. "/api/plugin/heartbeat"
 local GAME_MODEL_URL      = BASE_URL .. "/api/plugin/game-model"
 local SET_ROBLOX_USER_URL = BASE_URL .. "/api/plugin/set-roblox-user"
 
-local TOKEN_KEY = "Zorin_Token"
-local USER_KEY  = "Zorin_User"
+local TOKEN_KEY = "Zeugo_Token"
+local USER_KEY  = "Zeugo_User"
 
 local POLL_INTERVAL      = 10
 local HEARTBEAT_INTERVAL = 15
@@ -61,14 +61,14 @@ local SCAN_TARGETS = {
 	game:GetService("StarterPlayer"),
 }
 
-local toolbar   = plugin:CreateToolbar("Zorin")
-local toggleBtn = toolbar:CreateButton("Zorin", "Open Zorin", ICONS.logo)
+local toolbar   = plugin:CreateToolbar("Zeugo")
+local toggleBtn = toolbar:CreateButton("Zeugo", "Open Zeugo", ICONS.logo)
 
 local widgetInfo = DockWidgetPluginGuiInfo.new(
 	Enum.InitialDockState.Right, true, true, 620, 700, 460, 560
 )
-local widget       = plugin:CreateDockWidgetPluginGui("ZorinWidgetV3", widgetInfo)
-widget.Title       = "Zorin"
+local widget       = plugin:CreateDockWidgetPluginGui("ZeugoWidgetV3", widgetInfo)
+widget.Title       = "Zeugo"
 widget.Enabled     = false
 
 local function tween(obj, info, props)
@@ -108,7 +108,7 @@ local function makeTextButton(parent, text, bgColor, textColor)
 end
 
 local root = Instance.new("Frame")
-root.Name = "ZorinRoot"; root.Parent = widget; root.BackgroundColor3 = C.bg
+root.Name = "ZeugoRoot"; root.Parent = widget; root.BackgroundColor3 = C.bg
 root.BorderSizePixel = 0; root.Size = UDim2.fromScale(1, 1)
 
 local Topbar = Instance.new("Frame")
@@ -129,7 +129,7 @@ Logo.Image = ICONS.logo; Logo.ScaleType = Enum.ScaleType.Fit
 local BrandTitle = Instance.new("TextLabel")
 BrandTitle.Parent = Topbar; BrandTitle.BackgroundTransparency = 1
 BrandTitle.Position = UDim2.new(0.078, 0, 0.18, 0); BrandTitle.Size = UDim2.new(0.13, 0, 0.64, 0)
-BrandTitle.Font = Enum.Font.GothamBold; BrandTitle.Text = "Zorin"; BrandTitle.TextColor3 = C.text
+BrandTitle.Font = Enum.Font.GothamBold; BrandTitle.Text = "Zeugo"; BrandTitle.TextColor3 = C.text
 BrandTitle.TextSize = 14; BrandTitle.TextWrapped = true
 BrandTitle.TextXAlignment = Enum.TextXAlignment.Left; BrandTitle.TextYAlignment = Enum.TextYAlignment.Center
 
@@ -605,7 +605,7 @@ local function deleteGameModel()
 			})
 		end)
 		if not (ok and result and result.StatusCode == 200) then
-			warn("[Zorin] game model delete failed")
+			warn("[Zeugo] game model delete failed")
 		end
 	end)
 end
@@ -717,7 +717,7 @@ local function processdeletions(data: {}, createdInstanceMap: {[string]: Instanc
 			end
 		end)
 		if not ok then
-			warn("[Zorin] deletion error:", err)
+			warn("[Zeugo] deletion error:", err)
 		end
 	end
 	return deletedCount
@@ -736,8 +736,8 @@ local function insertLatestData()
 	for _, scriptData in ipairs(latestProjectData.scripts or {}) do
 		local ok, err = pcall(function()
 			local className  = scriptData.type or "ModuleScript"
-			local scriptName = scriptData.name or "ZorinScript"
-			local code       = scriptData.code or "-- Inserted by Zorin\n"
+			local scriptName = scriptData.name or "ZeugoScript"
+			local code       = scriptData.code or "-- Inserted by Zeugo\n"
 			local parent     = resolveParentTarget(scriptData.parent, className, createdInstanceMap)
 			local existing   = parent:FindFirstChild(scriptName)
 			if existing and existing:IsA("LuaSourceContainer") then
@@ -748,7 +748,7 @@ local function insertLatestData()
 				created += 1
 			end
 		end)
-		if not ok then warn("[Zorin] insert error:", err) end
+		if not ok then warn("[Zeugo] insert error:", err) end
 	end
 
 	local parts: {string} = {}

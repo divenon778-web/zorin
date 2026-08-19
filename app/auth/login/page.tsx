@@ -127,8 +127,8 @@ export default function LoginPage() {
     <div style={S.screen}>
       <header style={S.topbar}>
         <a href="https://zorinai.vercel.app" style={S.brand}>
-          <Image src="/icons/logo-white.png" alt="Zorin AI" width={22} height={22} style={{ objectFit: "contain" }} />
-          <span style={S.brandName}>Zorin AI</span>
+          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
+          <span style={S.brandName}>Zeugo AI</span>
         </a>
       </header>
 
@@ -138,9 +138,9 @@ export default function LoginPage() {
         </video>
 
         <div style={S.cardContent}>
-          <Image src="/icons/logo-white.png" alt="Zorin AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
+          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
           <h1 style={S.title}>Welcome back</h1>
-          <p style={S.sub}>Sign in to your Zorin AI account</p>
+          <p style={S.sub}>Sign in to your Zeugo AI account</p>
 
           {error && (
             <div style={S.errBox}>

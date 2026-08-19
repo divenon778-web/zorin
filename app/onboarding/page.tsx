@@ -108,12 +108,12 @@ export default function OnboardingPage() {
           <a href="https://zorinai.vercel.app" style={S.brand}>
             <Image
               src="/icons/logo-white.png"
-              alt="Zorin AI"
+              alt="Zeugo AI"
               width={22}
               height={22}
               style={{ objectFit: "contain" }}
             />
-            <span style={S.brandName}>Zorin AI</span>
+            <span style={S.brandName}>Zeugo AI</span>
           </a>
         </header>
 
@@ -139,7 +139,7 @@ export default function OnboardingPage() {
           >
             <Image
               src="/icons/logo-white.png"
-              alt="Zorin AI"
+              alt="Zeugo AI"
               width={44}
               height={44}
               style={{ objectFit: "contain", marginBottom: 20 }}
@@ -148,7 +148,7 @@ export default function OnboardingPage() {
             {step === "profile" && (
               <>
                 <h1 style={S.title}>Set up your profile</h1>
-                <p style={S.sub}>One-time setup for your Zorin account</p>
+                <p style={S.sub}>One-time setup for your Zeugo account</p>
 
                 {error && (
                   <div className="error-shake" style={S.errBox}>

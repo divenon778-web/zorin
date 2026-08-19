@@ -106,7 +106,7 @@ export function VerifyDiscordClient({
         <Card>
           <StatusPill color="rgba(255,255,255,0.4)" label="Sign in required" />
           <h1 style={S.title}>Sign in first</h1>
-          <p style={S.sub}>You need a Zorin AI account to verify your Discord. Sign in and this page will continue automatically.</p>
+          <p style={S.sub}>You need a Zeugo AI account to verify your Discord. Sign in and this page will continue automatically.</p>
           <a href={`https://zorinai.vercel.app/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={S.btnPrimary}>Sign in to continue</a>
         </Card>
       </Shell>
@@ -119,7 +119,7 @@ export function VerifyDiscordClient({
         <Card>
           <StatusPill color="#f87171" label="No account found" />
           <h1 style={S.title}>No account found</h1>
-          <p style={S.sub}>We couldn't find a Zorin AI account. Create a free account to get access.</p>
+          <p style={S.sub}>We couldn't find a Zeugo AI account. Create a free account to get access.</p>
           <a href="https://zorinai.vercel.app/register" style={S.btnPrimary}>Create an account</a>
           <a href={`https://zorinai.vercel.app/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={{ ...S.btnGhost, marginTop: 10 }}>Sign in with a different account</a>
         </Card>
@@ -164,16 +164,16 @@ export function VerifyDiscordClient({
         </h1>
         <p style={S.sub}>
           {status === "loading"
-            ? "Linking your Discord account to Zorin AI."
+            ? "Linking your Discord account to Zeugo AI."
             : status === "error"
             ? errMsg
-            : "Connect your Discord account to your Zorin AI account to get server access."}
+            : "Connect your Discord account to your Zeugo AI account to get server access."}
         </p>
         <div style={S.accountChip}>
           <AccountAvatar user={user} size={36} />
           <div>
             <div style={S.accountName}>{user.username}</div>
-            <div style={S.accountSub}>Zorin AI account</div>
+            <div style={S.accountSub}>Zeugo AI account</div>
           </div>
           <div style={S.accountCheckmark}><i className="bi bi-check" style={{ fontSize: 11 }} /></div>
         </div>
@@ -229,8 +229,8 @@ function Shell({ children, badge }: { children: React.ReactNode; badge: string }
       <div className="glc-shell">
         <header className="glc-topbar">
           <a href="https://zorinai.vercel.app" className="glc-brand">
-            <Image src="/icons/logo-white.png" alt="Zorin AI" width={22} height={22} style={{ objectFit: "contain" }} />
-            <span className="glc-brand-name">Zorin AI</span>
+            <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
+            <span className="glc-brand-name">Zeugo AI</span>
           </a>
           <span className="glc-topbar-badge">{badge}</span>
         </header>

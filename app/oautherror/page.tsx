@@ -28,8 +28,8 @@ function OAuthErrorContent() {
 
       <header style={S.topbar}>
         <a href="https://zorinai.vercel.app" style={S.brand}>
-          <Image src="/icons/logo-white.png" alt="Zorin AI" width={26} height={26} style={{ objectFit: "contain" }} />
-          <span style={S.brandName}>Zorin AI</span>
+          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={26} height={26} style={{ objectFit: "contain" }} />
+          <span style={S.brandName}>Zeugo AI</span>
         </a>
       </header>
 

@@ -42,8 +42,8 @@ export default function SignupPage() {
     <div style={S.screen}>
       <header style={S.topbar}>
         <a href="https://zorinai.vercel.app" style={S.brand}>
-          <Image src="/icons/logo-white.png" alt="Zorin AI" width={22} height={22} style={{ objectFit: "contain" }} />
-          <span style={S.brandName}>Zorin AI</span>
+          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
+          <span style={S.brandName}>Zeugo AI</span>
         </a>
       </header>
 
@@ -53,7 +53,7 @@ export default function SignupPage() {
         </video>
 
         <div style={S.cardContent}>
-          <Image src="/icons/logo-white.png" alt="Zorin AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
+          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
           <h1 style={S.title}>Create your account</h1>
           <p style={S.sub}>Start generating Roblox scripts with AI</p>
 

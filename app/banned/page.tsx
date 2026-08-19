@@ -66,7 +66,7 @@ export default async function BannedPage({
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        Sorry, but you're banned from Zorin services.
+        Sorry, but you're banned from Zeugo services.
       </p>
 
       {formattedReason && (

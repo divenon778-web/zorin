@@ -21,7 +21,7 @@ export default function InvalidLinkPage() {
 
         <div style={S.divider} />
 
-        <p style={S.hint}>To get a new link, go back to Roblox Studio and click <strong style={{ color: "#e2e2e2" }}>Connect</strong> in the Zorin plugin.</p>
+        <p style={S.hint}>To get a new link, go back to Roblox Studio and click <strong style={{ color: "#e2e2e2" }}>Connect</strong> in the Zeugo plugin.</p>
 
         <a href="https://zorinai.vercel.app" style={S.btn}>
           Go to dashboard

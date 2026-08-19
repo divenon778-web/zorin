@@ -74,7 +74,7 @@ export const LOCALES: LocaleEntry[] = [
   { code: "bn", label: "Bengali",       native: "বাংলা", flag: "🇧🇩" },
 ];
 
-const STORAGE_KEY = "zorin_locale";
+const STORAGE_KEY = "zeugo_locale";
 
 function getStoredLocale(): SupportedLocale {
   if (typeof window === "undefined") return "en";

@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.redirect(DASH_URL);
 
 
-    response.cookies.set("zorin_session", JSON.stringify(session), {
+    response.cookies.set("zeugo_session", JSON.stringify(session), {
       httpOnly: true,
       secure:   true,
       sameSite: "none",

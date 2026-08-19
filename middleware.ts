@@ -37,7 +37,7 @@ export async function middleware(req: NextRequest) {
     return res;
   }
 
-  if (host.startsWith("discord.zorin.lol")) {
+  if (host.startsWith("discord.zeugo.lol")) {
     return NextResponse.redirect("https://discord.gg/cdwvahVP5j");
   }
 
@@ -45,7 +45,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.rewrite(new URL("/server-error", req.url));
   }
 
-  if (host === "actions.zorin.lol") {
+  if (host === "actions.zeugo.lol") {
     if (req.method === "OPTIONS") {
       return new NextResponse(null, {
         status: 204,
@@ -161,10 +161,10 @@ export async function middleware(req: NextRequest) {
   const isMaintenance = (siteConfig as { maintenance?: boolean }).maintenance;
 
   if (isMaintenance && !isTester && !host.startsWith("server.error")) {
-    return NextResponse.redirect("https://server.error.zorin.lol", { status: 307 });
+    return NextResponse.redirect("https://server.error.zeugo.lol", { status: 307 });
   }
 
-  if (host === "zorin.lol" || host === "www.zorin.lol") {
+  if (host === "zeugo.lol" || host === "www.zeugo.lol") {
     if (pathname.startsWith("/auth/")) {
       return NextResponse.redirect(`https://zorinai.vercel.app${pathname}`);
     }
@@ -172,7 +172,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  if (host === "dash.zorin.lol" || host.includes("zorinai.vercel.app")) {
+  if (host === "dash.zeugo.lol" || host.includes("zorinai.vercel.app")) {
     if (profile?.banned && !isTester && !pathname.startsWith("/banned")) {
       const url = new URL("/banned", req.url);
       url.searchParams.set("reason", profile.ban_reason ?? "violation");

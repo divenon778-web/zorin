@@ -33,12 +33,12 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
             <div style={S.brandRow}>
               <Image
                 src={`${CDN}/icons/logo-white.png`}
-                alt="Zorin AI"
+                alt="Zeugo AI"
                 width={28}
                 height={28}
                 style={{ objectFit: "contain" }}
               />
-              <span style={S.brandName}>Zorin AI</span>
+              <span style={S.brandName}>Zeugo AI</span>
             </div>
             <p style={S.tagline}>
               AI-powered Luau code generation for Roblox developers. Build faster. Ship better.
@@ -66,7 +66,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
                 <DiscordIcon />
               </a>
               <a
-                href="https://www.tiktok.com/@zorinstudios"
+                href="https://www.tiktok.com/@zeugostudios"
                 target="_blank"
                 rel="noreferrer"
                 style={S.socialLink}
