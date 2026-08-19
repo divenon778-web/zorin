@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { runGenerate, isValidModel } from "@/lib/ai"
+import { runGenerateStream, runGenerate, isValidModel } from "@/lib/ai"
 import { CORS_HEADERS, handleOptions } from "@/lib/cors"
 
 export const maxDuration = 60
@@ -18,12 +18,18 @@ export async function POST(req: NextRequest) {
     const datamodel   = body.datamodel   || null
     const gameModel   = body.gameModel   || null
     const history     = body.history     || []
+    const stream      = body.stream      !== false
 
     if (!prompt) {
       return NextResponse.json({ error: "prompt required" }, { status: 400, headers: CORS_HEADERS })
     }
 
     const effectiveModel = model && isValidModel(model) ? model : ""
+
+    if (stream) {
+      const result = await runGenerateStream({ prompt, model: effectiveModel, projectName, datamodel, gameModel, history })
+      return result
+    }
 
     const result = await runGenerate({ prompt, model: effectiveModel, projectName, datamodel, gameModel, history })
     return NextResponse.json(result, { headers: CORS_HEADERS })
