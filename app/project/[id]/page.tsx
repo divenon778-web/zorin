@@ -1562,22 +1562,22 @@ export default function ProjectChatPage() {
                     <img
                       src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg"
                       alt="OpenAI"
-                      style={{ width: 16, height: 16 }}
+                      style={{ width: 16, height: 16, filter: "brightness(0) invert(1) opacity(0.7)" }}
                     />
                   ) : selectedModel === "nvidia/nemotron-3-ultra-550b-a55b" ? (
                     <img
                       src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/nvidia.svg"
                       alt="NVIDIA"
-                      style={{ width: 16, height: 16 }}
+                      style={{ width: 16, height: 16, filter: "brightness(0) invert(1) opacity(0.7)" }}
                     />
                   ) : selectedModel.startsWith("deepseek") ? (
                     <img
                       src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/deepseek.svg"
                       alt="DeepSeek"
-                      style={{ width: 16, height: 16 }}
+                      style={{ width: 16, height: 16, filter: "brightness(0) invert(1) opacity(0.7)" }}
                     />
                   ) : (
-                    <i className="bi bi-cpu" style={{ fontSize: 14 }} />
+                    <i className="bi bi-cpu" style={{ fontSize: 14, opacity: 0.7 }} />
                   )}
                   <span>{selectedModelLabel}</span>
                   <i className="bi bi-chevron-up" style={{ fontSize: 10, opacity: 0.36, transition: "transform .22s ease", transform: modelMenuOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
@@ -1591,9 +1591,9 @@ export default function ProjectChatPage() {
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", color: "#e8e9ec" }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13, fontWeight: 500 }}>
                             {m.logo ? (
-                              <img src={m.logo} alt={m.label} style={{ width: 16, height: 16 }} />
+                              <img src={m.logo} alt={m.label} style={{ width: 16, height: 16, filter: "brightness(0) invert(1) opacity(0.7)" }} />
                             ) : (
-                              <i className="bi bi-cpu" style={{ fontSize: 14 }} />
+                              <i className="bi bi-cpu" style={{ fontSize: 14, opacity: 0.7 }} />
                             )}
                             {m.label}
                           </div>
