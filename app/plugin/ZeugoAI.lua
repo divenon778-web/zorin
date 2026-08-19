@@ -10,13 +10,22 @@ local HEARTBEAT_URL       = BASE_URL .. "/api/plugin/heartbeat"
 local GAME_MODEL_URL      = BASE_URL .. "/api/plugin/game-model"
 local SET_ROBLOX_USER_URL = BASE_URL .. "/api/plugin/set-roblox-user"
 
-local TOKEN_KEY = "Zeugo_Token"
-local USER_KEY  = "Zeugo_User"
+local ORCHESTRATE_URL    = BASE_URL .. "/api/plugin/orchestrate"
+local CHECKPOINT_URL     = BASE_URL .. "/api/plugin/checkpoint"
+local MEMORY_URL         = BASE_URL .. "/api/plugin/memory"
+local SCAN_URL           = BASE_URL .. "/api/plugin/scan"
+local UNDO_URL           = BASE_URL .. "/api/plugin/undo"
+local EXPLAIN_URL        = BASE_URL .. "/api/plugin/explain"
+
+local TOKEN_KEY        = "Zeugo_Token"
+local USER_KEY         = "Zeugo_User"
+local ADVANCED_MODE_KEY = "Zeugo_AdvancedMode"
+local MEMORY_RULES_KEY  = "Zeugo_MemoryRules"
 
 local POLL_INTERVAL      = 10
 local HEARTBEAT_INTERVAL = 15
 local AUTOSCAN_INTERVAL  = 10
-local LINK_TTL_SECONDS   = 60 * 30  -- 30 minutes
+local LINK_TTL_SECONDS   = 60 * 30
 
 local ICONS = {
 	logo = "rbxassetid://101012686637127",
@@ -42,12 +51,16 @@ local C = {
 	blue      = Color3.fromRGB(80, 140, 220),
 	blueDark  = Color3.fromRGB(18, 28, 50),
 	white     = Color3.fromRGB(255, 255, 255),
+	yellowDark = Color3.fromRGB(50, 42, 14),
+	greenDark  = Color3.fromRGB(18, 42, 24),
 }
 
 local SETTINGS = {
 	autoInsert   = true,
 	showWarnings = true,
 }
+
+local EXPLAIN_DEPTH_LIST = { "Beginner", "Developer", "Expert" }
 
 local SCAN_TARGETS = {
 	workspace,
@@ -68,7 +81,7 @@ local toggleBtn = toolbar:CreateButton("Zeugo", "Open Zeugo", ICONS.logo)
 local widgetInfo = DockWidgetPluginGuiInfo.new(
 	Enum.InitialDockState.Right, true, true, 620, 700, 460, 560
 )
-local widget       = plugin:CreateDockWidgetPluginGui("ZeugoWidgetV4", widgetInfo)
+local widget       = plugin:CreateDockWidgetPluginGui("ZeugoWidgetV5", widgetInfo)
 widget.Title       = "Zeugo"
 widget.Enabled     = false
 
@@ -112,6 +125,10 @@ local root = Instance.new("Frame")
 root.Name = "ZeugoRoot"; root.Parent = widget; root.BackgroundColor3 = C.bg
 root.BorderSizePixel = 0; root.Size = UDim2.fromScale(1, 1)
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- TOPBAR
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local Topbar = Instance.new("Frame")
 Topbar.Parent = root; Topbar.BackgroundColor3 = C.panel; Topbar.BorderSizePixel = 0
 Topbar.Position = UDim2.new(0.008, 0, 0.007, 0); Topbar.Size = UDim2.new(0.984, 0, 0.075, 0)
@@ -137,7 +154,7 @@ BrandTitle.TextXAlignment = Enum.TextXAlignment.Left; BrandTitle.TextYAlignment 
 local ProjectPickerBtn = Instance.new("TextButton")
 ProjectPickerBtn.Parent = Topbar; ProjectPickerBtn.BackgroundColor3 = C.panel2
 ProjectPickerBtn.BorderSizePixel = 0; ProjectPickerBtn.Position = UDim2.new(0.215, 0, 0.18, 0)
-ProjectPickerBtn.Size = UDim2.new(0.30, 0, 0.64, 0); ProjectPickerBtn.Text = "No project selected"
+ProjectPickerBtn.Size = UDim2.new(0.25, 0, 0.64, 0); ProjectPickerBtn.Text = "No project selected"
 ProjectPickerBtn.TextColor3 = C.text; ProjectPickerBtn.TextSize = 11; ProjectPickerBtn.Font = Enum.Font.GothamBold
 ProjectPickerBtn.TextWrapped = false; ProjectPickerBtn.TextXAlignment = Enum.TextXAlignment.Left
 corner(ProjectPickerBtn, 8); stroke(ProjectPickerBtn, C.border); animatePress(ProjectPickerBtn, C.panel3)
@@ -152,28 +169,51 @@ PickerChevron.Position = UDim2.new(1, -22, 0, 0); PickerChevron.Size = UDim2.new
 PickerChevron.Font = Enum.Font.Code; PickerChevron.Text = "▼"; PickerChevron.TextColor3 = C.subtext
 PickerChevron.TextSize = 10
 
+local ExplainBtn = makeTextButton(Topbar, "Explain Game", C.panel2, C.text)
+ExplainBtn.Position = UDim2.new(0.47, 0, 0.18, 0); ExplainBtn.Size = UDim2.new(0.095, 0, 0.64, 0)
+stroke(ExplainBtn, C.border)
+
 local RefreshBtn = makeTextButton(Topbar, "Refresh", C.panel2, C.text)
-RefreshBtn.Position = UDim2.new(0.616, 0, 0.18, 0); RefreshBtn.Size = UDim2.new(0.09, 0, 0.64, 0)
+RefreshBtn.Position = UDim2.new(0.57, 0, 0.18, 0); RefreshBtn.Size = UDim2.new(0.08, 0, 0.64, 0)
 stroke(RefreshBtn, C.border)
 
+local AdvancedToggle = makeTextButton(Topbar, "Advanced", C.panel2, C.muted)
+AdvancedToggle.Position = UDim2.new(0.656, 0, 0.18, 0); AdvancedToggle.Size = UDim2.new(0.07, 0, 0.64, 0)
+stroke(AdvancedToggle, C.border)
+
 local DashboardBtn = makeTextButton(Topbar, "Dashboard", C.panel2, C.text)
-DashboardBtn.Position = UDim2.new(0.712, 0, 0.18, 0); DashboardBtn.Size = UDim2.new(0.115, 0, 0.64, 0)
+DashboardBtn.Position = UDim2.new(0.732, 0, 0.18, 0); DashboardBtn.Size = UDim2.new(0.095, 0, 0.64, 0)
 stroke(DashboardBtn, C.border)
 
 local DisconnectBtn = makeTextButton(Topbar, "Disconnect", C.redDark, C.text)
 DisconnectBtn.Position = UDim2.new(0.834, 0, 0.18, 0); DisconnectBtn.Size = UDim2.new(0.09, 0, 0.64, 0)
 stroke(DisconnectBtn, C.red)
 
-animatePress(RefreshBtn, C.panel3); animatePress(DashboardBtn, C.panel3)
+animatePress(ExplainBtn, C.panel3)
+animatePress(RefreshBtn, C.panel3)
+animatePress(AdvancedToggle, C.panel3)
+animatePress(DashboardBtn, C.panel3)
 animatePress(DisconnectBtn, Color3.fromRGB(58, 22, 22))
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- BODY + LAYOUT
+-- ══════════════════════════════════════════════════════════════════════════════
 
 local Body = Instance.new("Frame")
 Body.Parent = root; Body.BackgroundTransparency = 1
 Body.Position = UDim2.new(0.008, 0, 0.092, 0); Body.Size = UDim2.new(0.984, 0, 0.901, 0)
 
+local BodyLayout = Instance.new("UIListLayout")
+BodyLayout.Parent = Body; BodyLayout.SortOrder = Enum.SortOrder.LayoutOrder
+BodyLayout.Padding = UDim.new(0, 6)
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- PROJECT DROPDOWN
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local ProjectDropdown = Instance.new("Frame")
 ProjectDropdown.Parent = root; ProjectDropdown.BackgroundColor3 = C.panel; ProjectDropdown.BorderSizePixel = 0
-ProjectDropdown.Position = UDim2.new(0.223, 0, 0.084, 0); ProjectDropdown.Size = UDim2.new(0.30, 0, 0, 0)
+ProjectDropdown.Position = UDim2.new(0.223, 0, 0.084, 0); ProjectDropdown.Size = UDim2.new(0.25, 0, 0, 0)
 ProjectDropdown.ClipsDescendants = true; ProjectDropdown.Visible = false; ProjectDropdown.ZIndex = 10
 corner(ProjectDropdown, 10); stroke(ProjectDropdown, C.border)
 
@@ -199,6 +239,10 @@ local ProjectListLayout = Instance.new("UIListLayout")
 ProjectListLayout.Parent = ProjectList; ProjectListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 ProjectListLayout.Padding = UDim.new(0, 4)
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- HERO (STATE) PANEL
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local Hero = Instance.new("Frame")
 Hero.Parent = Body; Hero.BackgroundColor3 = C.panel; Hero.BorderSizePixel = 0
 Hero.Size = UDim2.new(1, 0, 0, 80); Hero.LayoutOrder = 1
@@ -212,22 +256,43 @@ StateTitle.TextColor3 = C.text; StateTitle.TextSize = 16; StateTitle.TextXAlignm
 
 local StateSub = Instance.new("TextLabel")
 StateSub.Parent = Hero; StateSub.BackgroundTransparency = 1
-StateSub.Position = UDim2.new(0.025, 0, 0.5, 0); StateSub.Size = UDim2.new(0.75, 0, 0, 16)
+StateSub.Position = UDim2.new(0.025, 0, 0.5, 0); StateSub.Size = UDim2.new(0.55, 0, 0, 16)
 StateSub.Font = Enum.Font.Gotham
 StateSub.Text = "Connect to browse your projects and insert generated output."
 StateSub.TextColor3 = C.subtext; StateSub.TextSize = 11; StateSub.TextWrapped = true
 StateSub.TextXAlignment = Enum.TextXAlignment.Left; StateSub.TextYAlignment = Enum.TextYAlignment.Top
 
-local StatusPill = Instance.new("TextLabel")
+-- Enhanced status pill: model + tokens + task count
+local StatusPill = Instance.new("Frame")
 StatusPill.Parent = Hero; StatusPill.BackgroundColor3 = C.panel2; StatusPill.BorderSizePixel = 0
-StatusPill.Position = UDim2.new(0.77, 0, 0.24, 0); StatusPill.Size = UDim2.new(0.2, 0, 0.44, 0)
-StatusPill.Font = Enum.Font.Code; StatusPill.Text = "Idle"; StatusPill.TextColor3 = C.muted
-StatusPill.TextSize = 10
-corner(StatusPill, 999); stroke(StatusPill, C.border)
+StatusPill.Position = UDim2.new(0.60, 0, 0.16, 0); StatusPill.Size = UDim2.new(0.37, 0, 0.68, 0)
+corner(StatusPill, 8); stroke(StatusPill, C.border)
+
+local StatusPillMain = Instance.new("TextLabel")
+StatusPillMain.Parent = StatusPill; StatusPillMain.BackgroundTransparency = 1
+StatusPillMain.Position = UDim2.new(0, 10, 0, 2); StatusPillMain.Size = UDim2.new(1, -20, 0, 14)
+StatusPillMain.Font = Enum.Font.Code; StatusPillMain.Text = "Idle"; StatusPillMain.TextColor3 = C.muted
+StatusPillMain.TextSize = 10; StatusPillMain.TextXAlignment = Enum.TextXAlignment.Left
+
+local StatusPillDetail = Instance.new("TextLabel")
+StatusPillDetail.Parent = StatusPill; StatusPillDetail.BackgroundTransparency = 1
+StatusPillDetail.Position = UDim2.new(0, 10, 0, 18); StatusPillDetail.Size = UDim2.new(1, -20, 0, 12)
+StatusPillDetail.Font = Enum.Font.Code; StatusPillDetail.Text = ""; StatusPillDetail.TextColor3 = C.muted
+StatusPillDetail.TextSize = 8; StatusPillDetail.TextXAlignment = Enum.TextXAlignment.Left
+
+local StatusPillTimer = Instance.new("TextLabel")
+StatusPillTimer.Parent = StatusPill; StatusPillTimer.BackgroundTransparency = 1
+StatusPillTimer.Position = UDim2.new(0, 10, 0, 32); StatusPillTimer.Size = UDim2.new(1, -20, 0, 12)
+StatusPillTimer.Font = Enum.Font.Code; StatusPillTimer.Text = ""; StatusPillTimer.TextColor3 = C.muted
+StatusPillTimer.TextSize = 8; StatusPillTimer.TextXAlignment = Enum.TextXAlignment.Left
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- GAME MODEL BAR
+-- ══════════════════════════════════════════════════════════════════════════════
 
 local GameModelBar = Instance.new("Frame")
 GameModelBar.Parent = Body; GameModelBar.BackgroundColor3 = C.panel; GameModelBar.BorderSizePixel = 0
-GameModelBar.Position = UDim2.new(0, 0, 0, 90); GameModelBar.Size = UDim2.new(1, 0, 0, 30)
+GameModelBar.Size = UDim2.new(1, 0, 0, 30); GameModelBar.LayoutOrder = 2
 corner(GameModelBar, 8); stroke(GameModelBar, C.border)
 
 local GameModelIcon = Instance.new("TextLabel")
@@ -243,9 +308,13 @@ GameModelLabel.Font = Enum.Font.Gotham; GameModelLabel.Text = "Auto-scanning on 
 GameModelLabel.TextColor3 = C.muted; GameModelLabel.TextSize = 10; GameModelLabel.TextWrapped = false
 GameModelLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- META PANEL
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local Meta = Instance.new("Frame")
 Meta.Parent = Body; Meta.BackgroundColor3 = C.panel; Meta.BorderSizePixel = 0
-Meta.Position = UDim2.new(0, 0, 0, 130); Meta.Size = UDim2.new(1, 0, 0, 62)
+Meta.Size = UDim2.new(1, 0, 0, 62); Meta.LayoutOrder = 3
 corner(Meta, 10); stroke(Meta, C.border)
 
 local ProjectNameLabel = Instance.new("TextLabel")
@@ -269,9 +338,148 @@ ProjectMetaLabel.Text = "Generate from the dashboard, then insert here."
 ProjectMetaLabel.TextColor3 = C.subtext; ProjectMetaLabel.TextSize = 10
 ProjectMetaLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- TASK PROGRESS PANEL
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local TaskProgressFrame = Instance.new("Frame")
+TaskProgressFrame.Parent = Body; TaskProgressFrame.BackgroundColor3 = C.panel; TaskProgressFrame.BorderSizePixel = 0
+TaskProgressFrame.Size = UDim2.new(1, 0, 0, 0); TaskProgressFrame.AutomaticSize = Enum.AutomaticSize.Y
+TaskProgressFrame.Visible = false; TaskProgressFrame.LayoutOrder = 4
+corner(TaskProgressFrame, 10); stroke(TaskProgressFrame, C.border)
+
+local TaskProgressHeader = Instance.new("TextLabel")
+TaskProgressHeader.Parent = TaskProgressFrame; TaskProgressHeader.BackgroundTransparency = 1
+TaskProgressHeader.Position = UDim2.new(0.02, 0, 0, 8); TaskProgressHeader.Size = UDim2.new(0.96, 0, 0, 14)
+TaskProgressHeader.Font = Enum.Font.Code; TaskProgressHeader.Text = "TASK PROGRESS"
+TaskProgressHeader.TextColor3 = C.muted; TaskProgressHeader.TextSize = 9
+TaskProgressHeader.TextXAlignment = Enum.TextXAlignment.Left
+
+local TaskProgressPhase = Instance.new("TextLabel")
+TaskProgressPhase.Parent = TaskProgressFrame; TaskProgressPhase.BackgroundTransparency = 1
+TaskProgressPhase.Position = UDim2.new(0.02, 0, 0, 24); TaskProgressPhase.Size = UDim2.new(0.96, 0, 0, 18)
+TaskProgressPhase.Font = Enum.Font.GothamBold; TaskProgressPhase.Text = "Planning..."
+TaskProgressPhase.TextColor3 = C.text; TaskProgressPhase.TextSize = 12
+TaskProgressPhase.TextXAlignment = Enum.TextXAlignment.Left
+
+local TaskList = Instance.new("Frame")
+TaskList.Parent = TaskProgressFrame; TaskList.BackgroundTransparency = 1
+TaskList.Position = UDim2.new(0, 8, 0, 44); TaskList.Size = UDim2.new(1, -16, 0, 0)
+TaskList.AutomaticSize = Enum.AutomaticSize.Y
+
+local TaskListLayout = Instance.new("UIListLayout")
+TaskListLayout.Parent = TaskList; TaskListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+TaskListLayout.Padding = UDim.new(0, 4)
+
+local TaskProgressElapsed = Instance.new("TextLabel")
+TaskProgressElapsed.Parent = TaskProgressFrame; TaskProgressElapsed.BackgroundTransparency = 1
+TaskProgressElapsed.Position = UDim2.new(0.02, 0, 0, 0); TaskProgressElapsed.Size = UDim2.new(0.96, 0, 0, 14)
+TaskProgressElapsed.Font = Enum.Font.Code; TaskProgressElapsed.Text = ""; TaskProgressElapsed.TextColor3 = C.muted
+TaskProgressElapsed.TextSize = 9; TaskProgressElapsed.TextXAlignment = Enum.TextXAlignment.Right
+TaskProgressElapsed.AutomaticSize = Enum.AutomaticSize.Y
+TaskProgressElapsed.LayoutOrder = 999
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- SKILL SELECTOR (Advanced mode)
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local SkillSelectorFrame = Instance.new("Frame")
+SkillSelectorFrame.Parent = Body; SkillSelectorFrame.BackgroundColor3 = C.panel; SkillSelectorFrame.BorderSizePixel = 0
+SkillSelectorFrame.Size = UDim2.new(1, 0, 0, 36); SkillSelectorFrame.Visible = false; SkillSelectorFrame.LayoutOrder = 5
+corner(SkillSelectorFrame, 8); stroke(SkillSelectorFrame, C.border)
+
+local SkillLabel = Instance.new("TextLabel")
+SkillLabel.Parent = SkillSelectorFrame; SkillLabel.BackgroundTransparency = 1
+SkillLabel.Position = UDim2.new(0.02, 0, 0, 0); SkillLabel.Size = UDim2.new(0, 80, 1, 0)
+SkillLabel.Font = Enum.Font.Code; SkillLabel.Text = "SKILL:"; SkillLabel.TextColor3 = C.muted
+SkillLabel.TextSize = 9; SkillLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local SkillDropdown = Instance.new("TextButton")
+SkillDropdown.Parent = SkillSelectorFrame; SkillDropdown.BackgroundColor3 = C.panel2
+SkillDropdown.BorderSizePixel = 0; SkillDropdown.Position = UDim2.new(0, 82, 0, 4)
+SkillDropdown.Size = UDim2.new(0, 200, 0, 28); SkillDropdown.Text = "None (default)"
+SkillDropdown.TextColor3 = C.text; SkillDropdown.TextSize = 10; SkillDropdown.Font = Enum.Font.Gotham
+SkillDropdown.TextXAlignment = Enum.TextXAlignment.Left
+corner(SkillDropdown, 6); stroke(SkillDropdown, C.border)
+
+local SkillDropdownChevron = Instance.new("TextLabel")
+SkillDropdownChevron.Parent = SkillDropdown; SkillDropdownChevron.BackgroundTransparency = 1
+SkillDropdownChevron.Position = UDim2.new(1, -20, 0, 0); SkillDropdownChevron.Size = UDim2.new(0, 18, 1, 0)
+SkillDropdownChevron.Font = Enum.Font.Code; SkillDropdownChevron.Text = "▼"; SkillDropdownChevron.TextColor3 = C.muted
+SkillDropdownChevron.TextSize = 9
+
+local SkillDropdownList = Instance.new("Frame")
+SkillDropdownList.Parent = SkillSelectorFrame; SkillDropdownList.BackgroundColor3 = C.panel
+SkillDropdownList.BorderSizePixel = 0; SkillDropdownList.Position = UDim2.new(0, 82, 0, 34)
+SkillDropdownList.Size = UDim2.new(0, 200, 0, 0); SkillDropdownList.ClipsDescendants = true
+SkillDropdownList.Visible = false; SkillDropdownList.ZIndex = 12
+corner(SkillDropdownList, 6); stroke(SkillDropdownList, C.border)
+
+local SkillDropdownScroll = Instance.new("ScrollingFrame")
+SkillDropdownScroll.Parent = SkillDropdownList; SkillDropdownScroll.BackgroundTransparency = 1
+SkillDropdownScroll.BorderSizePixel = 0; SkillDropdownScroll.Size = UDim2.new(1, 0, 1, 0)
+SkillDropdownScroll.CanvasSize = UDim2.new(0, 0, 0, 0); SkillDropdownScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+SkillDropdownScroll.ScrollBarThickness = 3; SkillDropdownScroll.ZIndex = 12
+
+local SkillDropdownLayout = Instance.new("UIListLayout")
+SkillDropdownLayout.Parent = SkillDropdownScroll; SkillDropdownLayout.SortOrder = Enum.SortOrder.LayoutOrder
+SkillDropdownLayout.Padding = UDim.new(0, 2)
+
+local skillDropdownOpen = false
+local selectedSkill = nil
+local availableSkills = {}
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- PROJECT MEMORY PANEL (Advanced mode)
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local MemoryFrame = Instance.new("Frame")
+MemoryFrame.Parent = Body; MemoryFrame.BackgroundColor3 = C.panel; MemoryFrame.BorderSizePixel = 0
+MemoryFrame.Size = UDim2.new(1, 0, 0, 0); MemoryFrame.AutomaticSize = Enum.AutomaticSize.Y
+MemoryFrame.Visible = false; MemoryFrame.LayoutOrder = 6
+corner(MemoryFrame, 10); stroke(MemoryFrame, C.border)
+
+local MemoryHeader = Instance.new("TextButton")
+MemoryHeader.Parent = MemoryFrame; MemoryHeader.BackgroundTransparency = 1
+MemoryHeader.Size = UDim2.new(1, 0, 0, 28)
+
+local MemoryHeaderLabel = Instance.new("TextLabel")
+MemoryHeaderLabel.Parent = MemoryHeader; MemoryHeaderLabel.BackgroundTransparency = 1
+MemoryHeaderLabel.Position = UDim2.new(0.02, 0, 0, 0); MemoryHeaderLabel.Size = UDim2.new(0.7, 0, 1, 0)
+MemoryHeaderLabel.Font = Enum.Font.Code; MemoryHeaderLabel.Text = "PROJECT RULES"
+MemoryHeaderLabel.TextColor3 = C.muted; MemoryHeaderLabel.TextSize = 9
+MemoryHeaderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local MemoryChevron = Instance.new("TextLabel")
+MemoryChevron.Parent = MemoryHeader; MemoryChevron.BackgroundTransparency = 1
+MemoryChevron.Position = UDim2.new(1, -24, 0, 0); MemoryChevron.Size = UDim2.new(0, 20, 1, 0)
+MemoryChevron.Font = Enum.Font.Code; MemoryChevron.Text = "▶"; MemoryChevron.TextColor3 = C.muted
+MemoryChevron.TextSize = 10
+
+local MemoryBody = Instance.new("Frame")
+MemoryBody.Parent = MemoryFrame; MemoryBody.BackgroundTransparency = 1
+MemoryBody.Position = UDim2.new(0, 8, 0, 28); MemoryBody.Size = UDim2.new(1, -16, 0, 0)
+MemoryBody.AutomaticSize = Enum.AutomaticSize.Y; MemoryBody.Visible = false
+
+local MemoryBodyLayout = Instance.new("UIListLayout")
+MemoryBodyLayout.Parent = MemoryBody; MemoryBodyLayout.SortOrder = Enum.SortOrder.LayoutOrder
+MemoryBodyLayout.Padding = UDim.new(0, 4)
+
+local memoryOpen = false
+local memoryRules = {}
+local memoryRuleFrames = {}
+
+local AddRuleBtn = makeTextButton(MemoryBody, "+ Add Rule", C.panel3, C.text)
+AddRuleBtn.Size = UDim2.new(1, 0, 0, 26); AddRuleBtn.LayoutOrder = 9999
+AddRuleBtn.TextSize = 10
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- OUTPUT PANEL
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local Output = Instance.new("Frame")
 Output.Parent = Body; Output.BackgroundColor3 = C.panel; Output.BorderSizePixel = 0
-Output.Position = UDim2.new(0, 0, 0, 202); Output.Size = UDim2.new(1, 0, 1, -202)
+Output.Size = UDim2.new(1, 0, 1, -170); Output.LayoutOrder = 10
 corner(Output, 10); stroke(Output, C.border)
 
 local OutputHeader = Instance.new("TextLabel")
@@ -289,6 +497,10 @@ OutputScroll.ScrollBarThickness = 3; OutputScroll.ScrollBarImageColor3 = C.panel
 local OutputLayout = Instance.new("UIListLayout")
 OutputLayout.Parent = OutputScroll; OutputLayout.SortOrder = Enum.SortOrder.LayoutOrder
 OutputLayout.Padding = UDim.new(0, 6)
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- LOGIN OVERLAY
+-- ══════════════════════════════════════════════════════════════════════════════
 
 local LoginOverlay = Instance.new("Frame")
 LoginOverlay.Parent = Body; LoginOverlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
@@ -332,6 +544,45 @@ local LoginDashboardBtn = makeTextButton(LoginCard, "Open Dashboard", C.panel2, 
 LoginDashboardBtn.Position = UDim2.new(0.52, 0, 1, -64); LoginDashboardBtn.Size = UDim2.new(0.4, 0, 0, 36)
 LoginDashboardBtn.ZIndex = 22; stroke(LoginDashboardBtn, C.border); animatePress(LoginDashboardBtn, C.panel3)
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- TOAST NOTIFICATION
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local ToastFrame = Instance.new("Frame")
+ToastFrame.Parent = root; ToastFrame.AnchorPoint = Vector2.new(0.5, 1)
+ToastFrame.Position = UDim2.new(0.5, 0, 0.95, 0); ToastFrame.Size = UDim2.new(0, 0, 0, 0)
+ToastFrame.AutomaticSize = Enum.AutomaticSize.X; ToastFrame.BackgroundColor3 = C.panel2
+ToastFrame.BorderSizePixel = 0; ToastFrame.ZIndex = 50; ToastFrame.Visible = false
+corner(ToastFrame, 8); stroke(ToastFrame, C.borderStr)
+
+local ToastLabel = Instance.new("TextLabel")
+ToastLabel.Parent = ToastFrame; ToastLabel.BackgroundTransparency = 1
+ToastLabel.Position = UDim2.new(0, 14, 0, 0); ToastLabel.Size = UDim2.new(0, 0, 0, 32)
+ToastLabel.AutomaticSize = Enum.AutomaticSize.X
+ToastLabel.Font = Enum.Font.GothamBold; ToastLabel.Text = ""; ToastLabel.TextColor3 = C.text
+ToastLabel.TextSize = 11
+
+local function showToast(message, color, duration)
+	ToastLabel.Text = message
+	ToastLabel.TextColor3 = color or C.text
+	ToastFrame.Size = UDim2.new(0, 0, 0, 32)
+	ToastFrame.Visible = true
+	ToastFrame.BackgroundTransparency = 0
+	task.delay(duration or 3, function()
+		tween(ToastFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			BackgroundTransparency = 1,
+		})
+		task.delay(0.3, function()
+			ToastFrame.Visible = false
+			ToastFrame.BackgroundTransparency = 0
+		end)
+	end)
+end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- STATE
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local savedToken = plugin:GetSetting(TOKEN_KEY) or ""
 local savedUser  = plugin:GetSetting(USER_KEY)  or ""
 
@@ -346,6 +597,16 @@ local dropdownOpen        = false
 local pollCountdown       = POLL_INTERVAL
 local insertedIds = {}
 local isScanningGame      = false
+local isAdvancedMode      = plugin:GetSetting(ADVANCED_MODE_KEY) or false
+local lastRunId           = nil
+local lastRunData         = nil
+local explainDepth        = "Developer"
+local currentRunStartTime = nil
+local elapsedTimerThread  = nil
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- UTILITY FUNCTIONS
+-- ══════════════════════════════════════════════════════════════════════════════
 
 local function getGameIds()
 	local placeId    = tostring(game.PlaceId or 0)
@@ -362,10 +623,28 @@ end
 
 local function setStatus(text, color)
 	local labelText = text or ""
-	StatusPill.Text        = labelText == "" and "Idle" or labelText
-	StatusPill.TextColor3  = color or C.muted
-	LoginStatus.Text       = labelText == "" and "Not connected" or labelText
-	LoginStatus.TextColor3 = color or C.muted
+	StatusPillMain.Text       = labelText == "" and "Idle" or labelText
+	StatusPillMain.TextColor3 = color or C.muted
+	LoginStatus.Text          = labelText == "" and "Not connected" or labelText
+	LoginStatus.TextColor3    = color or C.muted
+
+	if color == C.green then
+		StatusPill.BackgroundColor3 = C.greenDark
+	elseif color == C.red then
+		StatusPill.BackgroundColor3 = C.redDark
+	elseif color == C.amber then
+		StatusPill.BackgroundColor3 = C.yellowDark
+	else
+		StatusPill.BackgroundColor3 = C.panel2
+	end
+end
+
+local function setStatusDetail(model, tokens, tasks)
+	local parts = {}
+	if model then table.insert(parts, "Model: " .. model) end
+	if tokens then table.insert(parts, tokens .. " tokens") end
+	if tasks then table.insert(parts, tasks .. " tasks") end
+	StatusPillDetail.Text = table.concat(parts, "  ·  ")
 end
 
 local function setProjectPickerText(text)
@@ -378,12 +657,12 @@ local function setProjectMenuOpen(open)
 		ProjectDropdown.Visible = true
 		PickerChevron.Text      = "▲"
 		tween(ProjectDropdown, TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-			Size = UDim2.new(0.30, 0, 0, 210),
+			Size = UDim2.new(0.25, 0, 0, 210),
 		})
 	else
 		PickerChevron.Text = "▼"
 		local t = tween(ProjectDropdown, TweenInfo.new(0.16, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-			Size = UDim2.new(0.30, 0, 0, 0),
+			Size = UDim2.new(0.25, 0, 0, 0),
 		})
 		t.Completed:Once(function()
 			if not dropdownOpen then ProjectDropdown.Visible = false end
@@ -492,6 +771,636 @@ local function setProjectSelected(projectId)
 		end
 	end
 end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- TASK PROGRESS SYSTEM
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function clearTaskList()
+	for _, child in ipairs(TaskList:GetChildren()) do
+		if child:IsA("GuiObject") then child:Destroy() end
+	end
+	TaskListLayout.Parent = TaskList
+end
+
+local function showTaskProgress(phaseText)
+	TaskProgressPhase.Text = phaseText or "Planning..."
+	TaskProgressFrame.Visible = true
+	clearTaskList()
+end
+
+local function updateTaskProgress(phaseText)
+	TaskProgressPhase.Text = phaseText or TaskProgressPhase.Text
+end
+
+local function addTaskItem(name, status, taskType, agentName)
+	local statusIcons = {
+		pending   = "○",
+		running   = "◉",
+		completed = "●",
+		failed    = "✕",
+	}
+	local statusColors = {
+		pending   = C.muted,
+		running   = C.blue,
+		completed = C.green,
+		failed    = C.red,
+	}
+
+	local card = Instance.new("Frame")
+	card.BackgroundColor3 = C.panel2; card.BorderSizePixel = 0
+	card.Size = UDim2.new(1, 0, 0, 22); card.AutomaticSize = Enum.AutomaticSize.Y
+	corner(card, 6); stroke(card, C.border)
+
+	local iconLabel = Instance.new("TextLabel")
+	iconLabel.Parent = card; iconLabel.BackgroundTransparency = 1
+	iconLabel.Position = UDim2.new(0, 8, 0, 0); iconLabel.Size = UDim2.new(0, 16, 0, 22)
+	iconLabel.Font = Enum.Font.Code; iconLabel.Text = statusIcons[status] or "○"
+	iconLabel.TextColor3 = statusColors[status] or C.muted; iconLabel.TextSize = 11
+
+	local nameLabel = Instance.new("TextLabel")
+	nameLabel.Parent = card; nameLabel.BackgroundTransparency = 1
+	nameLabel.Position = UDim2.new(0, 28, 0, 0); nameLabel.Size = UDim2.new(1, -36, 0, 22)
+	nameLabel.Font = Enum.Font.Gotham; nameLabel.Text = name or "Task"
+	nameLabel.TextColor3 = C.text; nameLabel.TextSize = 10
+	nameLabel.TextXAlignment = Enum.TextXAlignment.Left; nameLabel.TextYAlignment = Enum.TextYAlignment.Center
+	nameLabel.TextWrapped = true
+
+	if isAdvancedMode and (taskType or agentName) then
+		local metaParts = {}
+		if taskType then table.insert(metaParts, taskType) end
+		if agentName then table.insert(metaParts, "→ " .. agentName) end
+		local metaLabel = Instance.new("TextLabel")
+		metaLabel.Parent = card; metaLabel.BackgroundTransparency = 1
+		metaLabel.Position = UDim2.new(0, 28, 0, 18); metaLabel.Size = UDim2.new(1, -36, 0, 14)
+		metaLabel.Font = Enum.Font.Code; metaLabel.Text = table.concat(metaParts, "  ")
+		metaLabel.TextColor3 = C.muted; metaLabel.TextSize = 8
+		metaLabel.TextXAlignment = Enum.TextXAlignment.Left
+		card.Size = UDim2.new(1, 0, 0, 36)
+	end
+
+	card.Parent = TaskList
+	return card
+end
+
+local function hideTaskProgress()
+	TaskProgressFrame.Visible = false
+end
+
+local function startElapsedTimer()
+	if elapsedTimerThread then task.cancel(elapsedTimerThread) end
+	currentRunStartTime = tick()
+	elapsedTimerThread = task.spawn(function()
+		while currentRunStartTime do
+			local elapsed = math.floor(tick() - currentRunStartTime)
+			TaskProgressElapsed.Text = elapsed .. "s elapsed"
+			StatusPillTimer.Text = "⏱ " .. elapsed .. "s"
+			task.wait(1)
+		end
+	end)
+end
+
+local function stopElapsedTimer()
+	if elapsedTimerThread then task.cancel(elapsedTimerThread); elapsedTimerThread = nil end
+	currentRunStartTime = nil
+end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- DIFF VIEWER
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function renderDiffSummary(data)
+	if not data then return end
+
+	local created = data.created or data.scripts or {}
+	local deleted = data.deletions or {}
+	local updated = data.updated or {}
+
+	local hasChanges = (#created > 0) or (#deleted > 0) or (#updated > 0)
+	if not hasChanges then return end
+
+	local diffCard = Instance.new("Frame")
+	diffCard.BackgroundColor3 = C.panel2; diffCard.BorderSizePixel = 0
+	diffCard.Size = UDim2.new(1, 0, 0, 0); diffCard.AutomaticSize = Enum.AutomaticSize.Y
+	diffCard.Parent = OutputScroll; corner(diffCard, 8); stroke(diffCard, C.border)
+
+	local diffHeader = Instance.new("TextLabel")
+	diffHeader.Parent = diffCard; diffHeader.BackgroundTransparency = 1
+	diffHeader.Position = UDim2.new(0, 10, 0, 6); diffHeader.Size = UDim2.new(1, -20, 0, 14)
+	diffHeader.Font = Enum.Font.Code; diffHeader.Text = "DIFF SUMMARY"
+	diffHeader.TextColor3 = C.muted; diffHeader.TextSize = 9
+	diffHeader.TextXAlignment = Enum.TextXAlignment.Left
+
+	local diffY = 22
+
+	for _, item in ipairs(created) do
+		local name = item.name or "NewScript"
+		local classType = item.type or item.class or "Script"
+		local parent = item.parent or "?"
+		local line = Instance.new("TextLabel")
+		line.Parent = diffCard; line.BackgroundTransparency = 1
+		line.Position = UDim2.new(0, 10, 0, diffY); line.Size = UDim2.new(1, -20, 0, 14)
+		line.Font = Enum.Font.Code; line.Text = "Created: " .. name .. " (" .. classType .. " → " .. parent .. ")"
+		line.TextColor3 = C.green; line.TextSize = 10
+		line.TextXAlignment = Enum.TextXAlignment.Left
+		diffY = diffY + 16
+	end
+
+	for _, item in ipairs(updated) do
+		local name = item.name or "Script"
+		local lines = item.linesChanged or item.lines or "?"
+		local line = Instance.new("TextLabel")
+		line.Parent = diffCard; line.BackgroundTransparency = 1
+		line.Position = UDim2.new(0, 10, 0, diffY); line.Size = UDim2.new(1, -20, 0, 14)
+		line.Font = Enum.Font.Code; line.Text = "Updated: " .. name .. " (" .. tostring(lines) .. " lines changed)"
+		line.TextColor3 = C.amber; line.TextSize = 10
+		line.TextXAlignment = Enum.TextXAlignment.Left
+		diffY = diffY + 16
+	end
+
+	for _, item in ipairs(deleted) do
+		local name = item.name or "Script"
+		local parent = item.parent or "?"
+		local line = Instance.new("TextLabel")
+		line.Parent = diffCard; line.BackgroundTransparency = 1
+		line.Position = UDim2.new(0, 10, 0, diffY); line.Size = UDim2.new(1, -20, 0, 14)
+		line.Font = Enum.Font.Code; line.Text = "Deleted: " .. name .. " from " .. parent
+		line.TextColor3 = C.red; line.TextSize = 10
+		line.TextXAlignment = Enum.TextXAlignment.Left
+		diffY = diffY + 16
+	end
+
+	diffCard.Size = UDim2.new(1, 0, 0, diffY + 8)
+end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- SECURITY + PERFORMANCE SCAN
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function renderScanResults(scanData)
+	if not scanData then return end
+
+	local issues = scanData.issues or scanData.warnings or {}
+	local critical = scanData.critical or {}
+	local score = scanData.score
+
+	local bgColor, borderColor, label, labelColor
+
+	if #critical > 0 then
+		bgColor = C.redDark; borderColor = C.red
+		label = "Critical security issue: " .. (critical[1] or "unknown")
+		labelColor = C.red
+	elseif #issues > 0 then
+		bgColor = C.yellowDark; borderColor = C.amber
+		label = #issues .. " security warning" .. (#issues > 1 and "s" or "")
+		labelColor = C.amber
+	else
+		bgColor = C.greenDark; borderColor = C.green
+		label = "No security issues found"
+		labelColor = C.green
+	end
+
+	local scanCard = Instance.new("Frame")
+	scanCard.BackgroundColor3 = bgColor; scanCard.BorderSizePixel = 0
+	scanCard.Size = UDim2.new(1, 0, 0, 0); scanCard.AutomaticSize = Enum.AutomaticSize.Y
+	scanCard.Parent = OutputScroll; corner(scanCard, 8); stroke(scanCard, borderColor)
+
+	local scanIcon = Instance.new("TextLabel")
+	scanIcon.Parent = scanCard; scanIcon.BackgroundTransparency = 1
+	scanIcon.Position = UDim2.new(0, 10, 0, 6); scanIcon.Size = UDim2.new(0, 16, 0, 16)
+	scanIcon.Font = Enum.Font.Code; scanIcon.Text = (#critical > 0 and "✕" or (#issues > 0 and "⚠" or "✓"))
+	scanIcon.TextColor3 = labelColor; scanIcon.TextSize = 12
+
+	local scanLabel = Instance.new("TextLabel")
+	scanLabel.Parent = scanCard; scanLabel.BackgroundTransparency = 1
+	scanLabel.Position = UDim2.new(0, 30, 0, 6); scanLabel.Size = UDim2.new(1, -40, 0, 16)
+	scanLabel.Font = Enum.Font.GothamBold; scanLabel.Text = label
+	scanLabel.TextColor3 = labelColor; scanLabel.TextSize = 11
+	scanLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local detailY = 26
+
+	if score then
+		local scoreLabel = Instance.new("TextLabel")
+		scoreLabel.Parent = scanCard; scoreLabel.BackgroundTransparency = 1
+		scoreLabel.Position = UDim2.new(0, 10, 0, detailY); scoreLabel.Size = UDim2.new(1, -20, 0, 14)
+		scoreLabel.Font = Enum.Font.Code; scoreLabel.Text = "Score: " .. tostring(score) .. "/100"
+		scoreLabel.TextColor3 = C.subtext; scoreLabel.TextSize = 10
+		scoreLabel.TextXAlignment = Enum.TextXAlignment.Left
+		detailY = detailY + 16
+	end
+
+	local allIssues = {}
+	for _, c in ipairs(critical) do table.insert(allIssues, { text = c, color = C.red }) end
+	for _, i in ipairs(issues) do table.insert(allIssues, { text = i, color = C.amber }) end
+
+	for _, issue in ipairs(allIssues) do
+		local issueLabel = Instance.new("TextLabel")
+		issueLabel.Parent = scanCard; issueLabel.BackgroundTransparency = 1
+		issueLabel.Position = UDim2.new(0, 10, 0, detailY); issueLabel.Size = UDim2.new(1, -20, 0, 14)
+		issueLabel.Font = Enum.Font.Code; issueLabel.Text = "• " .. issue.text
+		issueLabel.TextColor3 = issue.color; issueLabel.TextSize = 9
+		issueLabel.TextXAlignment = Enum.TextXAlignment.Left; issueLabel.TextWrapped = true
+		issueLabel.AutomaticSize = Enum.AutomaticSize.Y
+		detailY = detailY + 16
+	end
+
+	scanCard.Size = UDim2.new(1, 0, 0, detailY + 6)
+end
+
+local function runScanOnOutput(data)
+	if not data then return end
+	if not savedToken or savedToken == "" then return end
+
+	local codeParts = {}
+	for _, scriptData in ipairs(data.scripts or {}) do
+		if scriptData.code then
+			table.insert(codeParts, scriptData.code)
+		end
+	end
+	if #codeParts == 0 then return end
+
+	task.spawn(function()
+		local ok, result = pcall(function()
+			return HttpService:RequestAsync({
+				Url    = SCAN_URL,
+				Method = "POST",
+				Headers = {
+					["Authorization"] = "Bearer " .. savedToken,
+					["Content-Type"]  = "application/json",
+				},
+				Body = HttpService:JSONEncode({
+					code = table.concat(codeParts, "\n---\n"),
+				}),
+			})
+		end)
+		if ok and result and result.StatusCode == 200 then
+			local parseOk, scanData = pcall(function() return HttpService:JSONDecode(result.Body) end)
+			if parseOk and scanData then
+				renderScanResults(scanData)
+			end
+		end
+	end)
+end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- UNDO / CHECKPOINT SYSTEM
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function addUndoButton(runId)
+	if not runId then return end
+
+	local undoCard = Instance.new("Frame")
+	undoCard.BackgroundColor3 = C.panel2; undoCard.BorderSizePixel = 0
+	undoCard.Size = UDim2.new(1, 0, 0, 36); undoCard.Parent = OutputScroll
+	corner(undoCard, 8); stroke(undoCard, C.border)
+
+	local undoBtn = makeTextButton(undoCard, "Undo Changes", C.redDark, C.text)
+	undoBtn.Position = UDim2.new(0, 8, 0, 6); undoBtn.Size = UDim2.new(0, 120, 0, 24)
+	undoBtn.TextSize = 10; stroke(undoBtn, C.red)
+	animatePress(undoBtn, Color3.fromRGB(58, 22, 22))
+
+	local checkBtn = nil
+	if isAdvancedMode then
+		checkBtn = makeTextButton(undoCard, "Create Checkpoint", C.panel3, C.text)
+		checkBtn.Position = UDim2.new(0, 138, 0, 6); checkBtn.Size = UDim2.new(0, 130, 0, 24)
+		checkBtn.TextSize = 10; stroke(checkBtn, C.border)
+		animatePress(checkBtn, C.panel4)
+	end
+
+	undoBtn.MouseButton1Click:Connect(function()
+		undoBtn.Text = "Rolling back..."
+		task.spawn(function()
+			local ok, result = pcall(function()
+				return HttpService:RequestAsync({
+					Url    = UNDO_URL,
+					Method = "POST",
+					Headers = {
+						["Authorization"] = "Bearer " .. savedToken,
+						["Content-Type"]  = "application/json",
+					},
+					Body = HttpService:JSONEncode({ runId = runId }),
+				})
+			end)
+			if ok and result and result.StatusCode == 200 then
+				showToast("Rolled back successfully", C.green)
+				undoBtn.Text = "Rolled back"
+				undoBtn.BackgroundColor3 = C.greenDark
+				undoBtn.TextColor3 = C.green
+			else
+				showToast("Rollback failed", C.red)
+				undoBtn.Text = "Undo Changes"
+			end
+		end)
+	end)
+
+	if checkBtn then
+		checkBtn.MouseButton1Click:Connect(function()
+			checkBtn.Text = "Saving..."
+			task.spawn(function()
+				local ok, result = pcall(function()
+					return HttpService:RequestAsync({
+						Url    = CHECKPOINT_URL,
+						Method = "POST",
+						Headers = {
+							["Authorization"] = "Bearer " .. savedToken,
+							["Content-Type"]  = "application/json",
+						},
+						Body = HttpService:JSONEncode({ runId = runId }),
+					})
+				end)
+				if ok and result and result.StatusCode == 200 then
+					showToast("Checkpoint created", C.green)
+					checkBtn.Text = "Checkpoint Saved"
+					checkBtn.BackgroundColor3 = C.greenDark
+					checkBtn.TextColor3 = C.green
+				else
+					showToast("Checkpoint failed", C.red)
+					checkBtn.Text = "Create Checkpoint"
+				end
+			end)
+		end)
+	end
+end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- PROJECT MEMORY SYSTEM
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function loadMemoryRules()
+	local raw = plugin:GetSetting(MEMORY_RULES_KEY)
+	if raw then
+		local ok, rules = pcall(function() return HttpService:JSONDecode(raw) end)
+		if ok and rules then memoryRules = rules end
+	end
+end
+
+local function saveMemoryRules()
+	local ok, encoded = pcall(function() return HttpService:JSONEncode(memoryRules) end)
+	if ok then
+		plugin:SetSetting(MEMORY_RULES_KEY, encoded)
+	end
+end
+
+local function refreshMemoryDisplay()
+	for _, frame in ipairs(memoryRuleFrames) do
+		if frame and frame.Parent then frame:Destroy() end
+	end
+	memoryRuleFrames = {}
+
+	for i, rule in ipairs(memoryRules) do
+		local ruleCard = Instance.new("Frame")
+		ruleCard.BackgroundColor3 = C.panel2; ruleCard.BorderSizePixel = 0
+		ruleCard.Size = UDim2.new(1, 0, 0, 28); ruleCard.AutomaticSize = Enum.AutomaticSize.Y
+		ruleCard.LayoutOrder = i
+		corner(ruleCard, 6); stroke(ruleCard, C.border)
+
+		local ruleText = Instance.new("TextLabel")
+		ruleText.Parent = ruleCard; ruleText.BackgroundTransparency = 1
+		ruleText.Position = UDim2.new(0, 8, 0, 4); ruleText.Size = UDim2.new(1, -36, 0, 20)
+		ruleText.Font = Enum.Font.Gotham; ruleText.Text = rule
+		ruleText.TextColor3 = C.text; ruleText.TextSize = 10; ruleText.TextWrapped = true
+		ruleText.TextXAlignment = Enum.TextXAlignment.Left; ruleText.TextYAlignment = Enum.TextYAlignment.Top
+		ruleText.AutomaticSize = Enum.AutomaticSize.Y
+
+		local removeBtn = Instance.new("TextButton")
+		removeBtn.Parent = ruleCard; removeBtn.BackgroundColor3 = C.redDark
+		removeBtn.BorderSizePixel = 0; removeBtn.Position = UDim2.new(1, -28, 0, 4)
+		removeBtn.Size = UDim2.new(0, 20, 0, 20); removeBtn.Text = "✕"
+		removeBtn.TextColor3 = C.red; removeBtn.TextSize = 10; corner(removeBtn, 4)
+
+		removeBtn.MouseButton1Click:Connect(function()
+			table.remove(memoryRules, i)
+			saveMemoryRules()
+			refreshMemoryDisplay()
+		end)
+
+		table.insert(memoryRuleFrames, ruleCard)
+	end
+end
+
+AddRuleBtn.MouseButton1Click:Connect(function()
+	local inputCard = Instance.new("Frame")
+	inputCard.BackgroundColor3 = C.panel3; inputCard.BorderSizePixel = 0
+	inputCard.Size = UDim2.new(1, 0, 0, 60); inputCard.LayoutOrder = 0
+	corner(inputCard, 6); stroke(inputCard, C.border)
+
+	local input = Instance.new("TextBox")
+	input.Parent = inputCard; input.BackgroundColor3 = C.panel2; input.BorderSizePixel = 0
+	input.Position = UDim2.new(0, 8, 0, 6); input.Size = UDim2.new(1, -16, 0, 22)
+	input.Font = Enum.Font.Gotham; input.PlaceholderText = "Enter rule..."
+	input.PlaceholderColor3 = C.muted; input.Text = ""; input.TextColor3 = C.text
+	input.TextSize = 10; input.ClearTextOnFocus = true
+	corner(input, 4); stroke(input, C.border)
+	input:CaptureFocus()
+
+	local btnRow = Instance.new("Frame")
+	btnRow.Parent = inputCard; btnRow.BackgroundTransparency = 1
+	btnRow.Position = UDim2.new(0, 8, 0, 34); btnRow.Size = UDim2.new(1, -16, 0, 22)
+
+	local saveRuleBtn = makeTextButton(btnRow, "Save", C.green, C.bg)
+	saveRuleBtn.Size = UDim2.new(0, 60, 0, 22); saveRuleBtn.TextSize = 10
+
+	local cancelRuleBtn = makeTextButton(btnRow, "Cancel", C.panel2, C.text)
+	cancelRuleBtn.Position = UDim2.new(0, 68, 0, 0); cancelRuleBtn.Size = UDim2.new(0, 60, 0, 22)
+	cancelRuleBtn.TextSize = 10; stroke(cancelRuleBtn, C.border)
+
+	local function doSave()
+		local text = input.Text
+		if text and text ~= "" then
+			table.insert(memoryRules, text)
+			saveMemoryRules()
+			refreshMemoryDisplay()
+		end
+		inputCard:Destroy()
+	end
+
+	saveRuleBtn.MouseButton1Click:Connect(doSave)
+	cancelRuleBtn.MouseButton1Click:Connect(function() inputCard:Destroy() end)
+	input.FocusLost:Connect(function(enterPressed) if enterPressed then doSave() end end)
+
+	inputCard.Parent = MemoryBody
+	AddRuleBtn.LayoutOrder = 9999
+end)
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- SKILL SELECTOR SYSTEM
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function closeSkillDropdown()
+	skillDropdownOpen = false
+	SkillDropdownList.Visible = false
+	SkillDropdownChevron.Text = "▼"
+end
+
+local function openSkillDropdown()
+	skillDropdownOpen = true
+	SkillDropdownList.Visible = true
+	SkillDropdownChevron.Text = "▲"
+
+	for _, child in ipairs(SkillDropdownScroll:GetChildren()) do
+		if child:IsA("GuiObject") then child:Destroy() end
+	end
+
+	local noneBtn = Instance.new("TextButton")
+	noneBtn.Parent = SkillDropdownScroll; noneBtn.BackgroundColor3 = C.panel2
+	noneBtn.BorderSizePixel = 0; noneBtn.Size = UDim2.new(1, 0, 0, 26)
+	noneBtn.Text = "None (default)"; noneBtn.TextColor3 = C.text; noneBtn.TextSize = 10
+	noneBtn.Font = Enum.Font.Gotham; noneBtn.ZIndex = 13
+	noneBtn.MouseButton1Click:Connect(function()
+		selectedSkill = nil
+		SkillDropdown.Text = "None (default)"
+		closeSkillDropdown()
+	end)
+
+	local order = 1
+	for _, skill in ipairs(availableSkills) do
+		order = order + 1
+		local btn = Instance.new("TextButton")
+		btn.Parent = SkillDropdownScroll; btn.BackgroundColor3 = C.panel2
+		btn.BorderSizePixel = 0; btn.Size = UDim2.new(1, 0, 0, 26)
+		btn.Text = (skill.category and (skill.category .. ": ") or "") .. (skill.name or "Skill")
+		btn.TextColor3 = C.text; btn.TextSize = 10; btn.Font = Enum.Font.Gotham
+		btn.LayoutOrder = order; btn.ZIndex = 13
+
+		btn.MouseButton1Click:Connect(function()
+			selectedSkill = skill
+			SkillDropdown.Text = btn.Text
+			closeSkillDropdown()
+		end)
+	end
+
+	SkillDropdownLayout.Parent = SkillDropdownScroll
+end
+
+SkillDropdown.MouseButton1Click:Connect(function()
+	if skillDropdownOpen then closeSkillDropdown() else openSkillDropdown() end
+end)
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- ADVANCED MODE TOGGLE
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function applyAdvancedMode()
+	isAdvancedMode = plugin:GetSetting(ADVANCED_MODE_KEY) or false
+
+	if isAdvancedMode then
+		AdvancedToggle.Text = "Advanced"
+		AdvancedToggle.TextColor3 = C.blue
+		SkillSelectorFrame.Visible = true
+		MemoryFrame.Visible = true
+	else
+		AdvancedToggle.Text = "Default"
+		AdvancedToggle.TextColor3 = C.muted
+		SkillSelectorFrame.Visible = false
+		MemoryFrame.Visible = false
+		closeSkillDropdown()
+	end
+end
+
+AdvancedToggle.MouseButton1Click:Connect(function()
+	isAdvancedMode = not isAdvancedMode
+	plugin:SetSetting(ADVANCED_MODE_KEY, isAdvancedMode)
+	applyAdvancedMode()
+end)
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- MEMORY PANEL TOGGLE
+-- ══════════════════════════════════════════════════════════════════════════════
+
+MemoryHeader.MouseButton1Click:Connect(function()
+	memoryOpen = not memoryOpen
+	MemoryBody.Visible = memoryOpen
+	MemoryChevron.Text = memoryOpen and "▼" or "▶"
+end)
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- EXPLAIN GAME SYSTEM
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function explainGame()
+	if not savedToken or savedToken == "" then setStatus("Connect first.", C.red); return end
+	setStatus("Explaining game...", C.blue)
+
+	showTaskProgress("Analyzing game structure...")
+
+	task.spawn(function()
+		local ok, result = pcall(function()
+			return HttpService:RequestAsync({
+				Url    = EXPLAIN_URL,
+				Method = "POST",
+				Headers = {
+					["Authorization"] = "Bearer " .. savedToken,
+					["Content-Type"]  = "application/json",
+				},
+				Body = HttpService:JSONEncode({
+					depth = explainDepth:lower(),
+				}),
+			})
+		end)
+
+		hideTaskProgress()
+
+		if not ok then
+			setStatus("Explain request failed.", C.red)
+			return
+		end
+
+		if result.StatusCode ~= 200 then
+			setStatus("Explain failed (" .. tostring(result.StatusCode) .. ")", C.red)
+			return
+		end
+
+		local parseOk, data = pcall(function() return HttpService:JSONDecode(result.Body) end)
+		if not parseOk or not data then
+			setStatus("Bad explain response.", C.red)
+			return
+		end
+
+		clearOutput()
+
+		if data.title then
+			local lbl = Instance.new("TextLabel"); lbl.BackgroundTransparency = 1
+			lbl.Size = UDim2.new(1, 0, 0, 22); lbl.Font = Enum.Font.GothamBold
+			lbl.Text = data.title; lbl.TextColor3 = C.text; lbl.TextSize = 14
+			lbl.TextWrapped = true; lbl.TextXAlignment = Enum.TextXAlignment.Left
+			lbl.Parent = OutputScroll
+		end
+
+		if data.summary then
+			addOutputBlock("Summary", data.summary, C.accent, C.subtext, Enum.Font.Gotham)
+		end
+
+		if data.systems and #data.systems > 0 then
+			for _, system in ipairs(data.systems) do
+				local sysName = system.name or system.title or "System"
+				local sysDesc = system.description or system.details or ""
+				local dependencies = system.dependencies or {}
+				local depText = #dependencies > 0 and ("Dependencies: " .. table.concat(dependencies, ", ")) or ""
+				local body = sysDesc .. (depText ~= "" and ("\n" .. depText) or "")
+				addOutputBlock(sysName, body, C.blue, C.subtext, Enum.Font.Gotham)
+			end
+		end
+
+		if data.notes and #data.notes > 0 then
+			for _, note in ipairs(data.notes) do
+				addOutputBlock("Note", note, C.subtext, C.subtext, Enum.Font.Gotham)
+			end
+		end
+
+		setStatus("Game explained (" .. explainDepth .. ")", C.green)
+		StateTitle.Text = "Game Explained"
+		StateSub.Text = "Showing " .. explainDepth .. " level analysis."
+	end)
+end
+
+ExplainBtn.MouseButton1Click:Connect(function()
+	explainGame()
+end)
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- GAME MODEL SCANNING
+-- ══════════════════════════════════════════════════════════════════════════════
 
 local function scanInstance(instance)
 	local data = {
@@ -623,6 +1532,10 @@ local function startAutoScan()
 	end)
 end
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- INSTANCE INSERTION (existing logic)
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local function resolveParentTarget(parentName, className, createdInstanceMap)
 	local starterPlayer = game:GetService("StarterPlayer")
 	local normalized = (parentName or ""):lower()
@@ -714,7 +1627,6 @@ local function processdeletions(data, createdInstanceMap)
 			if target then
 				target:Destroy()
 				deletedCount = deletedCount + 1
-			else
 			end
 		end)
 		if not ok then
@@ -760,6 +1672,10 @@ local function insertLatestData()
 	setStatus(msg, C.green)
 end
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- RENDER LATEST DATA (enhanced with diff, scan, undo)
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local function renderLatestData(data)
 	clearOutput()
 	latestProjectData = data
@@ -788,6 +1704,8 @@ local function renderLatestData(data)
 		lbl.TextXAlignment = Enum.TextXAlignment.Left; lbl.TextYAlignment = Enum.TextYAlignment.Top
 		lbl.Parent = OutputScroll
 	end
+
+	renderDiffSummary(data)
 
 	if data.deletions and #data.deletions > 0 then
 		for _, delData in ipairs(data.deletions) do
@@ -833,10 +1751,119 @@ local function renderLatestData(data)
 			addOutputBlock("⚠ Warning", warning, C.amber, C.amber, Enum.Font.Gotham)
 		end
 	end
+
+	if data.runId then
+		lastRunId = data.runId
+		addUndoButton(data.runId)
+	end
+
+	runScanOnOutput(data)
 	insertLatestData()
 	StateTitle.Text = "✓ Inserted"
 	StateSub.Text   = "Output auto-inserted. Polling every " .. POLL_INTERVAL .. "s for new generations."
 end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- ORCHESTRATION SYSTEM
+-- ══════════════════════════════════════════════════════════════════════════════
+
+local function sendOrchestrateRequest(prompt)
+	if not savedToken or savedToken == "" then return end
+	if not selectedProject then setStatus("Select a project first.", C.amber); return end
+
+	showTaskProgress("Planning...")
+	startElapsedTimer()
+
+	setStatus("Orchestrating...", C.blue)
+	StatusPillDetail.Text = ""
+	StatusPillTimer.Text = ""
+
+	local body = {
+		prompt    = prompt,
+		projectId = selectedProject.id,
+	}
+
+	if isAdvancedMode and memoryRules and #memoryRules > 0 then
+		body.rules = memoryRules
+	end
+
+	if isAdvancedMode and selectedSkill then
+		body.skill = selectedSkill.id or selectedSkill.name
+	end
+
+	task.spawn(function()
+		local ok, result = pcall(function()
+			return HttpService:RequestAsync({
+				Url    = ORCHESTRATE_URL,
+				Method = "POST",
+				Headers = {
+					["Authorization"] = "Bearer " .. savedToken,
+					["Content-Type"]  = "application/json",
+				},
+				Body = HttpService:JSONEncode(body),
+			})
+		end)
+
+		stopElapsedTimer()
+
+		if not ok then
+			hideTaskProgress()
+			setStatus("Orchestration failed.", C.red)
+			return
+		end
+
+		if result.StatusCode == 401 then
+			hideTaskProgress()
+			setStatus("Session expired. Reconnect.", C.red)
+			plugin:SetSetting(TOKEN_KEY, ""); savedToken = ""
+			return
+		end
+
+		if result.StatusCode ~= 200 then
+			hideTaskProgress()
+			setStatus("Orchestration error (" .. tostring(result.StatusCode) .. ")", C.red)
+			return
+		end
+
+		local parseOk, data = pcall(function() return HttpService:JSONDecode(result.Body) end)
+		if not parseOk or not data then
+			hideTaskProgress()
+			setStatus("Bad orchestration response.", C.red)
+			return
+		end
+
+		local tasks = data.tasks or data.steps or {}
+		if #tasks > 0 then
+			updateTaskProgress("Building " .. #tasks .. " tasks...")
+			for i, taskItem in ipairs(tasks) do
+				local taskName = taskItem.name or taskItem.title or ("Task " .. i)
+				local taskStatus = taskItem.status or "completed"
+				local taskType = taskItem.type or taskItem.kind
+				local agentName = taskItem.agent or taskItem.agentName
+				addTaskItem(taskName, taskStatus, taskType, agentName)
+			end
+		end
+
+		updateTaskProgress("Reviewing...")
+		task.wait(0.5)
+		updateTaskProgress("Done!")
+		task.wait(1)
+
+		if data.model then
+			setStatusDetail(data.model, data.tokensUsed, #tasks)
+		end
+
+		latestProjectData = data.result or data
+		lastRunData = data
+		renderLatestData(latestProjectData)
+
+		fetchLatestForProject(selectedProject.id, true)
+	end)
+end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- PROJECT DATA FETCHING
+-- ══════════════════════════════════════════════════════════════════════════════
 
 local function verifyToken(token)
 	local ok, result = pcall(function()
@@ -927,6 +1954,50 @@ local function fetchProjects()
 	setStatus("Projects loaded.", C.green)
 end
 
+local function fetchSkills()
+	if not savedToken or savedToken == "" then return end
+	task.spawn(function()
+		local ok, result = pcall(function()
+			return HttpService:RequestAsync({
+				Url    = BASE_URL .. "/api/plugin/skills",
+				Method = "GET",
+				Headers = { ["Authorization"] = "Bearer " .. savedToken },
+			})
+		end)
+		if ok and result and result.StatusCode == 200 then
+			local parseOk, data = pcall(function() return HttpService:JSONDecode(result.Body) end)
+			if parseOk and data then
+				availableSkills = data.skills or data or {}
+			end
+		end
+	end)
+end
+
+local function fetchMemoryRules()
+	if not savedToken or savedToken == "" then return end
+	task.spawn(function()
+		local ok, result = pcall(function()
+			return HttpService:RequestAsync({
+				Url    = MEMORY_URL,
+				Method = "GET",
+				Headers = { ["Authorization"] = "Bearer " .. savedToken },
+			})
+		end)
+		if ok and result and result.StatusCode == 200 then
+			local parseOk, data = pcall(function() return HttpService:JSONDecode(result.Body) end)
+			if parseOk and data then
+				memoryRules = data.rules or data or {}
+				saveMemoryRules()
+				refreshMemoryDisplay()
+			end
+		end
+	end)
+end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- HEARTBEAT + POLLING
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local function startHeartbeat()
 	if heartbeatThread then task.cancel(heartbeatThread) end
 	heartbeatThread = task.spawn(function()
@@ -975,6 +2046,10 @@ local function startAutoPolling()
 	end)
 end
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- CONNECT / DISCONNECT
+-- ══════════════════════════════════════════════════════════════════════════════
+
 function showDisconnected()
 	setProjectPickerText("No project selected")
 	StateTitle.Text       = "Not connected"
@@ -982,8 +2057,10 @@ function showDisconnected()
 	ProjectNameLabel.Text = "No project selected"
 	ProjectMetaLabel.Text = "Generate from the dashboard, then insert here."
 	PollTimerLabel.Text   = ""
-	selectedProject = nil; latestProjectData = nil
-	clearProjectList(); clearOutput()
+	StatusPillDetail.Text = ""
+	StatusPillTimer.Text  = ""
+	selectedProject = nil; latestProjectData = nil; lastRunId = nil; lastRunData = nil
+	clearProjectList(); clearOutput(); hideTaskProgress()
 	addEmptyOutput("Projects and synced output will appear here after you connect.")
 	ProjectPickerBtn.Active           = false
 	ProjectPickerBtn.AutoButtonColor  = false
@@ -1012,7 +2089,13 @@ local function showConnected(username)
 	startHeartbeat()
 	startAutoScan()
 	syncRobloxUserId()
+	fetchSkills()
+	fetchMemoryRules()
 end
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- PROJECT BUTTONS
+-- ══════════════════════════════════════════════════════════════════════════════
 
 local function makeProjectButton(projectData)
 	local btn = Instance.new("TextButton")
@@ -1058,6 +2141,10 @@ function renderProjects(projects)
 	for _, projectData in ipairs(projects) do makeProjectButton(projectData) end
 end
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- SIGN IN
+-- ══════════════════════════════════════════════════════════════════════════════
+
 local function openDashboard()
 	setStatus("Link ready.", C.green)
 end
@@ -1087,7 +2174,7 @@ local function beginSignIn()
 	if pollThread then task.cancel(pollThread) end
 	pollThread = task.spawn(function()
 		local attempts = 0
-		local maxAttempts = 180  -- 6 minutes
+		local maxAttempts = 180
 		while attempts < maxAttempts do
 			task.wait(2); attempts = attempts + 1
 			local pOk, pResult = pcall(function()
@@ -1098,7 +2185,6 @@ local function beginSignIn()
 			end)
 			if not pOk then continue end
 			if pResult.StatusCode == 410 then
-				-- Link expired - show error but keep overlay visible
 				setStatus("Link expired. Press Connect to get a new one.", C.red)
 				LoginOverlay.Visible = true
 				break
@@ -1122,11 +2208,14 @@ local function beginSignIn()
 	end)
 end
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- BUTTON CONNECTIONS
+-- ══════════════════════════════════════════════════════════════════════════════
+
 ProjectPickerBtn.MouseButton1Click:Connect(function()
 	if not ProjectPickerBtn.Active then return end
 	setProjectMenuOpen(not dropdownOpen)
 end)
-
 
 RefreshBtn.MouseButton1Click:Connect(function()
 	if savedToken == "" then setStatus("Connect first.", C.red); return end
@@ -1156,11 +2245,19 @@ plugin.Unloading:Connect(function()
 	deleteGameModel()
 end)
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- INIT
+-- ══════════════════════════════════════════════════════════════════════════════
+
 ProjectPickerBtn.Active           = false
 ProjectPickerBtn.AutoButtonColor  = false
 ProjectPickerBtn.TextTransparency = 0.45
 PickerChevron.TextTransparency    = 0.45
 ProjectDropdown.Visible  = false
+
+loadMemoryRules()
+refreshMemoryDisplay()
+applyAdvancedMode()
 
 if savedToken ~= "" then
 	task.spawn(function()
