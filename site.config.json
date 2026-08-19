@@ -6,8 +6,8 @@
     "sub": "by Zorin Studios"
   },
   "links": {
-    "home": "http://localhost:3000",
-    "dashboard": "http://localhost:3000",
+    "home": "https://zorinai.vercel.app",
+    "dashboard": "https://zorinai.vercel.app",
     "roblox": "https://create.roblox.com/store/asset/131066175415119/Galaxium-AI",
     "github": null
   },
@@ -20,8 +20,7 @@
   "stats": [
     { "value": "< 3s",  "label": "Avg generation time" },
     { "value": "Luau",  "label": "Native language output" },
-    { "value": "Free",  "label": "No paywalls ever" },
-    { "value": "10+",   "label": "AI models available" }
+    { "value": "Free",  "label": "No credit card required" },
   ],
   "features": [
     {
@@ -40,13 +39,13 @@
     },
     {
       "title": "Completely Free",
-      "desc": "No paywalls, no credit limits, no subscription. Zorin AI is completely free to use for every Roblox developer.",
+      "desc": "No credit card required. Zorin AI is completely free to use for every Roblox developer.",
       "color": "#3ecf8e",
       "glow": "rgba(62,207,142,0.10)",
       "icon": "free"
     },
     {
-      "title": "Wide Variety of Models",
+      "title": "Multiple AI Models",
       "desc": "Choose from multiple AI models depending on your task — fast generation for quick scripts, or more powerful models for complex systems.",
       "color": "#5b96f7",
       "glow": "rgba(91,150,247,0.12)",
