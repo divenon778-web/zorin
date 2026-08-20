@@ -128,12 +128,12 @@ export default function DashboardPage() {
         <div style={{ textAlign: "center" }}>
           <div style={{ 
             width: 40, height: 40, margin: "0 auto 16px", 
-            border: "3px solid rgba(255,255,255,0.08)", 
-            borderTopColor: "rgba(255,165,0,0.6)", borderRadius: "50%",
-            animation: "spin 0.8s linear infinite"
+            border: "3px solid rgba(255,255,255,0.1)", 
+            borderTopColor: "#8b7ff5", borderRadius: "50%",
+            animation: "spin 1s linear infinite"
           }} />
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, fontWeight: 500 }}>Loading Wisp...</p>
+          <p style={{ color: "rgba(255,255,255,0.6)" }}>Loading dashboard...</p>
         </div>
       </div>
     );
