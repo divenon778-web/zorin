@@ -77,6 +77,17 @@ function getGreeting(name: string): string {
 function isLateHour(): boolean { const h = new Date().getHours(); return h >= 21 || h < 5 }
 function getRandomPrompt() { return BUILDING_PROMPTS[Math.floor(Math.random() * BUILDING_PROMPTS.length)] }
 function getRandomN<T>(arr: T[], n: number): T[] { if (arr.length <= n) return arr; return [...arr].sort(() => Math.random() - 0.5).slice(0, n) }
+
+function getTimeAgo(dateStr: string): string {
+  const now = Date.now()
+  const then = new Date(dateStr).getTime()
+  const diff = Math.floor((now - then) / 1000)
+  if (diff < 60) return "just now"
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`
+  if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`
+  return new Date(dateStr).toLocaleDateString()
+}
 function stripTicks(t: string) { if (!t) return t; return t.replace(/```[\w]*/g, "").replace(/`/g, "").trim() }
 function stripThinking(t: string) { if (!t) return t; return t.replace(/<think>[\s\S]*?<\/think>/g, "").trim() }
 function safeDisplayName(p: Profile) { return (p as FullProfile).display_name?.trim() || (p as FullProfile).username?.trim() || "User" }
@@ -798,6 +809,9 @@ export default function ProjectChatPage() {
   const [copiedMsgId,       setCopiedMsgId]       = useState<string | null>(null)
   const [shakeSend,         setShakeSend]         = useState(false)
   const [pluginJustChanged, setPluginJustChanged] = useState<"connected" | "disconnected" | null>(null)
+  const [sidebarOpen,       setSidebarOpen]       = useState(false)
+  const [sidebarSearch,     setSidebarSearch]     = useState("")
+  const [userProjects,      setUserProjects]      = useState<Project[]>([])
 
   const bottomRef      = useRef<HTMLDivElement>(null)
   const scrollRef       = useRef<HTMLDivElement>(null)
@@ -829,6 +843,10 @@ export default function ProjectChatPage() {
       const { data: msgs } = await supabase.from("messages").select("*").eq("project_id", projectId).order("created_at", { ascending: true })
       setMessages((msgs || []) as Message[])
       setLoadingMsgs(false)
+
+      // Load all user projects for sidebar history
+      const { data: allProjects } = await supabase.from("projects").select("*").eq("user_id", session.user.id).order("updated_at", { ascending: false })
+      setUserProjects((allProjects || []) as Project[])
 
       // Load prompt usage for this user
       const { data: usage } = await supabase
@@ -1271,11 +1289,127 @@ export default function ProjectChatPage() {
         .reasoning-toggle:hover  { opacity: 0.75; }
         .reasoning-row:hover     { background: rgba(255,255,255,0.018) !important; }
         .credits-pill:hover      { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; transition: all .15s ease !important; }
+        .sidebar-overlay         { opacity: 1; pointer-events: auto; }
+        .sidebar-panel           { transform: translateX(0); }
+        .sidebar-item:hover      { background: rgba(255,255,255,0.06) !important; }
+        .sidebar-item.active     { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.12) !important; }
       `}</style>
 
       <FeedbackModal open={feedbackOpen} onClose={() => { setFeedbackOpen(false); setFeedbackMsgId(null) }} onSubmit={submitFeedback} sending={feedbackSending} isMobile={isMobile} />
       <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} profile={profile} locale={locale} setLocale={setLocale} />
       {isAdmin && <AdminPanel open={adminOpen} onClose={() => setAdminOpen(false)} />}
+
+      {/* ── SIDEBAR OVERLAY ── */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 90,
+            background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)",
+            animation: "fadeIn .2s ease forwards",
+          }}
+        />
+      )}
+
+      {/* ── SIDEBAR PANEL ── */}
+      <div style={{
+        position: "fixed", top: 12, left: 12, bottom: 12,
+        width: isMobile ? "calc(100vw - 24px)" : 280,
+        zIndex: 95,
+        background: "rgba(17,17,20,0.97)",
+        backdropFilter: "blur(40px) saturate(1.5)", WebkitBackdropFilter: "blur(40px) saturate(1.5)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        borderRadius: 18,
+        boxShadow: "0 24px 80px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.06)",
+        display: "flex", flexDirection: "column",
+        overflow: "hidden",
+        transform: sidebarOpen ? "translateX(0)" : "translateX(-110%)",
+        opacity: sidebarOpen ? 1 : 0,
+        pointerEvents: sidebarOpen ? "auto" : "none",
+        transition: "transform .3s cubic-bezier(.16,1,.3,1), opacity .25s ease",
+      }}>
+        {/* sidebar header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 14px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <button type="button" onClick={() => setSidebarOpen(false)} style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 8px", borderRadius: 8, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.5)", fontSize: 13, fontWeight: 600, fontFamily: "inherit", transition: "all .15s ease" }} className="nav-btn">
+            <svg width="14" height="14" viewBox="0 0 15 15" fill="none"><path d="M9.5 11.5L5.5 7.5l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            Back to Toolbox
+          </button>
+          <button type="button" onClick={() => setSidebarOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 7, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)", transition: "all .15s ease" }} className="nav-btn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="5" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3"/><rect x="8" y="2" width="5" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3"/></svg>
+          </button>
+        </div>
+
+        {/* new chat button */}
+        <div style={{ padding: "12px 14px 10px" }}>
+          <button type="button" onClick={() => { setSidebarOpen(false); router.push("/dashboard") }} style={{
+            width: "100%", padding: "11px 0", borderRadius: 12, border: "none",
+            background: "linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%)",
+            color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer",
+            fontFamily: "inherit", letterSpacing: "0.01em",
+            boxShadow: "0 4px 16px rgba(37,99,235,0.35), inset 0 1px 0 rgba(255,255,255,0.15)",
+            transition: "all .2s ease",
+          }}>
+            + New Chat
+          </button>
+        </div>
+
+        {/* search */}
+        <div style={{ padding: "0 14px 10px" }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 8,
+            padding: "9px 12px", borderRadius: 11,
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.08)",
+          }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, opacity: 0.35 }}><circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.3"/><path d="M9.5 9.5L12.5 12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+            <input
+              type="text"
+              value={sidebarSearch}
+              onChange={e => setSidebarSearch(e.target.value)}
+              placeholder="Search"
+              style={{
+                flex: 1, background: "transparent", border: "none", outline: "none",
+                fontSize: 13, color: "#e8e9ec", fontFamily: "inherit",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* history list */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "0 8px 14px" }}>
+          {userProjects.filter(p => !sidebarSearch || p.name.toLowerCase().includes(sidebarSearch.toLowerCase())).length === 0 ? (
+            <div style={{ padding: "24px 14px", textAlign: "center" }}>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.22)" }}>Sign in to sync chats</span>
+            </div>
+          ) : (
+            userProjects
+              .filter(p => !sidebarSearch || p.name.toLowerCase().includes(sidebarSearch.toLowerCase()))
+              .map(p => {
+                const isActive = p.id === projectId
+                const timeAgo = getTimeAgo(p.updated_at)
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => { router.push(`/project/${p.id}`); setSidebarOpen(false) }}
+                    className={`sidebar-item${isActive ? " active" : ""}`}
+                    style={{
+                      width: "100%", display: "flex", flexDirection: "column", gap: 3,
+                      padding: "10px 12px", borderRadius: 11, marginBottom: 2,
+                      background: isActive ? "rgba(255,255,255,0.06)" : "transparent",
+                      border: isActive ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
+                      cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+                      transition: "all .15s ease",
+                    }}
+                  >
+                    <span style={{ fontSize: 13, fontWeight: isActive ? 600 : 500, color: isActive ? "#e8e9ec" : "rgba(255,255,255,0.55)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name || "Untitled"}</span>
+                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.22)" }}>{timeAgo}</span>
+                  </button>
+                )
+              })
+          )}
+        </div>
+      </div>
 
       <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#09090b", fontFamily: "'Inter', sans-serif", color: "#e8e9ec" }}>
 
@@ -1291,7 +1425,10 @@ export default function ProjectChatPage() {
           animation: "headerSlide .45s cubic-bezier(.16,1,.3,1) both",
         }}>
 
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6 }}>
+            <button type="button" onClick={() => setSidebarOpen(v => !v)} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32, borderRadius: 9, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.38)", transition: "all .18s ease" }} className="nav-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="1.5" rx="0.75" fill="currentColor"/><rect x="2" y="7.25" width="8" height="1.5" rx="0.75" fill="currentColor"/><rect x="2" y="11.5" width="10" height="1.5" rx="0.75" fill="currentColor"/></svg>
+            </button>
             <button type="button" onClick={() => router.push("/dashboard")} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 9px", borderRadius: 9, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.38)", fontSize: 13, fontWeight: 500, fontFamily: "inherit", transition: "all .18s ease" }} className="nav-btn">
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M9.5 11.5L5.5 7.5l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
               {!isMobile && <span style={{ fontSize: 13 }}>Projects</span>}
