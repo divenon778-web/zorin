@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DASH_URL  = "https://zeugoai.vercel.app";
+const DASH_URL  = "https://wispai.vercel.app";
 const ERROR_URL = `${DASH_URL}/oautherror`;
 
 export async function GET(req: NextRequest) {
@@ -77,13 +77,13 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.redirect(DASH_URL);
 
 
-    response.cookies.set("zeugo_session", JSON.stringify(session), {
+    response.cookies.set("wisp_session", JSON.stringify(session), {
       httpOnly: true,
       secure:   true,
       sameSite: "none",
       maxAge:   tokenData.expires_in,
       path:     "/",
-domain:   "zeugoai.vercel.app",
+domain:   "wispai.vercel.app",
     });
 
     response.cookies.set("roblox_oauth_state", "", {
@@ -92,7 +92,7 @@ domain:   "zeugoai.vercel.app",
       sameSite: "none",
       maxAge:   0,
       path:     "/",
-      domain:   "zeugoai.vercel.app",
+      domain:   "wispai.vercel.app",
     });
 
     return response;

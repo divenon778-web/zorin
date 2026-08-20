@@ -91,7 +91,7 @@ export default function OnboardingPage() {
     const url = new URL("https://discord.com/oauth2/authorize");
     url.searchParams.set("client_id",     clientId);
     url.searchParams.set("response_type", "code");
-    url.searchParams.set("redirect_uri",  "https://zeugoai.vercel.app/api/auth/discord/callback");
+    url.searchParams.set("redirect_uri",  "https://wispai.vercel.app/api/auth/discord/callback");
     url.searchParams.set("scope",         "identify guilds.join");
     url.searchParams.set("state",         userId);
 
@@ -105,15 +105,15 @@ export default function OnboardingPage() {
 
       <div style={S.screen}>
         <header style={S.topbar}>
-          <a href="https://zeugoai.vercel.app" style={S.brand}>
+          <a href="https://wispai.vercel.app" style={S.brand}>
             <Image
               src="/icons/logo-white.png"
-              alt="Zeugo AI"
+              alt="Wisp AI"
               width={22}
               height={22}
               style={{ objectFit: "contain" }}
             />
-            <span style={S.brandName}>Zeugo AI</span>
+            <span style={S.brandName}>Wisp AI</span>
           </a>
         </header>
 
@@ -139,7 +139,7 @@ export default function OnboardingPage() {
           >
             <Image
               src="/icons/logo-white.png"
-              alt="Zeugo AI"
+              alt="Wisp AI"
               width={44}
               height={44}
               style={{ objectFit: "contain", marginBottom: 20 }}
@@ -148,7 +148,7 @@ export default function OnboardingPage() {
             {step === "profile" && (
               <>
                 <h1 style={S.title}>Set up your profile</h1>
-                <p style={S.sub}>One-time setup for your Zeugo account</p>
+                <p style={S.sub}>One-time setup for your Wisp account</p>
 
                 {error && (
                   <div className="error-shake" style={S.errBox}>

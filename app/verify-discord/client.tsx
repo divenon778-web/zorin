@@ -94,7 +94,7 @@ export function VerifyDiscordClient({
           <StatusPill color="#f87171" label="Invalid link" />
           <h1 style={S.title}>Something's wrong</h1>
           <p style={S.sub}>This link is missing required information. Head back to Discord and click Verify again.</p>
-          <a href="https://zeugoai.vercel.app" style={S.btnGhost}>Go to dashboard</a>
+          <a href="https://wispai.vercel.app" style={S.btnGhost}>Go to dashboard</a>
         </Card>
       </Shell>
     );
@@ -106,8 +106,8 @@ export function VerifyDiscordClient({
         <Card>
           <StatusPill color="rgba(255,255,255,0.4)" label="Sign in required" />
           <h1 style={S.title}>Sign in first</h1>
-          <p style={S.sub}>You need a Zeugo AI account to verify your Discord. Sign in and this page will continue automatically.</p>
-          <a href={`https://zeugoai.vercel.app/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={S.btnPrimary}>Sign in to continue</a>
+          <p style={S.sub}>You need a Wisp AI account to verify your Discord. Sign in and this page will continue automatically.</p>
+          <a href={`https://wispai.vercel.app/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={S.btnPrimary}>Sign in to continue</a>
         </Card>
       </Shell>
     );
@@ -119,9 +119,9 @@ export function VerifyDiscordClient({
         <Card>
           <StatusPill color="#f87171" label="No account found" />
           <h1 style={S.title}>No account found</h1>
-          <p style={S.sub}>We couldn't find a Zeugo AI account. Create a free account to get access.</p>
-          <a href="https://zeugoai.vercel.app/register" style={S.btnPrimary}>Create an account</a>
-          <a href={`https://zeugoai.vercel.app/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={{ ...S.btnGhost, marginTop: 10 }}>Sign in with a different account</a>
+          <p style={S.sub}>We couldn't find a Wisp AI account. Create a free account to get access.</p>
+          <a href="https://wispai.vercel.app/register" style={S.btnPrimary}>Create an account</a>
+          <a href={`https://wispai.vercel.app/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={{ ...S.btnGhost, marginTop: 10 }}>Sign in with a different account</a>
         </Card>
       </Shell>
     );
@@ -143,7 +143,7 @@ export function VerifyDiscordClient({
             <div style={S.infoDivider} />
             <div style={S.infoRow}><span style={S.infoKey}>Status</span><span style={{ ...S.infoVal, color: "#4ade80" }}>Verified</span></div>
           </div>
-          <a href="https://zeugoai.vercel.app" style={S.btnGhost}>Open dashboard</a>
+          <a href="https://wispai.vercel.app" style={S.btnGhost}>Open dashboard</a>
         </Card>
       </Shell>
     );
@@ -164,16 +164,16 @@ export function VerifyDiscordClient({
         </h1>
         <p style={S.sub}>
           {status === "loading"
-            ? "Linking your Discord account to Zeugo AI."
+            ? "Linking your Discord account to Wisp AI."
             : status === "error"
             ? errMsg
-            : "Connect your Discord account to your Zeugo AI account to get server access."}
+            : "Connect your Discord account to your Wisp AI account to get server access."}
         </p>
         <div style={S.accountChip}>
           <AccountAvatar user={user} size={36} />
           <div>
             <div style={S.accountName}>{user.username}</div>
-            <div style={S.accountSub}>Zeugo AI account</div>
+            <div style={S.accountSub}>Wisp AI account</div>
           </div>
           <div style={S.accountCheckmark}><i className="bi bi-check" style={{ fontSize: 11 }} /></div>
         </div>
@@ -228,9 +228,9 @@ function Shell({ children, badge }: { children: React.ReactNode; badge: string }
       `}</style>
       <div className="glc-shell">
         <header className="glc-topbar">
-          <a href="https://zeugoai.vercel.app" className="glc-brand">
-            <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
-            <span className="glc-brand-name">Zeugo AI</span>
+          <a href="https://wispai.vercel.app" className="glc-brand">
+            <Image src="/icons/logo-white.png" alt="Wisp AI" width={22} height={22} style={{ objectFit: "contain" }} />
+            <span className="glc-brand-name">Wisp AI</span>
           </a>
           <span className="glc-topbar-badge">{badge}</span>
         </header>

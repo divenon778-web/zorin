@@ -1,7 +1,7 @@
 -- =============================================================================
--- Zeugo AI Database Schema Migration
+-- Wisp AI Database Schema Migration
 -- =============================================================================
--- This migration creates all tables needed for Zeugo AI features.
+-- This migration creates all tables needed for Wisp AI features.
 -- Existing tables (plugin_tokens, plugin_sessions, plugin_heartbeats, profiles,
 -- projects, messages) are NOT recreated.
 -- =============================================================================

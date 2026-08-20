@@ -37,9 +37,9 @@ type ModelData = { label: string; provider: string; speed?: number; quality?: nu
 type ModelMap = Record<string, ModelData>
 type FeedbackRow = { id: string; user_id: string; message_id: string | null; feedback_text: string; created_at: string }
 
-const STORAGE_KEY_REDUCE_MOTION  = "zeugo_reduce_motion"
-const STORAGE_KEY_SEND_ON_ENTER  = "zeugo_send_on_enter"
-const STORAGE_KEY_COMPACT_MODE   = "zeugo_compact_mode"
+const STORAGE_KEY_REDUCE_MOTION  = "wisp_reduce_motion"
+const STORAGE_KEY_SEND_ON_ENTER  = "wisp_send_on_enter"
+const STORAGE_KEY_COMPACT_MODE   = "wisp_compact_mode"
 
 const PROMPT_LIMIT_UNCONNECTED = 3
 
@@ -632,7 +632,7 @@ function MessageBubble({ msg, isMobile, qaHistory = [], onSuggestionClick, onCla
             {isNotConnected && (
               <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 13px", marginBottom: 12, ...glassPill, borderRadius: 11, animation: "fadeSlideUp .3s cubic-bezier(.16,1,.3,1) both" }}>
                 <i className="bi bi-plug" style={{ fontSize: 12, color: "rgba(255,255,255,0.32)" }} />
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.42)" }}>plugin not connected — scripts generated but won't auto-insert. <a href="https://zeugoai.vercel.app" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.42)", textDecoration: "underline" }}>get help</a></span>
+                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.42)" }}>plugin not connected — scripts generated but won't auto-insert. <a href="https://wispai.vercel.app" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.42)", textDecoration: "underline" }}>get help</a></span>
               </div>
             )}
 
@@ -778,7 +778,7 @@ export default function ProjectChatPage() {
   const [settingsOpen,      setSettingsOpen]      = useState(false)
   const [adminOpen,         setAdminOpen]         = useState(false)
   const [pluginConnected,   setPluginConnected]   = useState<boolean | null>(null)
-  const [pluginToken,       setPluginToken]       = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("zeugo_plugin_token") || "" : "")
+  const [pluginToken,       setPluginToken]       = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("wisp_plugin_token") || "" : "")
   const [datamodelSnapshot, setDatamodelSnapshot] = useState<Record<string, string[]>>({})
   const [gameModelJson,     setGameModelJson]     = useState<string | null>(null)
   const [stopping,          setStopping]          = useState(false)
@@ -906,7 +906,7 @@ export default function ProjectChatPage() {
         if (!cancelled) {
           setPluginConnected(data.connected === true)
           if (data.datamodel && Object.keys(data.datamodel).length > 0) setDatamodelSnapshot(data.datamodel)
-          if (data.token) { setPluginToken(data.token); window.localStorage.setItem("zeugo_plugin_token", data.token) }
+          if (data.token) { setPluginToken(data.token); window.localStorage.setItem("wisp_plugin_token", data.token) }
         }
       } catch { if (!cancelled && pluginConnected === null) setPluginConnected(false) }
     }
@@ -1030,7 +1030,7 @@ export default function ProjectChatPage() {
         await incrementPromptUsage()
       }
 
-      const aiBase = process.env.NEXT_PUBLIC_AI_API_URL ?? "https://zeugoai.vercel.app"
+      const aiBase = process.env.NEXT_PUBLIC_AI_API_URL ?? "https://wispai.vercel.app"
       const endpoint = mode === "thinking"
         ? `${aiBase}/generate/thinking`
         : `${aiBase}/generate`
@@ -1340,13 +1340,13 @@ export default function ProjectChatPage() {
             ) : messages.length === 0 && !loading ? (
               lateHour ? (
                 <div style={{ position: "fixed", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: 16, pointerEvents: "none", animation: "lateGreetIn .6s .1s cubic-bezier(.16,1,.3,1) both" }}>
-                  <Image src={`${CDN}/icons/logo-white.png`} alt="Zeugo" width={60} height={60} style={{ objectFit: "contain", opacity: 0.12, animation: "logoFloat 5s ease-in-out infinite" }} />
+                  <Image src={`${CDN}/icons/logo-white.png`} alt="Wisp" width={60} height={60} style={{ objectFit: "contain", opacity: 0.12, animation: "logoFloat 5s ease-in-out infinite" }} />
                   <p style={{ fontSize: isMobile ? 28 : 38, fontWeight: 800, letterSpacing: "-0.04em", color: "#e8e9ec", margin: 0, lineHeight: 1.1 }}>{greetingText}</p>
                   <p style={{ fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.25)", margin: 0 }}>{buildingPrompt}</p>
                 </div>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "90px 20px 0", textAlign: "center", gap: 12 }}>
-                  <Image src={`${CDN}/icons/logo-white.png`} alt="Zeugo" width={48} height={48} style={{ objectFit: "contain", opacity: 0.15, animation: "logoFloat 5s ease-in-out infinite" }} />
+                  <Image src={`${CDN}/icons/logo-white.png`} alt="Wisp" width={48} height={48} style={{ objectFit: "contain", opacity: 0.15, animation: "logoFloat 5s ease-in-out infinite" }} />
                   <p style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, letterSpacing: "-0.032em", color: "#e8e9ec", margin: 0, animation: "fadeSlideUp .5s .1s cubic-bezier(.16,1,.3,1) both" }}>{greetingText}</p>
                   <p style={{ fontSize: 14, color: "rgba(255,255,255,0.30)", margin: 0, animation: "fadeSlideUp .5s .18s cubic-bezier(.16,1,.3,1) both" }}>{buildingPrompt}</p>
                 </div>
@@ -1574,7 +1574,7 @@ export default function ProjectChatPage() {
                 onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey && sendOnEnter && !isMobile) { e.preventDefault(); generate() } }}
                 onFocus={() => setInputFocused(true)}
                 onBlur={() => setInputFocused(false)}
-                placeholder={isOverLimit ? "Connect Studio to keep generating…" : "Message Zeugo…"}
+                placeholder={isOverLimit ? "Connect Studio to keep generating…" : "Message Wisp…"}
                 disabled={loading || isOverLimit}
                 rows={1}
                 style={{

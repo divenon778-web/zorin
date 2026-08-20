@@ -4,6 +4,6 @@ export async function GET() {
   const response = NextResponse.redirect(
     `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
   );
-  response.cookies.delete("zeugo_session");
+  response.cookies.delete("wisp_session");
   return response;
 }

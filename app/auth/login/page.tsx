@@ -7,8 +7,8 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 function resolveRedirect(raw: string | null): string {
-  if (!raw || !raw.startsWith("/")) return "https://zeugoai.vercel.app/dashboard";
-  return `https://zeugoai.vercel.app${raw}`;
+  if (!raw || !raw.startsWith("/")) return "https://wispai.vercel.app/dashboard";
+  return `https://wispai.vercel.app${raw}`;
 }
 
 function clearAllAuthCookies() {
@@ -19,7 +19,7 @@ function clearAllAuthCookies() {
   ].filter(Boolean);
   
   // Clear with all possible domains and paths
-  const domains = ["zeugoai.vercel.app", ".zeugoai.vercel.app", ""];
+  const domains = ["wispai.vercel.app", ".wispai.vercel.app", ""];
   const paths = ["/", "/dashboard", "/auth"];
   
   for (const name of baseNames) {
@@ -126,9 +126,9 @@ export default function LoginPage() {
   return (
     <div style={S.screen}>
       <header style={S.topbar}>
-        <a href="https://zeugoai.vercel.app" style={S.brand}>
-          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
-          <span style={S.brandName}>Zeugo AI</span>
+        <a href="https://wispai.vercel.app" style={S.brand}>
+          <Image src="/icons/logo-white.png" alt="Wisp AI" width={22} height={22} style={{ objectFit: "contain" }} />
+          <span style={S.brandName}>Wisp AI</span>
         </a>
       </header>
 
@@ -138,9 +138,9 @@ export default function LoginPage() {
         </video>
 
         <div style={S.cardContent}>
-          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
+          <Image src="/icons/logo-white.png" alt="Wisp AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
           <h1 style={S.title}>Welcome back</h1>
-          <p style={S.sub}>Sign in to your Zeugo AI account</p>
+          <p style={S.sub}>Sign in to your Wisp AI account</p>
 
           {error && (
             <div style={S.errBox}>

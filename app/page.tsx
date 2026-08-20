@@ -13,20 +13,20 @@ const CDN = "";
 const INTER = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 
 const UTM_SOURCES: Record<string, { badge: string; title: string; sub: string }> = {
-  "claude.ai":           { badge: "Coming from Claude",   title: "Hey! You found us through Claude.",  sub: "We've got Claude Sonnet 4 built right into Zeugo â€” try it on your next Roblox project." },
-  "claude":              { badge: "Coming from Claude",   title: "Hey! You found us through Claude.",  sub: "We've got Claude Sonnet 4 built right into Zeugo â€” try it on your next Roblox project." },
-  "chatgpt.com":         { badge: "Coming from ChatGPT",  title: "Hey! Came over from ChatGPT?",       sub: "Zeugo has GPT-5, GPT-4o, O3-Mini and more â€” all purpose-built for Roblox." },
-  "chatgpt":             { badge: "Coming from ChatGPT",  title: "Hey! Came over from ChatGPT?",       sub: "Zeugo has GPT-5, GPT-4o, O3-Mini and more â€” all purpose-built for Roblox." },
-  "grok.com":            { badge: "Coming from Grok",     title: "Hey! Found us via Grok?",            sub: "Grok-4-Fast is one of many models inside Zeugo â€” made for Roblox devs." },
-  "x.com":               { badge: "Coming from Grok",     title: "Hey! Found us via Grok?",            sub: "Grok-4-Fast is one of many models inside Zeugo â€” made for Roblox devs." },
-  "grok":                { badge: "Coming from Grok",     title: "Hey! Found us via Grok?",            sub: "Grok-4-Fast is one of many models inside Zeugo â€” made for Roblox devs." },
-  "gemini.google.com":   { badge: "Coming from Gemini",   title: "Hey! Coming from Gemini?",           sub: "Gemini 2.5 Pro and Gemini 3 Flash are both available in Zeugo â€” built for Roblox." },
-  "gemini":              { badge: "Coming from Gemini",   title: "Hey! Coming from Gemini?",           sub: "Gemini 2.5 Pro and Gemini 3 Flash are both available in Zeugo â€” built for Roblox." },
-  "chat.deepseek.com":   { badge: "Coming from DeepSeek", title: "Hey! Came from DeepSeek?",           sub: "DeepSeek V3 and R1 are both inside Zeugo â€” wired specifically for Roblox dev." },
-  "deepseek.com":        { badge: "Coming from DeepSeek", title: "Hey! Came from DeepSeek?",           sub: "DeepSeek V3 and R1 are both inside Zeugo â€” wired specifically for Roblox dev." },
-  "deepseek":            { badge: "Coming from DeepSeek", title: "Hey! Came from DeepSeek?",           sub: "DeepSeek V3 and R1 are both inside Zeugo â€” wired specifically for Roblox dev." },
-  "toolbaz.com":         { badge: "Coming from ToolBaz",  title: "Hey! Coming from ToolBaz?",          sub: "ToolBaz-v4.5-Fast is our default model in Zeugo â€” give it a try on Roblox." },
-  "toolbaz":             { badge: "Coming from ToolBaz",  title: "Hey! Coming from ToolBaz?",          sub: "ToolBaz-v4.5-Fast is our default model in Zeugo â€” give it a try on Roblox." },
+  "claude.ai":           { badge: "Coming from Claude",   title: "Hey! You found us through Claude.",  sub: "We've got Claude Sonnet 4 built right into Wisp â€” try it on your next Roblox project." },
+  "claude":              { badge: "Coming from Claude",   title: "Hey! You found us through Claude.",  sub: "We've got Claude Sonnet 4 built right into Wisp â€” try it on your next Roblox project." },
+  "chatgpt.com":         { badge: "Coming from ChatGPT",  title: "Hey! Came over from ChatGPT?",       sub: "Wisp has GPT-5, GPT-4o, O3-Mini and more â€” all purpose-built for Roblox." },
+  "chatgpt":             { badge: "Coming from ChatGPT",  title: "Hey! Came over from ChatGPT?",       sub: "Wisp has GPT-5, GPT-4o, O3-Mini and more â€” all purpose-built for Roblox." },
+  "grok.com":            { badge: "Coming from Grok",     title: "Hey! Found us via Grok?",            sub: "Grok-4-Fast is one of many models inside Wisp â€” made for Roblox devs." },
+  "x.com":               { badge: "Coming from Grok",     title: "Hey! Found us via Grok?",            sub: "Grok-4-Fast is one of many models inside Wisp â€” made for Roblox devs." },
+  "grok":                { badge: "Coming from Grok",     title: "Hey! Found us via Grok?",            sub: "Grok-4-Fast is one of many models inside Wisp â€” made for Roblox devs." },
+  "gemini.google.com":   { badge: "Coming from Gemini",   title: "Hey! Coming from Gemini?",           sub: "Gemini 2.5 Pro and Gemini 3 Flash are both available in Wisp â€” built for Roblox." },
+  "gemini":              { badge: "Coming from Gemini",   title: "Hey! Coming from Gemini?",           sub: "Gemini 2.5 Pro and Gemini 3 Flash are both available in Wisp â€” built for Roblox." },
+  "chat.deepseek.com":   { badge: "Coming from DeepSeek", title: "Hey! Came from DeepSeek?",           sub: "DeepSeek V3 and R1 are both inside Wisp â€” wired specifically for Roblox dev." },
+  "deepseek.com":        { badge: "Coming from DeepSeek", title: "Hey! Came from DeepSeek?",           sub: "DeepSeek V3 and R1 are both inside Wisp â€” wired specifically for Roblox dev." },
+  "deepseek":            { badge: "Coming from DeepSeek", title: "Hey! Came from DeepSeek?",           sub: "DeepSeek V3 and R1 are both inside Wisp â€” wired specifically for Roblox dev." },
+  "toolbaz.com":         { badge: "Coming from ToolBaz",  title: "Hey! Coming from ToolBaz?",          sub: "ToolBaz-v4.5-Fast is our default model in Wisp â€” give it a try on Roblox." },
+  "toolbaz":             { badge: "Coming from ToolBaz",  title: "Hey! Coming from ToolBaz?",          sub: "ToolBaz-v4.5-Fast is our default model in Wisp â€” give it a try on Roblox." },
 };
 
 function UtmReferralCard() {
@@ -93,11 +93,11 @@ function UtmReferralCard() {
           <div aria-hidden style={{ position: "absolute", top: -40, left: "50%", transform: "translateX(-50%)", width: 300, height: 160, background: "radial-gradient(ellipse, rgba(167,139,250,0.10) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
             <button className="utm-dismiss" onClick={handleDismiss} aria-label="Dismiss" style={{ position: "absolute", top: -8, right: -8, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: "50%", width: 28, height: 28, cursor: "pointer", color: "rgba(255,255,255,0.35)", fontSize: 16, fontWeight: 300, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", transition: "color 0.15s, background 0.15s" }}>Ã—</button>
-            <Image src={`${CDN}/icons/logo-white.png`} alt="Zeugo AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
+            <Image src={`${CDN}/icons/logo-white.png`} alt="Wisp AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
             <h2 style={{ fontSize: "clamp(18px,4vw,22px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#fff", marginBottom: 8, lineHeight: 1.25 }}>{source.title}</h2>
             <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, marginBottom: 24, maxWidth: 300 }}>{source.sub}</p>
-            <a href="https://zeugoai.vercel.app" className="utm-btn" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", color: "#08080e", fontSize: 14, fontWeight: 700, padding: "12px 24px", borderRadius: 10, textDecoration: "none", letterSpacing: "-0.2px", transition: "opacity 0.15s", width: "100%", justifyContent: "center" }}>
-              Try it in Zeugo
+            <a href="https://wispai.vercel.app" className="utm-btn" style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", color: "#08080e", fontSize: 14, fontWeight: 700, padding: "12px 24px", borderRadius: 10, textDecoration: "none", letterSpacing: "-0.2px", transition: "opacity 0.15s", width: "100%", justifyContent: "center" }}>
+              Try it in Wisp
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
           </div>
@@ -213,11 +213,11 @@ function DashboardPreview() {
 }
 
 const COMP_ROWS = [
-  { label: "Works outside Roblox Studio",     zeugo: true,  roblox: false },
-  { label: "Full multi-script architectures", zeugo: true,  roblox: false },
-  { label: "Typed, idiomatic Luau output",    zeugo: true,  roblox: false },
-  { label: "Context-aware generation",        zeugo: true,  roblox: false },
-  { label: "Studio plugin integration",       zeugo: true,  roblox: true  },
+  { label: "Works outside Roblox Studio",     wisp: true,  roblox: false },
+  { label: "Full multi-script architectures", wisp: true,  roblox: false },
+  { label: "Typed, idiomatic Luau output",    wisp: true,  roblox: false },
+  { label: "Context-aware generation",        wisp: true,  roblox: false },
+  { label: "Studio plugin integration",       wisp: true,  roblox: true  },
 ];
 
 function Check({ yes }: { yes: boolean }) {
@@ -230,18 +230,18 @@ function Comparison() {
   return (
     <section style={{ padding: "80px clamp(18px,5vw,24px)", fontFamily: INTER }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
-        <h2 style={H2_STYLE}>Why developers choose <span className="grad-text">Zeugo.</span></h2>
-        <p style={SUB_STYLE}>Roblox Assistant is limited to Studio. Zeugo works anywhere, generates complete systems, and produces better code.</p>
+        <h2 style={H2_STYLE}>Why developers choose <span className="grad-text">Wisp.</span></h2>
+        <p style={SUB_STYLE}>Roblox Assistant is limited to Studio. Wisp works anywhere, generates complete systems, and produces better code.</p>
         <div style={{ borderRadius: 16, overflow: "hidden", border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.01)" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 110px 110px", padding: "12px 20px", borderBottom: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.025)" }}>
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "1.2px", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>Feature</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#fff", textAlign: "center" }}>Zeugo AI</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#fff", textAlign: "center" }}>Wisp AI</span>
             <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.3)", textAlign: "center" }}>Roblox Asst.</span>
           </div>
           {COMP_ROWS.map((row, i) => (
             <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 110px 110px", padding: "12px 20px", borderBottom: i < COMP_ROWS.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", background: i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.01)", alignItems: "center" }}>
               <span style={{ fontSize: 13.5, color: "#fff", fontWeight: 400 }}>{row.label}</span>
-              <span style={{ textAlign: "center" }}><Check yes={row.zeugo} /></span>
+              <span style={{ textAlign: "center" }}><Check yes={row.wisp} /></span>
               <span style={{ textAlign: "center" }}><Check yes={row.roblox} /></span>
             </div>
           ))}
@@ -252,12 +252,12 @@ function Comparison() {
 }
 
 const FAQS = [
-  { q: "Why use Zeugo instead of Roblox Assistant?", a: "Roblox Assistant is limited to Studio and basic snippet suggestions. Zeugo runs anywhere, generates full multi-script systems, and produces typed Luau code that's ready to use in real projects â€” not just quick snippets." },
-  { q: "How does Zeugo generate code?", a: "You describe the feature you want in plain English. Zeugo generates Luau scripts with proper service structure and Roblox-specific conventions built in. The output is designed to land in your project without cleanup." },
-  { q: "Do I need to know how to code?", a: "Not at all. Describe what you want â€” a shop system, a leaderboard, a custom character controller â€” and Zeugo builds it. If you do know Luau, Fix and Explain modes let you debug and understand existing scripts." },
-  { q: "Is there a free plan?", a: "Yes. Sign up and start generating immediately, no credit card needed. Zeugo is fully free for every developer right now." },
-  { q: "Can I use generated scripts in games I monetize?", a: "Yes. All code generated by Zeugo is yours â€” personal projects, commercial games, client work, all of it." },
-  { q: "How is this different from just asking ChatGPT?", a: "General-purpose AI tools don't know Roblox's service architecture, instance hierarchy, or Luau conventions. Zeugo does. The output is structured for Studio, not adapted from generic programming knowledge." },
+  { q: "Why use Wisp instead of Roblox Assistant?", a: "Roblox Assistant is limited to Studio and basic snippet suggestions. Wisp runs anywhere, generates full multi-script systems, and produces typed Luau code that's ready to use in real projects â€” not just quick snippets." },
+  { q: "How does Wisp generate code?", a: "You describe the feature you want in plain English. Wisp generates Luau scripts with proper service structure and Roblox-specific conventions built in. The output is designed to land in your project without cleanup." },
+  { q: "Do I need to know how to code?", a: "Not at all. Describe what you want â€” a shop system, a leaderboard, a custom character controller â€” and Wisp builds it. If you do know Luau, Fix and Explain modes let you debug and understand existing scripts." },
+  { q: "Is there a free plan?", a: "Yes. Sign up and start generating immediately, no credit card needed. Wisp is fully free for every developer right now." },
+  { q: "Can I use generated scripts in games I monetize?", a: "Yes. All code generated by Wisp is yours â€” personal projects, commercial games, client work, all of it." },
+  { q: "How is this different from just asking ChatGPT?", a: "General-purpose AI tools don't know Roblox's service architecture, instance hierarchy, or Luau conventions. Wisp does. The output is structured for Studio, not adapted from generic programming knowledge." },
 ];
 
 function FAQ() {
@@ -337,7 +337,7 @@ export default function HomePage() {
       <section style={{ padding: "0 clamp(18px,5vw,24px) 80px", zIndex: 1, position: "relative" }} className="feature-section-mobile">
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           <h2 className="anim-fade-up delay-1" style={H2_STYLE}>Everything to build faster on Roblox.</h2>
-          <p className="anim-fade-up delay-2" style={SUB_STYLE}>Just describe what you need. Zeugo handles the rest.</p>
+          <p className="anim-fade-up delay-2" style={SUB_STYLE}>Just describe what you need. Wisp handles the rest.</p>
           <FeatureCards features={features as any} />
         </div>
       </section>

@@ -159,7 +159,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
         >
           <Image
             src={`${CDN}/icons/logo-white.png`}
-            alt="Zeugo AI"
+            alt="Wisp AI"
             width={22}
             height={22}
             style={{ objectFit: "contain" }}
@@ -172,7 +172,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
               color: "#fff",
             }}
           >
-            Zeugo AI
+            Wisp AI
           </span>
         </Link>
         <nav
@@ -188,7 +188,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
             Home
           </Link>
           <a
-            href="https://zeugoai.vercel.app"
+            href="https://wispai.vercel.app"
             className="g-nav-link"
             style={navLinkStyle(activePage === "dashboard")}
           >
@@ -219,7 +219,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
             Home
           </Link>
           <a
-            href="https://zeugoai.vercel.app"
+            href="https://wispai.vercel.app"
             className="g-nav-link"
             style={{ ...navLinkStyle(activePage === "dashboard"), padding: "10px 12px", borderRadius: 10 }}
             onClick={() => setMenuOpen(false)}

@@ -110,7 +110,7 @@ export default function TermsPage() {
               <h1 style={S.h1}>Terms of Service</h1>
               <p style={S.lastUpdated}>Last updated: {LAST_UPDATED}</p>
               <p style={S.intro}>
-                Please read these Terms carefully before using Zeugo AI. By accessing or using
+                Please read these Terms carefully before using Wisp AI. By accessing or using
                 our service, you agree to be bound by these terms. If you do not agree, please
                 discontinue use immediately.
               </p>
@@ -119,28 +119,28 @@ export default function TermsPage() {
             <div style={S.content}>
 
               <Section id="acceptance" title="1. Acceptance of Terms">
-                <P>By accessing and using Zeugo AI ("the Service"), operated by Zeugo Studios ("we", "us", or "our"), you accept and agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree to these terms, you are prohibited from using or accessing this Service.</P>
-                <P>These Terms constitute the entire agreement between you and Zeugo Studios regarding your use of the Service, and supersede any prior agreements. We reserve the right to modify these terms at any time by posting an updated version. We will notify users of significant changes by updating the "Last updated" date at the top of this page. Your continued use of the Service after any changes constitutes your acceptance of the new terms.</P>
+                <P>By accessing and using Wisp AI ("the Service"), operated by Wisp Studios ("we", "us", or "our"), you accept and agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree to these terms, you are prohibited from using or accessing this Service.</P>
+                <P>These Terms constitute the entire agreement between you and Wisp Studios regarding your use of the Service, and supersede any prior agreements. We reserve the right to modify these terms at any time by posting an updated version. We will notify users of significant changes by updating the "Last updated" date at the top of this page. Your continued use of the Service after any changes constitutes your acceptance of the new terms.</P>
               </Section>
 
               <Section id="description" title="2. Description of Service">
-                <P>Zeugo AI is an AI-powered development tool that generates Roblox Luau scripts, systems, UI components, and game instances based on natural language prompts. The Service is accessible through our web dashboard at dash.zeugo.lol, our Roblox Studio plugin, and our browser-based chat interface — and is intended for use by Roblox developers of all skill levels.</P>
-                <P>The Service connects to your Roblox account via OAuth2, syncs your game's hierarchy from Studio, and delivers generated output directly into your project through the Zeugo plugin. Additional features include project management, version history, heartbeat-based session tracking, and collaborative tools. We reserve the right to modify, expand, suspend, or discontinue any feature or the Service in its entirety at any time, with or without notice.</P>
+                <P>Wisp AI is an AI-powered development tool that generates Roblox Luau scripts, systems, UI components, and game instances based on natural language prompts. The Service is accessible through our web dashboard at dash.wisp.lol, our Roblox Studio plugin, and our browser-based chat interface — and is intended for use by Roblox developers of all skill levels.</P>
+                <P>The Service connects to your Roblox account via OAuth2, syncs your game's hierarchy from Studio, and delivers generated output directly into your project through the Wisp plugin. Additional features include project management, version history, heartbeat-based session tracking, and collaborative tools. We reserve the right to modify, expand, suspend, or discontinue any feature or the Service in its entirety at any time, with or without notice.</P>
               </Section>
 
               <Section id="eligibility" title="3. Eligibility">
-                <P>You must be at least 13 years of age to use Zeugo AI. If you are under the age of majority in your jurisdiction, you represent that your parent or legal guardian has reviewed and agreed to these Terms on your behalf.</P>
+                <P>You must be at least 13 years of age to use Wisp AI. If you are under the age of majority in your jurisdiction, you represent that your parent or legal guardian has reviewed and agreed to these Terms on your behalf.</P>
                 <P>By using the Service, you represent and warrant that: (a) you have the legal capacity to enter into a binding agreement; (b) you are not barred from receiving services under any applicable law; and (c) all registration information you provide is accurate and current. We reserve the right to deny access to any person or entity at our sole discretion.</P>
               </Section>
 
               <Section id="authentication" title="4. Roblox Account & Authentication">
-                <P>To use Zeugo AI, you must authenticate via Roblox OAuth2 through our authorization flow at dash.zeugo.lol. By connecting your Roblox account, you authorize us to access your public profile information including your username, display name, user ID, and avatar image. We do not access your Roblox inventory, Robux balance, private messages, or any private account data beyond what is explicitly requested.</P>
+                <P>To use Wisp AI, you must authenticate via Roblox OAuth2 through our authorization flow at dash.wisp.lol. By connecting your Roblox account, you authorize us to access your public profile information including your username, display name, user ID, and avatar image. We do not access your Roblox inventory, Robux balance, private messages, or any private account data beyond what is explicitly requested.</P>
                 <P>Upon successful authorization, a secure token is issued and stored locally in your Roblox Studio plugin settings. This token is used to authenticate all subsequent API calls including project fetching, output polling, heartbeat pings, and game model uploads. You are solely responsible for maintaining the confidentiality of this token and your account credentials.</P>
                 <P>You may not share your account, allow others to access the Service through your account, or create multiple accounts to circumvent usage limits or restrictions. We reserve the right to revoke tokens and suspend or terminate accounts that violate these provisions.</P>
               </Section>
 
               <Section id="acceptable-use" title="5. Acceptable Use">
-                <P>You agree to use Zeugo AI only for lawful purposes and in a manner consistent with all applicable laws, regulations, and these Terms. You must not use the Service to:</P>
+                <P>You agree to use Wisp AI only for lawful purposes and in a manner consistent with all applicable laws, regulations, and these Terms. You must not use the Service to:</P>
                 <List items={[
                   "Generate scripts intended to exploit, harm, or harass other Roblox users or players",
                   "Create malicious code, cheats, exploits, aimbots, or unauthorized automation tools",
@@ -149,7 +149,7 @@ export default function TermsPage() {
                   "Attempt to reverse-engineer, decompile, hack, disrupt, or gain unauthorized access to our infrastructure or APIs",
                   "Scrape, crawl, or systematically extract data or generated outputs from the Service using automated means",
                   "Use the Service to generate content that is illegal, defamatory, obscene, or harmful to minors",
-                  "Resell, sublicense, or commercialize the Service or its outputs without prior written consent from Zeugo Studios",
+                  "Resell, sublicense, or commercialize the Service or its outputs without prior written consent from Wisp Studios",
                   "Impersonate any person or entity, or misrepresent your affiliation with any person or entity",
                   "Upload or transmit viruses, malware, or any other malicious or harmful code",
                   "Interfere with or disrupt the integrity or performance of the Service or its related systems",
@@ -159,38 +159,38 @@ export default function TermsPage() {
               </Section>
 
               <Section id="generated" title="6. Generated Content">
-                <P>Scripts, code, instances, and other content generated by Zeugo AI ("Generated Content") are provided for your use in Roblox projects. Generated Content is automatically inserted into your game via the Studio plugin when new output is detected. You are solely responsible for reviewing, testing, validating, and ensuring the safety and appropriateness of any Generated Content before publishing or distributing your game.</P>
+                <P>Scripts, code, instances, and other content generated by Wisp AI ("Generated Content") are provided for your use in Roblox projects. Generated Content is automatically inserted into your game via the Studio plugin when new output is detected. You are solely responsible for reviewing, testing, validating, and ensuring the safety and appropriateness of any Generated Content before publishing or distributing your game.</P>
                 <P>We do not claim ownership of Generated Content produced through your unique prompts. However, because the underlying AI models may produce similar or identical outputs for different users, we cannot guarantee uniqueness or exclusivity of any Generated Content.</P>
-                <P>Zeugo Studios is not responsible for any bugs, errors, security vulnerabilities, performance issues, or unintended behaviors in Generated Content that may affect your games, experiences, or end users. All Generated Content is used at your own risk.</P>
+                <P>Wisp Studios is not responsible for any bugs, errors, security vulnerabilities, performance issues, or unintended behaviors in Generated Content that may affect your games, experiences, or end users. All Generated Content is used at your own risk.</P>
               </Section>
 
               <Section id="ip" title="7. Intellectual Property">
-                <P>The Zeugo AI platform — including its web dashboard, Studio plugin, authentication system, APIs, design, source code, branding, logos, and all content created by Zeugo Studios — is protected by copyright, trademark, and other applicable intellectual property laws. All rights are reserved by Zeugo Studios unless otherwise stated.</P>
+                <P>The Wisp AI platform — including its web dashboard, Studio plugin, authentication system, APIs, design, source code, branding, logos, and all content created by Wisp Studios — is protected by copyright, trademark, and other applicable intellectual property laws. All rights are reserved by Wisp Studios unless otherwise stated.</P>
                 <P>You may not reproduce, distribute, modify, create derivative works of, decompile, or otherwise extract any portion of the Service without our explicit prior written permission. This includes but is not limited to the plugin source, API endpoints, and dashboard UI.</P>
-                <P>Any feedback, suggestions, or improvements you provide regarding the Service ("Feedback") shall be deemed non-confidential, and Zeugo Studios shall have the right to use such Feedback for any purpose without restriction or compensation to you.</P>
+                <P>Any feedback, suggestions, or improvements you provide regarding the Service ("Feedback") shall be deemed non-confidential, and Wisp Studios shall have the right to use such Feedback for any purpose without restriction or compensation to you.</P>
               </Section>
 
               <Section id="subscriptions" title="8. Subscriptions & Billing">
-                <P>Zeugo AI may offer free and paid subscription tiers. Paid plans unlock additional generation capacity, higher usage limits, faster output, and priority access to new features. By subscribing to a paid plan, you agree to pay all applicable fees as described on our pricing page at the time of your subscription.</P>
+                <P>Wisp AI may offer free and paid subscription tiers. Paid plans unlock additional generation capacity, higher usage limits, faster output, and priority access to new features. By subscribing to a paid plan, you agree to pay all applicable fees as described on our pricing page at the time of your subscription.</P>
                 <P>Subscription fees are billed in advance on a recurring basis (monthly or annually, as selected). All fees are non-refundable except as required by applicable law or as explicitly stated in our refund policy. We reserve the right to change pricing at any time, with at least 14 days' notice to existing subscribers before changes take effect.</P>
                 <P>You may cancel your subscription at any time through your account dashboard. Cancellation takes effect at the end of your current billing period. We reserve the right to suspend or downgrade accounts with overdue balances or failed payments.</P>
               </Section>
 
               <Section id="data" title="9. Data & Privacy">
                 <P>Your use of the Service is governed by our <Link href="/legal/privacy" className="inline-link" style={S.inlineLink}>Privacy Policy</Link>, which is incorporated into these Terms by reference. By using the Service, you consent to the collection and use of your data as described in the Privacy Policy.</P>
-                <P>When you use the Studio plugin, Zeugo AI scans and uploads your game's service hierarchy — including script names, class names, folder structures, and source code — to our servers. This data is used solely to provide context to the AI for better code generation. We do not share this game data with third parties.</P>
-                <P>You retain ownership of your prompts, game data, and project inputs. By submitting content, you grant Zeugo Studios a limited, non-exclusive, royalty-free license to process your inputs solely for the purpose of delivering and improving the Service. We do not sell your personal data.</P>
+                <P>When you use the Studio plugin, Wisp AI scans and uploads your game's service hierarchy — including script names, class names, folder structures, and source code — to our servers. This data is used solely to provide context to the AI for better code generation. We do not share this game data with third parties.</P>
+                <P>You retain ownership of your prompts, game data, and project inputs. By submitting content, you grant Wisp Studios a limited, non-exclusive, royalty-free license to process your inputs solely for the purpose of delivering and improving the Service. We do not sell your personal data.</P>
               </Section>
 
               <Section id="third-party" title="10. Third-Party Services">
-                <P>The Service integrates with third-party platforms including Roblox (for authentication and avatar data), payment processors (for billing), and infrastructure providers. These services are governed by their own terms and privacy policies, and Zeugo Studios is not responsible for their content, availability, or practices.</P>
-                <P>The Zeugo Studio plugin makes HTTP requests to our API endpoints. Your use of the plugin requires that HTTP Requests are enabled in your Roblox Studio game settings. We are not responsible for network errors, Roblox API changes, or plugin behavior resulting from Roblox platform updates.</P>
+                <P>The Service integrates with third-party platforms including Roblox (for authentication and avatar data), payment processors (for billing), and infrastructure providers. These services are governed by their own terms and privacy policies, and Wisp Studios is not responsible for their content, availability, or practices.</P>
+                <P>The Wisp Studio plugin makes HTTP requests to our API endpoints. Your use of the plugin requires that HTTP Requests are enabled in your Roblox Studio game settings. We are not responsible for network errors, Roblox API changes, or plugin behavior resulting from Roblox platform updates.</P>
               </Section>
 
               <Section id="plugin" title="11. Studio Plugin">
-                <P>The Zeugo AI Studio plugin ("the Plugin") is a Roblox Studio tool that connects to our Service, scans your game hierarchy, polls for new generated output, and automatically inserts scripts and instances into your project. The Plugin communicates with our servers at intervals defined by its polling (every 10 seconds), heartbeat (every 15 seconds), and auto-scan (every 60 seconds) cycles.</P>
-                <P>By installing and using the Plugin, you acknowledge that it will: (a) send your game's service tree structure and source code to our servers; (b) store a session token in your Studio plugin settings; (c) automatically insert, update, or overwrite scripts and instances in your project when new output is available; and (d) send your Roblox user ID to associate your Studio session with your Zeugo account.</P>
-                <P>You are responsible for reviewing all code inserted by the Plugin before publishing your experience. Zeugo Studios is not liable for any damage, data loss, or policy violations arising from auto-inserted content.</P>
+                <P>The Wisp AI Studio plugin ("the Plugin") is a Roblox Studio tool that connects to our Service, scans your game hierarchy, polls for new generated output, and automatically inserts scripts and instances into your project. The Plugin communicates with our servers at intervals defined by its polling (every 10 seconds), heartbeat (every 15 seconds), and auto-scan (every 60 seconds) cycles.</P>
+                <P>By installing and using the Plugin, you acknowledge that it will: (a) send your game's service tree structure and source code to our servers; (b) store a session token in your Studio plugin settings; (c) automatically insert, update, or overwrite scripts and instances in your project when new output is available; and (d) send your Roblox user ID to associate your Studio session with your Wisp account.</P>
+                <P>You are responsible for reviewing all code inserted by the Plugin before publishing your experience. Wisp Studios is not liable for any damage, data loss, or policy violations arising from auto-inserted content.</P>
               </Section>
 
               <Section id="termination" title="12. Termination">
@@ -209,7 +209,7 @@ export default function TermsPage() {
               </Section>
 
               <Section id="indemnification" title="15. Indemnification">
-                <P>You agree to indemnify, defend, and hold harmless Zeugo Studios and its officers, directors, employees, contractors, agents, licensors, and service providers from and against any claims, liabilities, damages, judgments, losses, costs, and fees (including reasonable legal fees) arising from: (a) your violation of these Terms; (b) your use of the Service or Plugin; (c) content you submit or generate; (d) your violation of any third party's rights; or (e) your violation of any applicable law or regulation.</P>
+                <P>You agree to indemnify, defend, and hold harmless Wisp Studios and its officers, directors, employees, contractors, agents, licensors, and service providers from and against any claims, liabilities, damages, judgments, losses, costs, and fees (including reasonable legal fees) arising from: (a) your violation of these Terms; (b) your use of the Service or Plugin; (c) content you submit or generate; (d) your violation of any third party's rights; or (e) your violation of any applicable law or regulation.</P>
                 <P>We reserve the right to assume the exclusive defense and control of any matter subject to indemnification by you, at our expense. You agree to cooperate fully with our defense of such claims.</P>
               </Section>
 
@@ -227,7 +227,7 @@ export default function TermsPage() {
                 <P>If you have any questions, concerns, or requests regarding these Terms, please contact us through one of the following channels:</P>
                 <List items={[
                   "Discord: Join our community server and open a support ticket in the #support channel",
-                  "Dashboard: Submit a request through the Help & Support section at dash.zeugo.lol",
+                  "Dashboard: Submit a request through the Help & Support section at dash.wisp.lol",
                   "Email: Reach out via the contact address listed in your dashboard account settings",
                 ]} />
                 <P>We aim to respond to all inquiries within 12 hours. For urgent matters related to account security, billing disputes, or potential abuse, please mark your message as urgent.</P>

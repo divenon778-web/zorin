@@ -33,12 +33,12 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
             <div style={S.brandRow}>
               <Image
                 src={`${CDN}/icons/logo-white.png`}
-                alt="Zeugo AI"
+                alt="Wisp AI"
                 width={28}
                 height={28}
                 style={{ objectFit: "contain" }}
               />
-              <span style={S.brandName}>Zeugo AI</span>
+              <span style={S.brandName}>Wisp AI</span>
             </div>
             <p style={S.tagline}>
               AI-powered Luau code generation for Roblox developers. Build faster. Ship better.
@@ -57,7 +57,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
                 <YoutubeIcon />
               </a>
               <a
-                href="https://zeugoai.vercel.app"
+                href="https://wispai.vercel.app"
                 target="_blank"
                 rel="noreferrer"
                 style={S.socialLink}
@@ -66,7 +66,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
                 <DiscordIcon />
               </a>
               <a
-                href="https://www.tiktok.com/@zeugostudios"
+                href="https://www.tiktok.com/@wispstudios"
                 target="_blank"
                 rel="noreferrer"
                 style={S.socialLink}
@@ -79,7 +79,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
 
           <div style={S.col}>
             <span style={S.colHead}>Product</span>
-            <a href="https://zeugoai.vercel.app" style={S.link}>Dashboard</a>
+            <a href="https://wispai.vercel.app" style={S.link}>Dashboard</a>
             <Link href="/" style={S.link}>Home</Link>
           </div>
 

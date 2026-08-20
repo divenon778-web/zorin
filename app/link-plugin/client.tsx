@@ -161,7 +161,7 @@ export function LinkPluginClient({
           <StatusPill color="rgba(255,255,255,0.3)" label="Enter your code" />
           <h1 style={S.title}>Connect Studio</h1>
           <p style={S.sub}>
-            Type or paste the 4-digit code shown in the Zeugo plugin inside Roblox Studio.
+            Type or paste the 4-digit code shown in the Wisp plugin inside Roblox Studio.
           </p>
 
           <input
@@ -195,7 +195,7 @@ export function LinkPluginClient({
             </button>
           ) : (
             <a
-              href={`https://zeugoai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${effectiveCode || ""}`)}`}
+              href={`https://wispai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${effectiveCode || ""}`)}`}
               style={S.btnPrimary}
             >
               Sign in to continue
@@ -216,9 +216,9 @@ export function LinkPluginClient({
         <Card>
           <StatusPill color="rgba(255,255,255,0.4)" label="Sign in required" />
           <h1 style={S.title}>Sign in first</h1>
-          <p style={S.sub}>You need a Zeugo AI account before Studio can connect.</p>
+          <p style={S.sub}>You need a Wisp AI account before Studio can connect.</p>
           <a
-            href={`https://zeugoai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${code}`)}`}
+            href={`https://wispai.vercel.app/login?redirect=${encodeURIComponent(`/link-plugin?code=${code}`)}`}
             style={S.btnPrimary}
           >
             Sign in to continue
@@ -250,7 +250,7 @@ export function LinkPluginClient({
             </div>
           </div>
 
-          <a href="https://zeugoai.vercel.app" style={S.btnGhost}>Open dashboard</a>
+          <a href="https://wispai.vercel.app" style={S.btnGhost}>Open dashboard</a>
         </Card>
       </Shell>
     );
@@ -273,10 +273,10 @@ export function LinkPluginClient({
 
         <p style={S.sub}>
           {status === "loading"
-            ? "Linking Roblox Studio to your Zeugo AI account."
+            ? "Linking Roblox Studio to your Wisp AI account."
             : status === "error"
             ? errMsg
-            : "Zeugo AI Studio is requesting access to your account."}
+            : "Wisp AI Studio is requesting access to your account."}
         </p>
 
         <div style={S.codeChip}>
@@ -292,7 +292,7 @@ export function LinkPluginClient({
           <AccountAvatar user={user} size={36} />
           <div>
             <div style={S.accountName}>{user.username}</div>
-            <div style={S.accountSub}>Zeugo AI account</div>
+            <div style={S.accountSub}>Wisp AI account</div>
           </div>
           <div style={S.accountCheckmark}>
             <i className="bi bi-check" style={{ fontSize: 11 }} />
@@ -472,9 +472,9 @@ function Shell({ children }: { children: React.ReactNode }) {
 
       <div className="glc-shell">
         <header className="glc-topbar">
-          <a href="https://zeugoai.vercel.app" className="glc-brand">
-            <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
-            <span className="glc-brand-name">Zeugo AI</span>
+          <a href="https://wispai.vercel.app" className="glc-brand">
+            <Image src="/icons/logo-white.png" alt="Wisp AI" width={22} height={22} style={{ objectFit: "contain" }} />
+            <span className="glc-brand-name">Wisp AI</span>
           </a>
           <span className="glc-topbar-badge">Studio Link</span>
         </header>

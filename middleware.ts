@@ -37,7 +37,7 @@ export async function middleware(req: NextRequest) {
     return res;
   }
 
-  if (host.startsWith("discord.zeugo.lol")) {
+  if (host.startsWith("discord.wisp.lol")) {
     return NextResponse.redirect("https://discord.gg/cdwvahVP5j");
   }
 
@@ -45,7 +45,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.rewrite(new URL("/server-error", req.url));
   }
 
-  if (host === "actions.zeugo.lol") {
+  if (host === "actions.wisp.lol") {
     if (req.method === "OPTIONS") {
       return new NextResponse(null, {
         status: 204,
@@ -110,7 +110,7 @@ export async function middleware(req: NextRequest) {
     }
 
     return NextResponse.redirect(
-      `https://zeugoai.vercel.app/link-plugin?code=${code}`,
+      `https://wispai.vercel.app/link-plugin?code=${code}`,
       { status: 307 }
     );
   }
@@ -126,7 +126,7 @@ export async function middleware(req: NextRequest) {
         path: "/",
         sameSite: "none",
         secure: true,
-        domain: "zeugoai.vercel.app",
+        domain: "wispai.vercel.app",
       },
       cookies: {
         getAll: () => req.cookies.getAll(),
@@ -134,7 +134,7 @@ export async function middleware(req: NextRequest) {
           cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value));
           response = NextResponse.next({ request: { headers: req.headers } });
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, { ...options, domain: "zeugoai.vercel.app", sameSite: "none", secure: true } as any)
+            response.cookies.set(name, value, { ...options, domain: "wispai.vercel.app", sameSite: "none", secure: true } as any)
           );
         },
       },
@@ -161,18 +161,18 @@ export async function middleware(req: NextRequest) {
   const isMaintenance = (siteConfig as { maintenance?: boolean }).maintenance;
 
   if (isMaintenance && !isTester && !host.startsWith("server.error")) {
-    return NextResponse.redirect("https://server.error.zeugo.lol", { status: 307 });
+    return NextResponse.redirect("https://server.error.wisp.lol", { status: 307 });
   }
 
-  if (host === "zeugo.lol" || host === "www.zeugo.lol") {
+  if (host === "wisp.lol" || host === "www.wisp.lol") {
     if (pathname.startsWith("/auth/")) {
-      return NextResponse.redirect(`https://zeugoai.vercel.app${pathname}`);
+      return NextResponse.redirect(`https://wispai.vercel.app${pathname}`);
     }
 
     return NextResponse.next();
   }
 
-  if (host === "dash.zeugo.lol" || host.includes("zeugoai.vercel.app")) {
+  if (host === "dash.wisp.lol" || host.includes("wispai.vercel.app")) {
     if (profile?.banned && !isTester && !pathname.startsWith("/banned")) {
       const url = new URL("/banned", req.url);
       url.searchParams.set("reason", profile.ban_reason ?? "violation");

@@ -1,7 +1,7 @@
 local HttpService  = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 
-local BASE_URL            = "https://zeugoai.vercel.app"
+local BASE_URL            = "https://wispai.vercel.app"
 local LINK_URL            = BASE_URL .. "/api/plugin/link"
 local POLL_URL            = BASE_URL .. "/api/plugin/poll"
 local PROJECTS_URL        = BASE_URL .. "/api/plugin/projects"
@@ -18,10 +18,10 @@ local SCAN_URL           = BASE_URL .. "/api/plugin/scan"
 local UNDO_URL           = BASE_URL .. "/api/plugin/undo"
 local EXPLAIN_URL        = BASE_URL .. "/api/plugin/explain"
 
-local TOKEN_KEY        = "Zeugo_Token"
-local USER_KEY         = "Zeugo_User"
-local ADVANCED_MODE_KEY = "Zeugo_AdvancedMode"
-local MEMORY_RULES_KEY  = "Zeugo_MemoryRules"
+local TOKEN_KEY        = "Wisp_Token"
+local USER_KEY         = "Wisp_User"
+local ADVANCED_MODE_KEY = "Wisp_AdvancedMode"
+local MEMORY_RULES_KEY  = "Wisp_MemoryRules"
 
 local POLL_INTERVAL      = 10
 local HEARTBEAT_INTERVAL = 15
@@ -76,14 +76,14 @@ local SCAN_TARGETS = {
 	game:GetService("StarterPlayer"),
 }
 
-local toolbar   = plugin:CreateToolbar("Zeugo")
-local toggleBtn = toolbar:CreateButton("Zeugo", "Open Zeugo", ICONS.logo)
+local toolbar   = plugin:CreateToolbar("Wisp")
+local toggleBtn = toolbar:CreateButton("Wisp", "Open Wisp", ICONS.logo)
 
 local widgetInfo = DockWidgetPluginGuiInfo.new(
 	Enum.InitialDockState.Right, true, true, 620, 700, 460, 560
 )
-local widget       = plugin:CreateDockWidgetPluginGui("ZeugoWidgetV5", widgetInfo)
-widget.Title       = "Zeugo"
+local widget       = plugin:CreateDockWidgetPluginGui("WispWidgetV5", widgetInfo)
+widget.Title       = "Wisp"
 widget.Enabled     = false
 
 local function tween(obj, info, props)
@@ -123,7 +123,7 @@ local function makeTextButton(parent, text, bgColor, textColor)
 end
 
 local root = Instance.new("Frame")
-root.Name = "ZeugoRoot"; root.Parent = widget; root.BackgroundColor3 = C.bg
+root.Name = "WispRoot"; root.Parent = widget; root.BackgroundColor3 = C.bg
 root.BorderSizePixel = 0; root.Size = UDim2.fromScale(1, 1)
 
 -- ══════════════════════════════════════════════════════════════════════════════
@@ -148,7 +148,7 @@ Logo.Image = ICONS.logo; Logo.ScaleType = Enum.ScaleType.Fit
 local BrandTitle = Instance.new("TextLabel")
 BrandTitle.Parent = Topbar; BrandTitle.BackgroundTransparency = 1
 BrandTitle.Position = UDim2.new(0.078, 0, 0.18, 0); BrandTitle.Size = UDim2.new(0.13, 0, 0.64, 0)
-BrandTitle.Font = Enum.Font.GothamBold; BrandTitle.Text = "Zeugo"; BrandTitle.TextColor3 = C.text
+BrandTitle.Font = Enum.Font.GothamBold; BrandTitle.Text = "Wisp"; BrandTitle.TextColor3 = C.text
 BrandTitle.TextSize = 14; BrandTitle.TextWrapped = true
 BrandTitle.TextXAlignment = Enum.TextXAlignment.Left; BrandTitle.TextYAlignment = Enum.TextYAlignment.Center
 
@@ -1516,7 +1516,7 @@ local function deleteGameModel()
 			})
 		end)
 		if not (ok and result and result.StatusCode == 200) then
-			warn("[Zeugo] game model delete failed")
+			warn("[Wisp] game model delete failed")
 		end
 	end)
 end
@@ -1631,7 +1631,7 @@ local function processdeletions(data, createdInstanceMap)
 			end
 		end)
 		if not ok then
-			warn("[Zeugo] deletion error:", err)
+			warn("[Wisp] deletion error:", err)
 		end
 	end
 	return deletedCount
@@ -1650,8 +1650,8 @@ local function insertLatestData()
 	for _, scriptData in ipairs(latestProjectData.scripts or {}) do
 		local ok, err = pcall(function()
 			local className  = scriptData.type or "ModuleScript"
-			local scriptName = scriptData.name or "ZeugoScript"
-			local code       = scriptData.code or "-- Inserted by Zeugo\n"
+			local scriptName = scriptData.name or "WispScript"
+			local code       = scriptData.code or "-- Inserted by Wisp\n"
 			local parent     = resolveParentTarget(scriptData.parent, className, createdInstanceMap)
 			local existing   = parent:FindFirstChild(scriptName)
 			if existing and existing:IsA("LuaSourceContainer") then
@@ -1662,7 +1662,7 @@ local function insertLatestData()
 				created = created + 1
 			end
 		end)
-		if not ok then warn("[Zeugo] insert error:", err) end
+		if not ok then warn("[Wisp] insert error:", err) end
 	end
 
 	local parts = {}

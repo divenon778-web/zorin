@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-export interface ZeugoSession {
+export interface WispSession {
   userId:      string;
   username:    string;
   displayName: string;
@@ -13,13 +13,13 @@ export interface ZeugoSession {
 
 
 
-export async function getSession(): Promise<ZeugoSession | null> {
+export async function getSession(): Promise<WispSession | null> {
   const cookieStore = await cookies();
-  const raw = cookieStore.get("zeugo_session")?.value;
+  const raw = cookieStore.get("wisp_session")?.value;
   if (!raw) return null;
 
   try {
-    const session: ZeugoSession = JSON.parse(raw);
+    const session: WispSession = JSON.parse(raw);
 
     if (Date.now() > session.expiresAt - 60_000) return null;
     return session;

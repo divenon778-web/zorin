@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Navbar } from "../../components/navbar";
 import { Footer } from "../../components/footer";
 
-export const metadata: Metadata = { title: "Privacy Policy | Zeugo AI" };
+export const metadata: Metadata = { title: "Privacy Policy | Wisp AI" };
 
 const LAST_UPDATED = "March 17, 2025";
 
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
         rightSlot={
           <div className="topbar-actions" style={{ display: "flex", gap: 8 }}>
             <Link href="/legal/terms" className="btn btn-ghost btn-sm">Terms of Service</Link>
-            <a href="https://zeugoai.vercel.app" className="btn btn-primary btn-sm">Get Started</a>
+            <a href="https://wispai.vercel.app" className="btn btn-primary btn-sm">Get Started</a>
           </div>
         }
       />
@@ -25,12 +25,12 @@ export default function PrivacyPage() {
           <div style={S.badge}>Legal</div>
           <h1 style={S.h1}>Privacy Policy</h1>
           <p style={S.lastUpdated}>Last updated: {LAST_UPDATED}</p>
-          <p style={S.intro}>This Privacy Policy explains how Zeugo Studios collects, uses, and protects your information when you use Zeugo AI. We are committed to protecting your privacy and being transparent about our data practices.</p>
+          <p style={S.intro}>This Privacy Policy explains how Wisp Studios collects, uses, and protects your information when you use Wisp AI. We are committed to protecting your privacy and being transparent about our data practices.</p>
         </div>
 
         <div style={S.content}>
           <Section title="1. Information We Collect">
-            <P>When you use Zeugo AI, we collect the following information:</P>
+            <P>When you use Wisp AI, we collect the following information:</P>
             <List items={[
               "Roblox username and display name (via OAuth2 authentication)",
               "Roblox user ID (to identify your session)",
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
           <Section title="4. Cookies">
             <P>We use the following cookies:</P>
             <List items={[
-              "zeugo_session â€” stores your encrypted session data, httpOnly, expires with your Roblox token",
+              "wisp_session â€” stores your encrypted session data, httpOnly, expires with your Roblox token",
               "roblox_oauth_state â€” a temporary CSRF protection token used during the OAuth flow, deleted after login",
             ]} />
             <P>We do not use advertising cookies, tracking pixels, or any third-party analytics cookies.</P>
@@ -71,7 +71,7 @@ export default function PrivacyPage() {
             <P>Session data is stored in encrypted cookies on your browser. We do not maintain a persistent database of user accounts or generated scripts. We implement HTTPS encryption, httpOnly cookies, and CSRF protection.</P>
           </Section>
           <Section title="7. Third-Party Services">
-            <P>Zeugo AI integrates with:</P>
+            <P>Wisp AI integrates with:</P>
             <List items={[
               "Roblox â€” for OAuth2 authentication (governed by Roblox's Privacy Policy)",
               "Cloudflare â€” for security and performance (governed by Cloudflare's Privacy Policy)",

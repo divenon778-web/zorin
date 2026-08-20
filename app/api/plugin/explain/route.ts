@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAdminSupabase } from "@/lib/supabase"
 import { callNvidiaWithFallback, extractJson } from "@/lib/ai.js"
 
-const EXPLAIN_SYSTEM = `You are Zeugo AI — an expert Roblox Luau architect.
+const EXPLAIN_SYSTEM = `You are Wisp AI — an expert Roblox Luau architect.
 
 Given a game model JSON, explain the game's architecture. Analyze the instance tree, identify systems, and describe how they connect.
 

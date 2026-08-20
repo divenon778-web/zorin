@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     sameSite: "none",
     maxAge:   60 * 10,
     path:     "/",
-    domain:   "zeugoai.vercel.app",
+    domain:   "wispai.vercel.app",
   });
 
   return response;

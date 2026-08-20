@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       headers: {
         Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
         "Content-Type": "application/json",
-        "User-Agent": "ZeugoApp (https://zeugoai.vercel.app, 1.0.0)",
+        "User-Agent": "WispApp (https://wispai.vercel.app, 1.0.0)",
       },
       body: JSON.stringify({
         access_token: tokenData.access_token,

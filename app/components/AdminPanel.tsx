@@ -84,7 +84,7 @@ export default function AdminPanel({ open, onClose, isMobile = false }: { open: 
               </div>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 800, color: "#fff", letterSpacing: "-0.02em" }}>Admin</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,.32)" }}>zeugo control panel</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,.32)" }}>wisp control panel</div>
               </div>
             </div>
             <button type="button" onClick={close} style={{ width: 30, height: 30, borderRadius: 8, ...glassPill, border: "1px solid rgba(255,255,255,.09)", color: "rgba(255,255,255,.38)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, transition: "all .18s ease" }}>

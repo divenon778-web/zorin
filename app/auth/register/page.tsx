@@ -29,7 +29,7 @@ export default function SignupPage() {
     if (err) { setError(err.message); setLoading(false); return; }
 
     const token = makeToken();
-    window.location.href = `https://zeugoai.vercel.app/onboarding?${token}`;
+    window.location.href = `https://wispai.vercel.app/onboarding?${token}`;
   };
 
   const fields = [
@@ -41,9 +41,9 @@ export default function SignupPage() {
   return (
     <div style={S.screen}>
       <header style={S.topbar}>
-        <a href="https://zeugoai.vercel.app" style={S.brand}>
-          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={22} height={22} style={{ objectFit: "contain" }} />
-          <span style={S.brandName}>Zeugo AI</span>
+        <a href="https://wispai.vercel.app" style={S.brand}>
+          <Image src="/icons/logo-white.png" alt="Wisp AI" width={22} height={22} style={{ objectFit: "contain" }} />
+          <span style={S.brandName}>Wisp AI</span>
         </a>
       </header>
 
@@ -53,7 +53,7 @@ export default function SignupPage() {
         </video>
 
         <div style={S.cardContent}>
-          <Image src="/icons/logo-white.png" alt="Zeugo AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
+          <Image src="/icons/logo-white.png" alt="Wisp AI" width={44} height={44} style={{ objectFit: "contain", marginBottom: 20 }} />
           <h1 style={S.title}>Create your account</h1>
           <p style={S.sub}>Start generating Roblox scripts with AI</p>
 
