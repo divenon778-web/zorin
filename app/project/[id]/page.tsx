@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "gpt-5.6-luna", label: "GPT 5.6 Luna", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg" },
+  { id: "claude-opus-4-8", label: "Claude Opus 4.8", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
@@ -1074,7 +1074,7 @@ export default function ProjectChatPage() {
               locale, language: LOCALES.find(l => l.code === locale)?.label || "English",
               mode: mode === "thinking" ? "generate" : mode,
               type: projectType,
-              model: "gpt-5.6-luna",
+              model: "claude-opus-4-8",
               projectId: currentProjectId, projectName: currentProjectName,
               history: historyForBackend.length > 0 ? historyForBackend : undefined,
               datamodel: Object.keys(datamodelSnapshot).length > 0 ? datamodelSnapshot : undefined,
@@ -1566,11 +1566,11 @@ export default function ProjectChatPage() {
               {/* model selector */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
-                  src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg"
-                  alt="OpenAI"
+                  src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg"
+                  alt="Anthropic"
                   style={{ width: 16, height: 16, filter: "brightness(0) invert(1) opacity(0.7)" }}
                 />
-                <span>GPT 5.6 Luna</span>
+                <span>Claude Opus 4.8</span>
               </div>
 
               {/* credits pill — right side */}
