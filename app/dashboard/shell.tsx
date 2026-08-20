@@ -72,20 +72,13 @@ export default function DashboardShell({ profile, initialProjects }: { profile: 
     el.style.height = Math.min(Math.max(el.scrollHeight, 44), 120) + "px"
   }, [prompt])
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     const text = prompt.trim()
     if (!text) return
     setSendBounce(true)
     setTimeout(() => setSendBounce(false), 500)
-    const { data } = supabase.from("projects").insert({ user_id: profile.id, name: text.slice(0, 32) }).select().single()
-    if (data) {
-      data.then(({ data: proj }) => {
-        if (proj) router.push(`/project/${proj.id}`)
-      })
-    }
-    supabase.from("projects").insert({ user_id: profile.id, name: text.slice(0, 32) }).select().single().then(({ data: proj }) => {
-      if (proj) router.push(`/project/${proj.id}`)
-    })
+    const { data: proj } = await supabase.from("projects").insert({ user_id: profile.id, name: text.slice(0, 32) }).select().single()
+    if (proj) router.push(`/project/${proj.id}`)
   }, [prompt, profile.id, router])
 
   const handleSuggestionClick = useCallback((text: string) => {
