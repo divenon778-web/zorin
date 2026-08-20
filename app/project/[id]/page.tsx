@@ -1292,7 +1292,7 @@ export default function ProjectChatPage() {
         }}>
 
           <div style={{ flex: 1 }}>
-            <button type="button" onClick={() => router.push("/")} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 9px", borderRadius: 9, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.38)", fontSize: 13, fontWeight: 500, fontFamily: "inherit", transition: "all .18s ease" }} className="nav-btn">
+            <button type="button" onClick={() => router.push("/dashboard")} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 9px", borderRadius: 9, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.38)", fontSize: 13, fontWeight: 500, fontFamily: "inherit", transition: "all .18s ease" }} className="nav-btn">
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M9.5 11.5L5.5 7.5l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
               {!isMobile && <span style={{ fontSize: 13 }}>Projects</span>}
             </button>
