@@ -254,45 +254,27 @@ function NewProjectModal({ open, onClose, profile, onCreate, creating }: { open:
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, animation: closing ? "gFadeOut .22s ease forwards" : "gFadeIn .18s ease forwards" }}>
       <ModalBackdrop onClick={close} />
-      <div style={{ position: "relative", width: "min(480px,calc(100vw - 32px))", ...glassModal, borderRadius: 22, overflow: "hidden", animation: closing ? "gScaleOut .22s ease forwards" : "gScaleIn .3s cubic-bezier(.16,1,.3,1) forwards" }}>
-        <div style={{ padding: "22px 22px 18px", borderBottom: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ position: "relative", width: "min(420px,calc(100vw - 32px))", ...glassModal, borderRadius: 20, overflow: "hidden", animation: closing ? "gScaleOut .22s ease forwards" : "gScaleIn .3s cubic-bezier(.16,1,.3,1) forwards" }}>
+        <div style={{ padding: "20px 22px 16px", borderBottom: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
             <div style={{ fontSize: 17, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em" }}>New project</div>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,.35)", marginTop: 3 }}>Give your project a name to get started</div>
+            <div style={{ fontSize: 13, color: "rgba(255,255,255,.35)", marginTop: 3 }}>Name your project to get started</div>
           </div>
           <button type="button" onClick={close} style={{ width: 30, height: 30, borderRadius: 8, ...glassPill, color: "rgba(255,255,255,.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, border: "1px solid rgba(255,255,255,0.10)", transition: "all .18s" }}>
             <i className="bi bi-x-lg" />
           </button>
         </div>
-        <div style={{ padding: "18px 22px 14px" }}>
+        <div style={{ padding: "18px 22px 10px" }}>
           <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.35)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 8 }}>Project name</label>
           <input ref={inputRef} value={name} onChange={e => setName(e.target.value.slice(0, 32))} onKeyDown={e => e.key === "Enter" && submit()} placeholder="e.g. Combat System, Admin Panel…" maxLength={32}
-            style={{ width: "100%", height: 42, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.10)", borderRadius: 11, padding: "0 14px", fontSize: 14, color: "#fff", fontFamily: "inherit", outline: "none", transition: "border-color .2s, box-shadow .2s" }} />
+            style={{ width: "100%", height: 44, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.10)", borderRadius: 11, padding: "0 14px", fontSize: 14, color: "#fff", fontFamily: "inherit", outline: "none", transition: "border-color .2s, box-shadow .2s" }} />
         </div>
         <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "0 22px" }} />
-        <div style={{ padding: "14px 22px" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.35)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 10 }}>Project type</div>
-          <div style={{ display: "flex", gap: 10 }}>
-            <button type="button" onClick={submit} disabled={creating || !name.trim()} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10, padding: 14, background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.20)", boxShadow: "inset 0 1px 0 rgba(255,255,255,.14)", borderRadius: 13, cursor: name.trim() && !creating ? "pointer" : "not-allowed", opacity: name.trim() ? 1 : 0.5, position: "relative", textAlign: "left", transition: "all .18s" }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><i className="bi bi-person" style={{ fontSize: 18 }} /></div>
-              <div><div style={{ fontSize: 14, fontWeight: 600, color: "#fff" }}>Solo</div><div style={{ fontSize: 12, color: "rgba(255,255,255,.4)", marginTop: 2 }}>Just you, building fast</div></div>
-              <div style={{ position: "absolute", top: 12, right: 12, color: "#fff", fontSize: 14 }}><i className="bi bi-check-circle-fill" /></div>
-            </button>
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10, padding: 14, background: "rgba(255,255,255,.02)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 13, opacity: 0.45, position: "relative" }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,.4)" }}><i className="bi bi-people" style={{ fontSize: 18 }} /></div>
-              <div><div style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,.5)" }}>Collaborate</div><div style={{ fontSize: 12, color: "rgba(255,255,255,.3)", marginTop: 2 }}>Build with your team</div></div>
-              <div style={{ position: "absolute", top: 10, right: 10, fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,.35)", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.10)", borderRadius: 6, padding: "2px 7px" }}>Soon</div>
-            </div>
-          </div>
-        </div>
-        <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "0 22px" }} />
-        <div style={{ padding: "13px 22px 20px", display: "flex", alignItems: "center", gap: 10 }}>
-          <UserAvatar profile={profile} size={28} />
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,.72)" }}>{safeDisplayName(profile)}</div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,.3)" }}>will be set as project owner</div>
-          </div>
-          {creating && <div style={{ marginLeft: "auto", width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(255,255,255,.12)", borderTopColor: "rgba(255,255,255,.7)", animation: "gSpin .7s linear infinite" }} />}
+        <div style={{ padding: "14px 22px 20px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10 }}>
+          <button type="button" onClick={close} disabled={creating} style={{ padding: "10px 20px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.10)", background: "transparent", color: "rgba(255,255,255,.52)", fontSize: 13, fontWeight: 500, cursor: creating ? "not-allowed" : "pointer", transition: "all .18s" }}>Cancel</button>
+          <button type="button" onClick={submit} disabled={creating || !name.trim()} style={{ padding: "10px 20px", borderRadius: 10, border: "none", background: name.trim() && !creating ? "#fff" : "rgba(255,255,255,0.06)", color: name.trim() && !creating ? "#09090b" : "rgba(255,255,255,0.20)", fontSize: 13, fontWeight: 600, cursor: name.trim() && !creating ? "pointer" : "not-allowed", transition: "all .18s" }}>
+            {creating ? "Creating…" : "Create project"}
+          </button>
         </div>
       </div>
     </div>
