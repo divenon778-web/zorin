@@ -322,12 +322,6 @@ export default function HomePage() {
               Get Started
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
             </a>
-            {links.roblox && (
-              <a href={links.roblox} target="_blank" rel="noreferrer" style={{ border: "1px solid rgba(255,255,255,0.10)", color: "#fff", fontWeight: 500, fontSize: 14, borderRadius: 10, padding: "12px 24px", background: "rgba(255,255,255,0.03)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8, fontFamily: INTER }}>
-                Studio Plugin
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
-              </a>
-            )}
           </div>
           <div className="anim-fade-up delay-4 hero-stats-mobile" style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
             {stats.map((s: { value: string; label: string }, i: number) => <StatCard key={i} value={s.value} label={s.label} />)}
