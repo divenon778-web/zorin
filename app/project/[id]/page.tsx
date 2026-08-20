@@ -80,6 +80,7 @@ function isLateHour(): boolean { const h = new Date().getHours(); return h >= 21
 function getRandomPrompt() { return BUILDING_PROMPTS[Math.floor(Math.random() * BUILDING_PROMPTS.length)] }
 function getRandomN<T>(arr: T[], n: number): T[] { if (arr.length <= n) return arr; return [...arr].sort(() => Math.random() - 0.5).slice(0, n) }
 function stripTicks(t: string) { if (!t) return t; return t.replace(/```[\w]*/g, "").replace(/`/g, "").trim() }
+function stripThinking(t: string) { if (!t) return t; return t.replace(/<think>[\s\S]*?<\/think>/g, "").trim() }
 function safeDisplayName(p: Profile) { return (p as FullProfile).display_name?.trim() || (p as FullProfile).username?.trim() || "User" }
 
 function parseQA(content: string): QAPair[] | null {
@@ -1102,7 +1103,7 @@ export default function ProjectChatPage() {
             }
 
             try {
-              const parsed = JSON.parse(output)
+              const parsed = JSON.parse(stripThinking(output))
               if (meta) { parsed.__model = meta.__model; parsed.__provider = meta.__provider }
               return parsed
             } catch {
