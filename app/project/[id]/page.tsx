@@ -1071,7 +1071,14 @@ export default function ProjectChatPage() {
               stream: true,
             }),
           })
-          if (!res.ok) throw new Error("server error")
+          if (!res.ok) {
+            try {
+              const errBody = await res.json()
+              throw new Error(errBody?.message || errBody?.error || `server error (${res.status})`)
+            } catch {
+              throw new Error(`server error (${res.status})`)
+            }
+          }
 
           const contentType = res.headers.get("content-type") || ""
           if (contentType.includes("text/event-stream") && res.body) {
@@ -1147,14 +1154,17 @@ export default function ProjectChatPage() {
       const { data: allMsgs } = await supabase.from("messages").select("*").eq("project_id", project.id).order("created_at", { ascending: true })
       setMessages((allMsgs as Message[]) || [])
 
-    } catch {
+    } catch (err: any) {
       stepControl.finish()
       setGenerationSteps(prev => prev.map(s => ({ ...s, status: "error" as const })))
+      const reason = err?.message && err.message !== "server error"
+        ? err.message
+        : "Something went wrong. Check your connection and try again."
       setMessages(prev => [
         ...prev.filter(m => m.id !== tempMsg.id),
         {
           id: "err-" + Date.now(), project_id: project.id, user_id: profile.id, role: "assistant",
-          content: JSON.stringify({ type: "chat", message: "Something went wrong. Check your connection and try again.", __model: "" }),
+          content: JSON.stringify({ type: "chat", message: reason, __model: "" }),
           created_at: new Date().toString(),
         },
       ])
