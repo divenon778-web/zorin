@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "nvidia/nemotron-3-ultra-550b-a55b",
-  code:        "nvidia/nemotron-3-ultra-550b-a55b",
-  world:       "nvidia/nemotron-3-ultra-550b-a55b",
-  ui:          "nvidia/nemotron-3-ultra-550b-a55b",
-  test:        "nvidia/nemotron-3-ultra-550b-a55b",
-  reviewer:    "nvidia/nemotron-3-ultra-550b-a55b",
-  performance: "nvidia/nemotron-3-ultra-550b-a55b",
-  security:    "nvidia/nemotron-3-ultra-550b-a55b",
-  economy:     "nvidia/nemotron-3-ultra-550b-a55b",
+  planner:     "gpt-5.6-luna",
+  code:        "gpt-5.6-luna",
+  world:       "gpt-5.6-luna",
+  ui:          "gpt-5.6-luna",
+  test:        "gpt-5.6-luna",
+  reviewer:    "gpt-5.6-luna",
+  performance: "gpt-5.6-luna",
+  security:    "gpt-5.6-luna",
+  economy:     "gpt-5.6-luna",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "nvidia/nemotron-3-ultra-550b-a55b"
+  return "gpt-5.6-luna"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -57,30 +57,15 @@ export function estimateCost(taskType: string): { model: string; estimatedTokens
 }
 
 export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
-  return MODEL_MAP[taskType] ?? "kat-coder-pro-v2.5"
+  return MODEL_MAP[taskType] ?? "gpt-5.6-luna"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "nvidia/nemotron-3-ultra-550b-a55b": {
-      name: "Nemotron 3 Ultra 550B",
-      provider: "nvidia",
-      strengths: "Smart — complex reasoning, code generation, Lua/Roblox scripting",
-    },
-    "deepseek-v4-flash": {
-      name: "DeepSeek V4 Flash",
-      provider: "api.b.ai",
-      strengths: "Fast — code generation, planning, all tasks",
-    },
-    "kat-coder-pro-v2.5": {
-      name: "Kat Coder Pro v2.5",
-      provider: "hcnsec.cn",
-      strengths: "Fast — code generation, planning, all tasks",
-    },
-    "DeepSeek-V4-Pro": {
-      name: "DeepSeek V4 Pro (Nemotron 3 Ultra)",
-      provider: "hcnsec.cn",
-      strengths: "High quality fallback — complex reasoning, better code (slower)",
+    "gpt-5.6-luna": {
+      name: "GPT 5.6 Luna",
+      provider: "groq",
+      strengths: "Smart — Qwen 3.6 27B on Groq, complex reasoning, code generation, Lua/Roblox scripting",
     },
   }
 
