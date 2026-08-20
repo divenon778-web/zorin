@@ -41,8 +41,6 @@ const STORAGE_KEY_REDUCE_MOTION  = "wisp_reduce_motion"
 const STORAGE_KEY_SEND_ON_ENTER  = "wisp_send_on_enter"
 const STORAGE_KEY_COMPACT_MODE   = "wisp_compact_mode"
 
-const PROMPT_LIMIT_UNCONNECTED = 3
-
 const MODES = [
   { id: "generate", label: "Generate", icon: "bi-stars" },
   { id: "thinking", label: "Thinking", icon: "bi-lightbulb" },
@@ -482,11 +480,10 @@ function ClarificationCard({
   )
 }
 
-/* ──────────────── PROMPT LIMIT BANNER ──────────────── */
+/* ──────────────── CREDITS LOW BANNER ──────────────── */
 
-function PromptLimitBanner({ used, limit }: { used: number; limit: number }) {
-  const remaining = limit - used
-  const isOut = remaining <= 0
+function CreditsLowBanner({ credits }: { credits: number }) {
+  const isOut = credits <= 0
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: 10,
@@ -500,8 +497,8 @@ function PromptLimitBanner({ used, limit }: { used: number; limit: number }) {
       <i className={`bi ${isOut ? "bi-plug-fill" : "bi-lightning-charge-fill"}`} style={{ fontSize: 13, color: isOut ? "#fc8181" : "#ffc048", flexShrink: 0 }} />
       <span style={{ fontSize: 13, color: isOut ? "#fc8181" : "#ffc048", flex: 1, lineHeight: 1.5 }}>
         {isOut
-          ? "Connect Studio to keep generating — you've used your 3 free prompts."
-          : `${remaining} free prompt${remaining !== 1 ? "s" : ""} left. Connect Studio to unlock unlimited.`}
+          ? "You've run out of credits. Upgrade to keep generating."
+          : `Only ${credits} credit${credits !== 1 ? "s" : ""} left. Each prompt uses 1 credit.`}
       </span>
     </div>
   )
@@ -787,6 +784,7 @@ export default function ProjectChatPage() {
   const [inputFocused,      setInputFocused]      = useState(false)
   const [planHovered,       setPlanHovered]       = useState(false)
   const [promptUsed,        setPromptUsed]        = useState(0)
+  const [credits,           setCredits]           = useState<number | null>(null)
 
   const [reduceMotion, setReduceMotion] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY_REDUCE_MOTION) === "true" : false)
   const [sendOnEnter,  setSendOnEnter]  = useState(() => { if (typeof window === "undefined") return true; const s = window.localStorage.getItem(STORAGE_KEY_SEND_ON_ENTER); return s !== null ? s === "true" : true })
@@ -811,10 +809,11 @@ export default function ProjectChatPage() {
   const prevMsgCountRef = useRef(0)
   const prevPluginRef   = useRef<boolean | null>(null)
 
-  // Derived: is this user over the free prompt limit?
+  // Derived: is this user out of credits?
   const isUnlimited = profile?.unlimited_prompts === true
-  const isOverLimit = !isUnlimited && pluginConnected === false && promptUsed >= PROMPT_LIMIT_UNCONNECTED
-  const showLimitBanner = !isUnlimited && pluginConnected === false && promptUsed > 0
+  const isOverCredits = credits !== null && credits <= 0 && !isUnlimited
+  const isOverLimit = isOverCredits
+  const showLimitBanner = !isUnlimited && credits !== null && credits <= 5 && credits > 0
   
 
   useEffect(() => {
@@ -838,6 +837,13 @@ export default function ProjectChatPage() {
         .eq("user_id", session.user.id)
         .single()
       if (usage) setPromptUsed(usage.used_count || 0)
+
+      // Load credits from profile
+      if (prof.credits !== undefined && prof.credits !== null) {
+        setCredits(prof.credits)
+      } else {
+        setCredits(50)
+      }
     })
   }, [projectId])
 
@@ -971,7 +977,7 @@ export default function ProjectChatPage() {
     generate(`Q: ${question}\nA: ${answer}`)
   }, [loading])
 
-  // Increment prompt_usage in Supabase
+  // Increment prompt_usage in Supabase and deduct credits
   const incrementPromptUsage = async () => {
     if (!profile) return
     const newCount = promptUsed + 1
@@ -980,6 +986,12 @@ export default function ProjectChatPage() {
       { user_id: profile.id, used_count: newCount, updated_at: new Date().toISOString() },
       { onConflict: "user_id" }
     )
+    // Deduct 1 credit
+    if (credits !== null && !isUnlimited) {
+      const newCredits = Math.max(0, credits - 1)
+      setCredits(newCredits)
+      await supabase.from("profiles").update({ credits: newCredits }).eq("id", profile.id)
+    }
   }
 
   const generate = async (overridePrompt?: string) => {
@@ -990,8 +1002,8 @@ export default function ProjectChatPage() {
       return
     }
 
-    // Enforce prompt limit when plugin is not connected
-    if (!isUnlimited && pluginConnected === false && promptUsed >= PROMPT_LIMIT_UNCONNECTED) {
+    // Enforce credit limit
+    if (!isUnlimited && credits !== null && credits <= 0) {
       return
     }
 
@@ -1025,8 +1037,8 @@ export default function ProjectChatPage() {
     try {
       await supabase.from("messages").insert({ project_id: project.id, user_id: profile.id, role: "user", content: userPrompt })
 
-      // Increment usage only when plugin is not connected (unlimited users are exempt)
-      if (!isUnlimited && pluginConnected === false) {
+      // Increment usage and deduct credits
+      if (!isUnlimited) {
         await incrementPromptUsage()
       }
 
@@ -1258,6 +1270,7 @@ export default function ProjectChatPage() {
         .plan-menu-item:hover .plan-coming-soon { opacity: 1 !important; pointer-events: none; animation: tooltipDown .22s cubic-bezier(.34,1.56,.64,1) both !important; }
         .reasoning-toggle:hover  { opacity: 0.75; }
         .reasoning-row:hover     { background: rgba(255,255,255,0.018) !important; }
+        .credits-pill:hover      { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; transition: all .15s ease !important; }
       `}</style>
 
       <FeedbackModal open={feedbackOpen} onClose={() => { setFeedbackOpen(false); setFeedbackMsgId(null) }} onSubmit={submitFeedback} sending={feedbackSending} isMobile={isMobile} />
@@ -1394,9 +1407,9 @@ export default function ProjectChatPage() {
         }}>
           <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", flexDirection: "column", gap: 9 }}>
 
-            {/* prompt limit banner */}
-            {showLimitBanner && (
-              <PromptLimitBanner used={promptUsed} limit={PROMPT_LIMIT_UNCONNECTED} />
+            {/* credits low banner */}
+            {showLimitBanner && credits !== null && (
+              <CreditsLowBanner credits={credits} />
             )}
 
             {/* toolbar row */}
@@ -1559,6 +1572,14 @@ export default function ProjectChatPage() {
                 />
                 <span>GPT 5.6 Luna</span>
               </div>
+
+              {/* credits pill — right side */}
+              <div className="credits-pill" style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: credits !== null && credits <= 5 && !isUnlimited ? "#fc8181" : "rgba(255,255,255,0.52)", border: credits !== null && credits <= 5 && !isUnlimited ? "1px solid rgba(252,100,100,0.2)" : "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif", transition: "all .3s ease", animation: "chipPop .38s cubic-bezier(.34,1.56,.64,1) both" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill={credits !== null && credits <= 5 && !isUnlimited ? "rgba(252,100,100,0.7)" : "rgba(255,192,72,0.8)"} stroke={credits !== null && credits <= 5 && !isUnlimited ? "rgba(252,100,100,0.4)" : "rgba(255,192,72,0.4)"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>{isUnlimited ? "∞" : credits !== null ? credits.toLocaleString() : "—"}</span>
+              </div>
             </div>
 
             {/* text input row */}
@@ -1584,7 +1605,7 @@ export default function ProjectChatPage() {
                 onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey && sendOnEnter && !isMobile) { e.preventDefault(); generate() } }}
                 onFocus={() => setInputFocused(true)}
                 onBlur={() => setInputFocused(false)}
-                placeholder={isOverLimit ? "Connect Studio to keep generating…" : "Message Wisp…"}
+                placeholder={isOverLimit ? "Out of credits…" : "Message Wisp…"}
                 disabled={loading || isOverLimit}
                 rows={1}
                 style={{

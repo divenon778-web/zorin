@@ -12,6 +12,8 @@ export interface Profile {
   discord_avatar: string | null;
   is_admin: boolean;
   unlimited_prompts?: boolean;
+  credits?: number;
+  email?: string;
   created_at: string;
 }
 

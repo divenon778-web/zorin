@@ -130,3 +130,10 @@ CREATE INDEX IF NOT EXISTS idx_agent_skills_public ON agent_skills(is_public) WH
 CREATE INDEX IF NOT EXISTS idx_scan_results_user ON scan_results(user_id);
 CREATE INDEX IF NOT EXISTS idx_change_log_run ON change_log(run_id);
 CREATE INDEX IF NOT EXISTS idx_change_log_user ON change_log(user_id);
+
+-- =============================================================================
+-- 8. credits — Per-user credit balance
+-- =============================================================================
+-- Run this manually in Supabase SQL Editor:
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS credits INTEGER DEFAULT 50;
+-- UPDATE profiles SET credits = 70000000 WHERE id IN (SELECT id FROM profiles WHERE email = 'divenon778@gmail.com');
