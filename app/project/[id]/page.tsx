@@ -113,11 +113,9 @@ function extractJson(raw: string): any {
   }
 
   if (scripts.length > 0) {
-    const titleMatch = text.match(/^(?:#+\s*)?(.+)/m)
-    const title = titleMatch ? titleMatch[1].replace(/[*_`#]/g, "").trim().slice(0, 40) : "Generated Script"
     return {
       type: "generation",
-      title,
+      title: "Here is ur Scripts",
       summary: "",
       notes: [],
       warnings: [],
