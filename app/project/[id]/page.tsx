@@ -110,6 +110,44 @@ function extractJson(raw: string): any {
     try { return JSON.parse(text.slice(start, end + 1)) } catch {}
   }
 
+  // Fallback: extract code blocks from markdown and build a generation response
+  const codeBlockRegex = /```(?:lua|luau)?\s*\n([\s\S]*?)```/g
+  const scripts: any[] = []
+  let match
+  let scriptIndex = 0
+  while ((match = codeBlockRegex.exec(text)) !== null) {
+    const code = match[1].trim()
+    if (code) {
+      scriptIndex++
+      const isLocal = code.includes("LocalPlayer") || code.includes("StarterPlayer")
+      scripts.push({
+        name: `Script${scriptIndex > 1 ? scriptIndex : ""}`,
+        type: isLocal ? "LocalScript" : "Script",
+        parent: "ServerScriptService",
+        code,
+      })
+    }
+  }
+
+  if (scripts.length > 0) {
+    const titleMatch = text.match(/^(?:#+\s*)?(.+)/m)
+    const title = titleMatch ? titleMatch[1].replace(/[*_`#]/g, "").trim().slice(0, 40) : "Generated Script"
+    return {
+      type: "generation",
+      title,
+      summary: "Extracted from markdown response.",
+      notes: [],
+      warnings: ["Response was not valid JSON — code was extracted from markdown."],
+      suggestions: [],
+      instances: [],
+      deletions: [],
+      scripts,
+      thoughts: [],
+      plan: [],
+      thinking_steps: [],
+    }
+  }
+
   return null
 }
 
