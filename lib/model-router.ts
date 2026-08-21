@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "deepseek/deepseek-v4-pro-free",
-  code:        "deepseek/deepseek-v4-pro-free",
-  world:       "deepseek/deepseek-v4-pro-free",
-  ui:          "deepseek/deepseek-v4-pro-free",
-  test:        "deepseek/deepseek-v4-pro-free",
-  reviewer:    "deepseek/deepseek-v4-pro-free",
-  performance: "deepseek/deepseek-v4-pro-free",
-  security:    "deepseek/deepseek-v4-pro-free",
-  economy:     "deepseek/deepseek-v4-pro-free",
+  planner:     "coding-kimi-k3-free",
+  code:        "coding-kimi-k3-free",
+  world:       "coding-kimi-k3-free",
+  ui:          "coding-kimi-k3-free",
+  test:        "coding-kimi-k3-free",
+  reviewer:    "coding-kimi-k3-free",
+  performance: "coding-kimi-k3-free",
+  security:    "coding-kimi-k3-free",
+  economy:     "coding-kimi-k3-free",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "deepseek/deepseek-v4-pro-free"
+  return "coding-kimi-k3-free"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -62,9 +62,9 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "deepseek/deepseek-v4-pro-free": {
-      name: "DeepSeek V4 Pro",
-      provider: "anthropic",
+    "coding-kimi-k3-free": {
+      name: "Kimi K3",
+      provider: "aihubmix",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
     },
   }

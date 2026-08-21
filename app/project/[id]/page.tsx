@@ -1770,11 +1770,11 @@ export default function ProjectChatPage() {
               {/* model selector */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
-                  src="/assistant/brands/deepseek.svg"
-                  alt="DeepSeek V4 Pro"
+                  src="/assistant/brands/kimi.svg"
+                  alt="Kimi K3"
                   style={{ width: 16, height: 16, background: "transparent" }}
                 />
-                <span>DeepSeek V4 Pro</span>
+                <span>Kimi K3</span>
               </div>
 
               {/* credits pill — right side */}
