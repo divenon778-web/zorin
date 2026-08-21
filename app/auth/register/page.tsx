@@ -29,7 +29,7 @@ export default function SignupPage() {
     if (err) { setError(err.message); setLoading(false); return; }
 
     const token = makeToken();
-    window.location.href = `https://wispai.vercel.app/onboarding?${token}`;
+    window.location.href = `https://wisp-pvv1.onrender.com/onboarding?${token}`;
   };
 
   const fields = [
@@ -41,7 +41,7 @@ export default function SignupPage() {
   return (
     <div style={S.screen}>
       <header style={S.topbar}>
-        <a href="https://wispai.vercel.app" style={S.brand}>
+        <a href="https://wisp-pvv1.onrender.com" style={S.brand}>
           <Image src="/icons/logo-white.png" alt="Wisp AI" width={22} height={22} style={{ objectFit: "contain" }} />
           <span style={S.brandName}>Wisp AI</span>
         </a>

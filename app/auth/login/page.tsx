@@ -7,8 +7,8 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 function resolveRedirect(raw: string | null): string {
-  if (!raw || !raw.startsWith("/")) return "https://wispai.vercel.app/dashboard";
-  return `https://wispai.vercel.app${raw}`;
+  if (!raw || !raw.startsWith("/")) return "https://wisp-pvv1.onrender.com/dashboard";
+  return `https://wisp-pvv1.onrender.com${raw}`;
 }
 
 function clearAllAuthCookies() {
@@ -19,7 +19,7 @@ function clearAllAuthCookies() {
   ].filter(Boolean);
   
   // Clear with all possible domains and paths
-  const domains = ["wispai.vercel.app", ".wispai.vercel.app", ""];
+  const domains = ["wisp-pvv1.onrender.com", ".wisp-pvv1.onrender.com", ""];
   const paths = ["/", "/dashboard", "/auth"];
   
   for (const name of baseNames) {
@@ -126,7 +126,7 @@ export default function LoginPage() {
   return (
     <div style={S.screen}>
       <header style={S.topbar}>
-        <a href="https://wispai.vercel.app" style={S.brand}>
+        <a href="https://wisp-pvv1.onrender.com" style={S.brand}>
           <Image src="/icons/logo-white.png" alt="Wisp AI" width={22} height={22} style={{ objectFit: "contain" }} />
           <span style={S.brandName}>Wisp AI</span>
         </a>

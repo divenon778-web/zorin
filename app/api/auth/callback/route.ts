@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DASH_URL  = "https://wispai.vercel.app";
+const DASH_URL  = "https://wisp-pvv1.onrender.com";
 const ERROR_URL = `${DASH_URL}/oautherror`;
 
 export async function GET(req: NextRequest) {
@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
       sameSite: "none",
       maxAge:   tokenData.expires_in,
       path:     "/",
-domain:   "wispai.vercel.app",
+domain:   "wisp-pvv1.onrender.com",
     });
 
     response.cookies.set("roblox_oauth_state", "", {
@@ -92,7 +92,7 @@ domain:   "wispai.vercel.app",
       sameSite: "none",
       maxAge:   0,
       path:     "/",
-      domain:   "wispai.vercel.app",
+domain:   "wisp-pvv1.onrender.com",
     });
 
     return response;

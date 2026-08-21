@@ -84,7 +84,7 @@ export async function POST() {
     console.log("[plugin/link] success — code:", deviceCode);
     return NextResponse.json({
       code: deviceCode,
-      authUrl: `https://wispai.vercel.app/link-plugin?code=${deviceCode}`,
+      authUrl: `https://wisp-pvv1.onrender.com/link-plugin?code=${deviceCode}`,
     });
 
   } catch (err) {

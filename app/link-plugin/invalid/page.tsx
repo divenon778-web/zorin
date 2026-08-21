@@ -23,7 +23,7 @@ export default function InvalidLinkPage() {
 
         <p style={S.hint}>To get a new link, go back to Roblox Studio and click <strong style={{ color: "#e2e2e2" }}>Connect</strong> in the Wisp plugin.</p>
 
-        <a href="https://wispai.vercel.app" style={S.btn}>
+        <a href="https://wisp-pvv1.onrender.com" style={S.btn}>
           Go to dashboard
         </a>
       </div>

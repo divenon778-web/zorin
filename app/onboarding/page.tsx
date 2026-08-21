@@ -91,7 +91,7 @@ export default function OnboardingPage() {
     const url = new URL("https://discord.com/oauth2/authorize");
     url.searchParams.set("client_id",     clientId);
     url.searchParams.set("response_type", "code");
-    url.searchParams.set("redirect_uri",  "https://wispai.vercel.app/api/auth/discord/callback");
+    url.searchParams.set("redirect_uri",  "https://wisp-pvv1.onrender.com/api/auth/discord/callback");
     url.searchParams.set("scope",         "identify guilds.join");
     url.searchParams.set("state",         userId);
 
@@ -105,7 +105,7 @@ export default function OnboardingPage() {
 
       <div style={S.screen}>
         <header style={S.topbar}>
-          <a href="https://wispai.vercel.app" style={S.brand}>
+          <a href="https://wisp-pvv1.onrender.com" style={S.brand}>
             <Image
               src="/icons/logo-white.png"
               alt="Wisp AI"

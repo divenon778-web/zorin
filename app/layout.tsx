@@ -1867,7 +1867,7 @@ export const metadata: Metadata = {
     title: "Wisp AI",
     description: "AI-powered Roblox script generation",
     type: "website",
-    url: "https://wispai.vercel.app",
+    url: "https://wisp-pvv1.onrender.com",
     images: [
       {
         url: "/icons/CD1CB55E-5059-4BAA-B236-7C57F0A49F5B.png",

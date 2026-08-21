@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       headers: {
         Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
         "Content-Type": "application/json",
-        "User-Agent": "WispApp (https://wispai.vercel.app, 1.0.0)",
+        "User-Agent": "WispApp (https://wisp-pvv1.onrender.com, 1.0.0)",
       },
       body: JSON.stringify({
         access_token: tokenData.access_token,

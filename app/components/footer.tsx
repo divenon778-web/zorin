@@ -57,7 +57,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
                 <YoutubeIcon />
               </a>
               <a
-                href="https://wispai.vercel.app"
+href="https://wisp-pvv1.onrender.com"
                 target="_blank"
                 rel="noreferrer"
                 style={S.socialLink}
@@ -79,7 +79,7 @@ export function Footer({ maxWidth = 1100 }: { maxWidth?: number }) {
 
           <div style={S.col}>
             <span style={S.colHead}>Product</span>
-            <a href="https://wispai.vercel.app" style={S.link}>Dashboard</a>
+            <a href="https://wisp-pvv1.onrender.com" style={S.link}>Dashboard</a>
             <Link href="/" style={S.link}>Home</Link>
           </div>
 

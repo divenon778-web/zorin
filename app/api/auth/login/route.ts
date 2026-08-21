@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     sameSite: "none",
     maxAge:   60 * 10,
     path:     "/",
-    domain:   "wispai.vercel.app",
+    domain:   "wisp-pvv1.onrender.com",
   });
 
   return response;
