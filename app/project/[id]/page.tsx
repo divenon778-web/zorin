@@ -1072,10 +1072,13 @@ export default function ProjectChatPage() {
 
       const fetchStepsEarly = async (): Promise<string[]> => {
         try {
+          const stepsController = new AbortController()
+          const stepsTimeout = setTimeout(() => stepsController.abort(), 10000)
           const res = await fetch(`${aiBase}/thinking-steps`, {
-            method: "POST", headers: { "Content-Type": "application/json" }, signal: controller.signal,
+            method: "POST", headers: { "Content-Type": "application/json" }, signal: stepsController.signal,
             body: JSON.stringify({ prompt: userPrompt, projectId: currentProjectId, projectName: currentProjectName, locale, language: LOCALES.find(l => l.code === locale)?.label || "English" }),
           })
+          clearTimeout(stepsTimeout)
           if (!res.ok) return []
           const data = await res.json()
           return data.steps || []
