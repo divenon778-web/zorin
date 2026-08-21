@@ -1770,11 +1770,11 @@ export default function ProjectChatPage() {
               {/* model selector */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
-                  src="/assistant/brands/kimi.svg"
-                  alt="Kimi K3"
+                  src="/assistant/brands/openai.svg"
+                  alt="GPT-4.1"
                   style={{ width: 16, height: 16, background: "transparent" }}
                 />
-                <span>Kimi K2.7 Code</span>
+                <span>GPT-4.1</span>
               </div>
 
               {/* credits pill — right side */}

@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "kimi-k2.7-code",
-  code:        "kimi-k2.7-code",
-  world:       "kimi-k2.7-code",
-  ui:          "kimi-k2.7-code",
-  test:        "kimi-k2.7-code",
-  reviewer:    "kimi-k2.7-code",
-  performance: "kimi-k2.7-code",
-  security:    "kimi-k2.7-code",
-  economy:     "kimi-k2.7-code",
+  planner:     "gpt-4.1-free",
+  code:        "gpt-4.1-free",
+  world:       "gpt-4.1-free",
+  ui:          "gpt-4.1-free",
+  test:        "gpt-4.1-free",
+  reviewer:    "gpt-4.1-free",
+  performance: "gpt-4.1-free",
+  security:    "gpt-4.1-free",
+  economy:     "gpt-4.1-free",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "kimi-k2.7-code"
+  return "gpt-4.1-free"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -62,15 +62,20 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "kimi-k2.7-code": {
-      name: "Kimi K2.7 Code",
-      provider: "aihubmix",
+    "gpt-4.1-free": {
+      name: "GPT-4.1",
+      provider: "openai",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
     },
-    "kimi-k3": {
-      name: "Kimi K3",
-      provider: "aihubmix",
-      strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
+    "gpt-4o-free": {
+      name: "GPT-4o",
+      provider: "openai",
+      strengths: "Fast all-rounder, good code generation, Luau/Roblox scripting",
+    },
+    "gemini-3.7-flash-free": {
+      name: "Gemini 3.7 Flash",
+      provider: "google",
+      strengths: "Fast inference, good code generation, Luau/Roblox scripting",
     },
   }
 
