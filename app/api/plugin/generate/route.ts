@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   let prompt = ""
   let model  = "minimax-m3"
-  try { const body = await req.json(); prompt = body?.prompt ?? ""; if (body?.model) model = body.model }
+  try { const raw = await req.text(); const body = raw ? JSON.parse(raw) : {}; prompt = body?.prompt ?? ""; if (body?.model) model = body.model }
   catch { return NextResponse.json({ error: "invalid_body" }, { status: 400 }) }
 
   if (prompt === "__ping__") {

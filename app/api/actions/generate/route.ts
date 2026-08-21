@@ -10,7 +10,8 @@ export async function OPTIONS() {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
+    const raw = await req.text()
+    const body = raw ? JSON.parse(raw) : {}
 
     const prompt      = (body.prompt      || "").trim()
     const model       = (body.model       || "").trim()

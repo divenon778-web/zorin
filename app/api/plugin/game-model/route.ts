@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   }
 
   let body: { model?: string; placeId?: string | number; universeId?: string | number; thumbnailApiUrl?: string } = {}
-  try { body = await req.json() } catch { return NextResponse.json({ error: "bad json" }, { status: 400 }) }
+  try { const raw = await req.text(); body = raw ? JSON.parse(raw) : {} } catch { return NextResponse.json({ error: "bad json" }, { status: 400 }) }
 
   const model = body.model
   if (!model || typeof model !== "string") {

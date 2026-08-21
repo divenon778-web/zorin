@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const userId = tokenRow.user_id
 
   let body: { prompt?: string; projectId?: string; gameModel?: string; mode?: "default" | "advanced" } = {}
-  try { body = await req.json() } catch { return NextResponse.json({ error: "invalid_body" }, { status: 400 }) }
+  try { const raw = await req.text(); body = raw ? JSON.parse(raw) : {} } catch { return NextResponse.json({ error: "invalid_body" }, { status: 400 }) }
 
   if (!body.prompt?.trim()) return NextResponse.json({ error: "missing_prompt" }, { status: 400 })
 
