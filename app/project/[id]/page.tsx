@@ -1774,7 +1774,7 @@ export default function ProjectChatPage() {
                   alt="Kimi K3"
                   style={{ width: 16, height: 16, background: "transparent" }}
                 />
-                <span>Kimi K3</span>
+                <span>Kimi K2.6 Code</span>
               </div>
 
               {/* credits pill — right side */}
