@@ -90,6 +90,29 @@ function getTimeAgo(dateStr: string): string {
 }
 function stripTicks(t: string) { if (!t) return t; return t.replace(/```[\w]*/g, "").replace(/`/g, "").trim() }
 function stripThinking(t: string) { if (!t) return t; return t.replace(/<think>[\s\S]*?<\/think>/g, "").trim() }
+
+function extractJson(raw: string): any {
+  let text = raw.trim()
+    .replace(/^```(?:json)?\s*/m, "")
+    .replace(/```\s*$/m, "")
+    .trim()
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/)
+  if (jsonMatch) {
+    try { return JSON.parse(jsonMatch[0]) } catch {}
+  }
+
+  try { return JSON.parse(text) } catch {}
+
+  const start = text.indexOf("{")
+  const end = text.lastIndexOf("}")
+  if (start !== -1 && end > start) {
+    try { return JSON.parse(text.slice(start, end + 1)) } catch {}
+  }
+
+  return null
+}
+
 function safeDisplayName(p: Profile) { return (p as FullProfile).display_name?.trim() || (p as FullProfile).username?.trim() || "User" }
 
 function parseQA(content: string): QAPair[] | null {
@@ -1143,9 +1166,13 @@ export default function ProjectChatPage() {
             }
 
             try {
-              const parsed = JSON.parse(stripThinking(output))
-              if (meta) { parsed.__model = meta.__model; parsed.__provider = meta.__provider }
-              return parsed
+              const cleaned = stripThinking(output)
+              const parsed = extractJson(cleaned)
+              if (parsed) {
+                if (meta) { parsed.__model = meta.__model; parsed.__provider = meta.__provider }
+                return parsed
+              }
+              return { type: "chat", message: output || "Empty response", __model: meta?.__model || "" }
             } catch {
               return { type: "chat", message: output || "Empty response", __model: meta?.__model || "" }
             }
