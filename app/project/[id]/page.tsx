@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "claude-opus-4.8", label: "Claude Opus 4.8", logo: "/assistant/brands/claude.svg" },
+  { id: "claude-sonnet-4.6", label: "Claude Sonnet 4.6", logo: "/assistant/brands/claude.svg" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
@@ -1704,10 +1704,10 @@ export default function ProjectChatPage() {
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
                   src="/assistant/brands/claude.svg"
-                  alt="Claude Opus 4.8"
+                  alt="Claude Sonnet 4.6"
                   style={{ width: 16, height: 16, background: "transparent" }}
                 />
-                <span>Claude Opus 4.8</span>
+                <span>Claude Sonnet 4.6</span>
               </div>
 
               {/* credits pill — right side */}
