@@ -137,7 +137,7 @@ function extractJson(raw: string): any {
       title,
       summary: "Extracted from markdown response.",
       notes: [],
-      warnings: ["Response was not valid JSON — code was extracted from markdown."],
+      warnings: [],
       suggestions: [],
       instances: [],
       deletions: [],
