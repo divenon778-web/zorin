@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   const profile = profileRaw as { username: string; display_name: string } | null
 
   let prompt = ""
-  let model  = "claude-opus-4-8"
+  let model  = "YuriiFominYoung/fable-5"
   try { const body = await req.json(); prompt = body?.prompt ?? ""; if (body?.model) model = body.model }
   catch { return NextResponse.json({ error: "invalid_body" }, { status: 400 }) }
 
