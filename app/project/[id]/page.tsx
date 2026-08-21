@@ -1343,7 +1343,7 @@ export default function ProjectChatPage() {
         <div style={{ padding: "12px 14px 10px" }}>
           <button type="button" onClick={() => { setSidebarOpen(false); router.push("/dashboard") }} style={{
             width: "100%", padding: "11px 0", borderRadius: 12, border: "none",
-            background: "linear-gradient(135deg, #4b5563 0%, #6b7280 50%, #9ca3af 100%)",
+            background: "#6b7280",
             color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer",
             fontFamily: "inherit", letterSpacing: "0.01em",
             boxShadow: "0 4px 16px rgba(75,85,99,0.35), inset 0 1px 0 rgba(255,255,255,0.15)",
