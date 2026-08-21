@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "DeepSeek-V4-Pro",
-  code:        "DeepSeek-V4-Pro",
-  world:       "DeepSeek-V4-Pro",
-  ui:          "DeepSeek-V4-Pro",
-  test:        "DeepSeek-V4-Pro",
-  reviewer:    "DeepSeek-V4-Pro",
-  performance: "DeepSeek-V4-Pro",
-  security:    "DeepSeek-V4-Pro",
-  economy:     "DeepSeek-V4-Pro",
+  planner:     "gpt-4o-mini",
+  code:        "gpt-4o-mini",
+  world:       "gpt-4o-mini",
+  ui:          "gpt-4o-mini",
+  test:        "gpt-4o-mini",
+  reviewer:    "gpt-4o-mini",
+  performance: "gpt-4o-mini",
+  security:    "gpt-4o-mini",
+  economy:     "gpt-4o-mini",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "DeepSeek-V4-Pro"
+  return "gpt-4o-mini"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -57,13 +57,13 @@ export function estimateCost(taskType: string): { model: string; estimatedTokens
 }
 
 export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
-  return MODEL_MAP[taskType] ?? "DeepSeek-V4-Pro"
+  return MODEL_MAP[taskType] ?? "gpt-4o-mini"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "DeepSeek-V4-Pro": {
-      name: "GPT-5.6 Sol",
+    "gpt-4o-mini": {
+      name: "Opus 5",
       provider: "openai",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
     },

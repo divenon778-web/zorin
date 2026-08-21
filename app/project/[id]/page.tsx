@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "DeepSeek-V4-Pro", label: "Opus 5", logo: "/assistant/brands/claude.svg" },
+  { id: "gpt-4o-mini", label: "Opus 5", logo: "/assistant/brands/claude.svg" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
