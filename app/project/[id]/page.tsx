@@ -1703,7 +1703,7 @@ export default function ProjectChatPage() {
               {/* model selector */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
-                  src="https://claude.ai/favicon.ico"
+                  src="/assistant/brands/claude.svg"
                   alt="Fable 5"
                   style={{ width: 16, height: 16, background: "transparent" }}
                 />
