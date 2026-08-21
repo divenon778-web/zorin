@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "YuriiFominYoung/fable-5", label: "Fable 5", logo: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg" },
+  { id: "YuriiFominYoung/fable-5", label: "Fable 5", logo: "https://claude.ai/favicon.ico" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
@@ -1703,11 +1703,11 @@ export default function ProjectChatPage() {
               {/* model selector */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
-                  src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg"
-                  alt="Anthropic"
-                  style={{ width: 16, height: 16, filter: "brightness(0) invert(1) opacity(0.7)" }}
+                  src="https://claude.ai/favicon.ico"
+                  alt="Fable 5"
+                  style={{ width: 16, height: 16, background: "transparent" }}
                 />
-                <span>Claude Opus 4.8</span>
+                <span>Fable 5</span>
               </div>
 
               {/* credits pill — right side */}
