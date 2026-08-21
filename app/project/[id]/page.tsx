@@ -640,7 +640,7 @@ function MessageBubble({ msg, isMobile, qaHistory = [], onSuggestionClick, onCla
             {isNotConnected && (
               <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 13px", marginBottom: 12, ...glassPill, borderRadius: 11, animation: "fadeSlideUp .3s cubic-bezier(.16,1,.3,1) both" }}>
                 <i className="bi bi-plug" style={{ fontSize: 12, color: "rgba(255,255,255,0.32)" }} />
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.42)" }}>plugin not connected — scripts generated but won't auto-insert. <a href="https://wisp-pvv1.onrender.com" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.42)", textDecoration: "underline" }}>get help</a></span>
+                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.42)" }}>plugin not connected — scripts generated but won't auto-insert. <a href="https://wisprblx.site" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.42)", textDecoration: "underline" }}>get help</a></span>
               </div>
             )}
 
@@ -1060,7 +1060,7 @@ export default function ProjectChatPage() {
         await incrementPromptUsage()
       }
 
-      const aiBase = process.env.NEXT_PUBLIC_AI_API_URL ?? "https://wisp-pvv1.onrender.com"
+      const aiBase = process.env.NEXT_PUBLIC_AI_API_URL ?? "https://wisprblx.site"
       const endpoint = mode === "thinking"
         ? `${aiBase}/generate/thinking`
         : `${aiBase}/generate`

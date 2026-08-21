@@ -188,7 +188,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
             Home
           </Link>
           <a
-            href="https://wisp-pvv1.onrender.com"
+            href="https://wisprblx.site"
             className="g-nav-link"
             style={navLinkStyle(activePage === "dashboard")}
           >
@@ -219,7 +219,7 @@ export function Navbar({ activePage, rightSlot }: NavbarProps) {
             Home
           </Link>
           <a
-            href="https://wisp-pvv1.onrender.com"
+            href="https://wisprblx.site"
             className="g-nav-link"
             style={{ ...navLinkStyle(activePage === "dashboard"), padding: "10px 12px", borderRadius: 10 }}
             onClick={() => setMenuOpen(false)}

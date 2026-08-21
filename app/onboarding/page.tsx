@@ -91,7 +91,7 @@ export default function OnboardingPage() {
     const url = new URL("https://discord.com/oauth2/authorize");
     url.searchParams.set("client_id",     clientId);
     url.searchParams.set("response_type", "code");
-    url.searchParams.set("redirect_uri",  "https://wisp-pvv1.onrender.com/api/auth/discord/callback");
+    url.searchParams.set("redirect_uri",  "https://wisprblx.site/api/auth/discord/callback");
     url.searchParams.set("scope",         "identify guilds.join");
     url.searchParams.set("state",         userId);
 
@@ -105,7 +105,7 @@ export default function OnboardingPage() {
 
       <div style={S.screen}>
         <header style={S.topbar}>
-          <a href="https://wisp-pvv1.onrender.com" style={S.brand}>
+          <a href="https://wisprblx.site" style={S.brand}>
             <Image
               src="/icons/logo-white.png"
               alt="Wisp AI"
@@ -412,3 +412,4 @@ const css = `
   .btn-hover:active:not(:disabled) { transform: translateY(0) !important; }
   .btn-hover:disabled { opacity: 0.6; cursor: not-allowed; }
 `;
+

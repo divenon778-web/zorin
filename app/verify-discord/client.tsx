@@ -94,7 +94,7 @@ export function VerifyDiscordClient({
           <StatusPill color="#f87171" label="Invalid link" />
           <h1 style={S.title}>Something's wrong</h1>
           <p style={S.sub}>This link is missing required information. Head back to Discord and click Verify again.</p>
-          <a href="https://wisp-pvv1.onrender.com" style={S.btnGhost}>Go to dashboard</a>
+          <a href="https://wisprblx.site" style={S.btnGhost}>Go to dashboard</a>
         </Card>
       </Shell>
     );
@@ -107,7 +107,7 @@ export function VerifyDiscordClient({
           <StatusPill color="rgba(255,255,255,0.4)" label="Sign in required" />
           <h1 style={S.title}>Sign in first</h1>
           <p style={S.sub}>You need a Wisp AI account to verify your Discord. Sign in and this page will continue automatically.</p>
-          <a href={`https://wisp-pvv1.onrender.com/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={S.btnPrimary}>Sign in to continue</a>
+          <a href={`https://wisprblx.site/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={S.btnPrimary}>Sign in to continue</a>
         </Card>
       </Shell>
     );
@@ -120,8 +120,8 @@ export function VerifyDiscordClient({
           <StatusPill color="#f87171" label="No account found" />
           <h1 style={S.title}>No account found</h1>
           <p style={S.sub}>We couldn't find a Wisp AI account. Create a free account to get access.</p>
-          <a href="https://wisp-pvv1.onrender.com/register" style={S.btnPrimary}>Create an account</a>
-          <a href={`https://wisp-pvv1.onrender.com/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={{ ...S.btnGhost, marginTop: 10 }}>Sign in with a different account</a>
+          <a href="https://wisprblx.site/register" style={S.btnPrimary}>Create an account</a>
+          <a href={`https://wisprblx.site/login?redirect=${encodeURIComponent(`/verify-discord?code=${code}&discordId=${discordId}`)}`} style={{ ...S.btnGhost, marginTop: 10 }}>Sign in with a different account</a>
         </Card>
       </Shell>
     );
@@ -143,7 +143,7 @@ export function VerifyDiscordClient({
             <div style={S.infoDivider} />
             <div style={S.infoRow}><span style={S.infoKey}>Status</span><span style={{ ...S.infoVal, color: "#4ade80" }}>Verified</span></div>
           </div>
-          <a href="https://wisp-pvv1.onrender.com" style={S.btnGhost}>Open dashboard</a>
+          <a href="https://wisprblx.site" style={S.btnGhost}>Open dashboard</a>
         </Card>
       </Shell>
     );
@@ -228,7 +228,7 @@ function Shell({ children, badge }: { children: React.ReactNode; badge: string }
       `}</style>
       <div className="glc-shell">
         <header className="glc-topbar">
-          <a href="https://wisp-pvv1.onrender.com" className="glc-brand">
+          <a href="https://wisprblx.site" className="glc-brand">
             <Image src="/icons/logo-white.png" alt="Wisp AI" width={22} height={22} style={{ objectFit: "contain" }} />
             <span className="glc-brand-name">Wisp AI</span>
           </a>

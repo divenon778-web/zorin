@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DASH_URL  = "https://wisp-pvv1.onrender.com";
+const DASH_URL  = "https://wisprblx.site";
 const ERROR_URL = `${DASH_URL}/oautherror`;
 
 export async function GET(req: NextRequest) {
@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
       sameSite: "none",
       maxAge:   tokenData.expires_in,
       path:     "/",
-domain:   "wisp-pvv1.onrender.com",
+domain:   "wisprblx.site",
     });
 
     response.cookies.set("roblox_oauth_state", "", {
@@ -92,7 +92,7 @@ domain:   "wisp-pvv1.onrender.com",
       sameSite: "none",
       maxAge:   0,
       path:     "/",
-domain:   "wisp-pvv1.onrender.com",
+domain:   "wisprblx.site",
     });
 
     return response;

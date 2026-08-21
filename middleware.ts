@@ -110,7 +110,7 @@ export async function middleware(req: NextRequest) {
     }
 
     return NextResponse.redirect(
-      `https://wisp-pvv1.onrender.com/link-plugin?code=${code}`,
+      `https://wisprblx.site/link-plugin?code=${code}`,
       { status: 307 }
     );
   }
@@ -126,7 +126,7 @@ export async function middleware(req: NextRequest) {
         path: "/",
         sameSite: "none",
         secure: true,
-domain: "wisp-pvv1.onrender.com",
+domain: "wisprblx.site",
       },
       cookies: {
         getAll: () => req.cookies.getAll(),
@@ -134,7 +134,7 @@ domain: "wisp-pvv1.onrender.com",
           cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value));
           response = NextResponse.next({ request: { headers: req.headers } });
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, { ...options, domain: "wisp-pvv1.onrender.com", sameSite: "none", secure: true } as any)
+            response.cookies.set(name, value, { ...options, domain: "wisprblx.site", sameSite: "none", secure: true } as any)
           );
         },
       },
@@ -166,13 +166,13 @@ domain: "wisp-pvv1.onrender.com",
 
   if (host === "wisp.lol" || host === "www.wisp.lol") {
     if (pathname.startsWith("/auth/")) {
-      return NextResponse.redirect(`https://wisp-pvv1.onrender.com${pathname}`);
+      return NextResponse.redirect(`https://wisprblx.site${pathname}`);
     }
 
     return NextResponse.next();
   }
 
-  if (host === "dash.wisp.lol" || host.includes("wisp-pvv1.onrender.com")) {
+  if (host === "dash.wisp.lol" || host.includes("wisprblx.site")) {
     if (profile?.banned && !isTester && !pathname.startsWith("/banned")) {
       const url = new URL("/banned", req.url);
       url.searchParams.set("reason", profile.ban_reason ?? "violation");

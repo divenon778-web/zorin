@@ -15,7 +15,7 @@ export default function PrivacyPage() {
         rightSlot={
           <div className="topbar-actions" style={{ display: "flex", gap: 8 }}>
             <Link href="/legal/terms" className="btn btn-ghost btn-sm">Terms of Service</Link>
-            <a href="https://wisp-pvv1.onrender.com" className="btn btn-primary btn-sm">Get Started</a>
+            <a href="https://wisprblx.site" className="btn btn-primary btn-sm">Get Started</a>
           </div>
         }
       />
