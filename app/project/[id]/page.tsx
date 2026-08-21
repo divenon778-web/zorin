@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "gpt-5.4-mini", label: "Opus 5", logo: "/assistant/brands/claude.svg" },
+  { id: "openai/gpt-5.6", label: "GPT-5.6 Sol", logo: "/assistant/brands/openai.svg" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
@@ -1703,11 +1703,11 @@ export default function ProjectChatPage() {
               {/* model selector */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
-                  src="/assistant/brands/claude.svg"
-                  alt="Opus 5"
-                  style={{ width: 16, height: 16, background: "transparent" }}
+                  src="/assistant/brands/openai.svg"
+                  alt="GPT-5.6 Sol"
+                  style={{ width: 16, height: 16, background: "transparent", filter: "brightness(0) invert(1)", opacity: 0.52 }}
                 />
-                <span>Opus 5</span>
+                <span>GPT-5.6 Sol</span>
               </div>
 
               {/* credits pill — right side */}
