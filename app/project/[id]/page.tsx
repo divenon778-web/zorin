@@ -1705,7 +1705,7 @@ export default function ProjectChatPage() {
                 <img
                   src="/assistant/brands/claude.svg"
                   alt="Opus 5"
-                  style={{ width: 16, height: 16, background: "transparent", filter: "brightness(0) invert(1)", opacity: 0.52 }}
+                  style={{ width: 16, height: 16, background: "transparent" }}
                 />
                 <span>Opus 5</span>
               </div>
