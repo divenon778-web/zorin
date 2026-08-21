@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "minimax-m3", label: "Fable 5", logo: "/assistant/brands/claude.svg" },
+  { id: "gpt-5.6-sol", label: "GPT-5.6 Sol", logo: "/assistant/brands/openai.svg" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
