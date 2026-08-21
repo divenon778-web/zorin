@@ -1705,7 +1705,7 @@ export default function ProjectChatPage() {
                 <img
                   src="/assistant/brands/openai.svg"
                   alt="GPT-5.6 Sol"
-                  style={{ width: 16, height: 16, background: "transparent" }}
+                  style={{ width: 16, height: 16, background: "transparent", filter: "brightness(0) invert(1)", opacity: 0.52 }}
                 />
                 <span>GPT-5.6 Sol</span>
               </div>
