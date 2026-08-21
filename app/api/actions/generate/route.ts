@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { runGenerate, runGenerateStream, isValidModel } from "@/lib/ai"
 import { CORS_HEADERS, handleOptions } from "@/lib/cors"
 
+export const maxDuration = 60
+
 export async function OPTIONS() {
   return handleOptions()
 }
