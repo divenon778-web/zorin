@@ -1060,7 +1060,7 @@ export default function ProjectChatPage() {
         await incrementPromptUsage()
       }
 
-      const aiBase = process.env.NEXT_PUBLIC_AI_API_URL ?? "https://wispai.vercel.app"
+      const aiBase = process.env.NEXT_PUBLIC_AI_API_URL ?? "https://wisp-pvv1.onrender.com"
       const endpoint = mode === "thinking"
         ? `${aiBase}/generate/thinking`
         : `${aiBase}/generate`
