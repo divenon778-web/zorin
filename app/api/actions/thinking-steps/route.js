@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { runThinking } from "@/lib/ai"
+import { runFetchSteps } from "@/lib/ai"
 
 export const maxDuration = 60
 
@@ -12,8 +12,8 @@ export async function POST(req) {
       return NextResponse.json({ steps: [] })
     }
 
-    const result = await runThinking({ prompt })
-    return NextResponse.json({ steps: result.thinking_steps ?? [] })
+    const steps = await runFetchSteps(prompt)
+    return NextResponse.json({ steps })
   } catch (err) {
     console.error("[/api/actions/thinking-steps]", err)
     return NextResponse.json({ steps: [] })
