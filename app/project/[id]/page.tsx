@@ -92,26 +92,9 @@ function stripTicks(t: string) { if (!t) return t; return t.replace(/```[\w]*/g,
 function stripThinking(t: string) { if (!t) return t; return t.replace(/<think>[\s\S]*?<\/think>/g, "").trim() }
 
 function extractJson(raw: string): any {
-  let text = raw.trim()
-    .replace(/^```(?:json)?\s*/m, "")
-    .replace(/```\s*$/m, "")
-    .trim()
+  const text = raw.trim()
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/)
-  if (jsonMatch) {
-    try { return JSON.parse(jsonMatch[0]) } catch {}
-  }
-
-  try { return JSON.parse(text) } catch {}
-
-  const start = text.indexOf("{")
-  const end = text.lastIndexOf("}")
-  if (start !== -1 && end > start) {
-    try { return JSON.parse(text.slice(start, end + 1)) } catch {}
-  }
-
-  // Fallback: extract code blocks from markdown and build a generation response
-  const codeBlockRegex = /```(?:lua|luau)?\s*\n([\s\S]*?)```/g
+  const codeBlockRegex = /```[\s\S]*?\n([\s\S]*?)```/g
   const scripts: any[] = []
   let match
   let scriptIndex = 0
@@ -119,7 +102,7 @@ function extractJson(raw: string): any {
     const code = match[1].trim()
     if (code) {
       scriptIndex++
-      const isLocal = code.includes("LocalPlayer") || code.includes("StarterPlayer")
+      const isLocal = code.includes("LocalPlayer") || code.includes("StarterPlayer") || code.includes("UserInputService")
       scripts.push({
         name: `Script${scriptIndex > 1 ? scriptIndex : ""}`,
         type: isLocal ? "LocalScript" : "Script",
@@ -135,7 +118,7 @@ function extractJson(raw: string): any {
     return {
       type: "generation",
       title,
-      summary: "Extracted from markdown response.",
+      summary: "",
       notes: [],
       warnings: [],
       suggestions: [],
@@ -146,6 +129,24 @@ function extractJson(raw: string): any {
       plan: [],
       thinking_steps: [],
     }
+  }
+
+  let cleaned = text
+    .replace(/^```(?:json)?\s*/m, "")
+    .replace(/```\s*$/m, "")
+    .trim()
+
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
+  if (jsonMatch) {
+    try { return JSON.parse(jsonMatch[0]) } catch {}
+  }
+
+  try { return JSON.parse(cleaned) } catch {}
+
+  const start = cleaned.indexOf("{")
+  const end = cleaned.lastIndexOf("}")
+  if (start !== -1 && end > start) {
+    try { return JSON.parse(cleaned.slice(start, end + 1)) } catch {}
   }
 
   return null
