@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "gpt-4.1-free",
-  code:        "gpt-4.1-free",
-  world:       "gpt-4.1-free",
-  ui:          "gpt-4.1-free",
-  test:        "gpt-4.1-free",
-  reviewer:    "gpt-4.1-free",
-  performance: "gpt-4.1-free",
-  security:    "gpt-4.1-free",
-  economy:     "gpt-4.1-free",
+  planner:     "qwen/qwen3.8-max-free",
+  code:        "qwen/qwen3.8-max-free",
+  world:       "qwen/qwen3.8-max-free",
+  ui:          "qwen/qwen3.8-max-free",
+  test:        "qwen/qwen3.8-max-free",
+  reviewer:    "qwen/qwen3.8-max-free",
+  performance: "qwen/qwen3.8-max-free",
+  security:    "qwen/qwen3.8-max-free",
+  economy:     "qwen/qwen3.8-max-free",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "gpt-4.1-free"
+  return "qwen/qwen3.8-max-free"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -62,20 +62,10 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "gpt-4.1-free": {
-      name: "GPT-4.1",
-      provider: "openai",
+    "qwen/qwen3.8-max-free": {
+      name: "Qwen 3.8 Max",
+      provider: "tokenrouter",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
-    },
-    "gpt-4o-free": {
-      name: "GPT-4o",
-      provider: "openai",
-      strengths: "Fast all-rounder, good code generation, Luau/Roblox scripting",
-    },
-    "gemini-3.7-flash-free": {
-      name: "Gemini 3.7 Flash",
-      provider: "google",
-      strengths: "Fast inference, good code generation, Luau/Roblox scripting",
     },
   }
 
