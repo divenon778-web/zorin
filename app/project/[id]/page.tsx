@@ -1092,7 +1092,7 @@ export default function ProjectChatPage() {
               locale, language: LOCALES.find(l => l.code === locale)?.label || "English",
               mode: mode === "thinking" ? "generate" : mode,
               type: projectType,
-              model: "gpt-5.6-sol",
+              model: "claude-sonnet-4.6",
               projectId: currentProjectId, projectName: currentProjectName,
               history: historyForBackend.length > 0 ? historyForBackend : undefined,
               datamodel: Object.keys(datamodelSnapshot).length > 0 ? datamodelSnapshot : undefined,
