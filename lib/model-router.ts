@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "k2.6-code-preview-free",
-  code:        "k2.6-code-preview-free",
-  world:       "k2.6-code-preview-free",
-  ui:          "k2.6-code-preview-free",
-  test:        "k2.6-code-preview-free",
-  reviewer:    "k2.6-code-preview-free",
-  performance: "k2.6-code-preview-free",
-  security:    "k2.6-code-preview-free",
-  economy:     "k2.6-code-preview-free",
+  planner:     "kimi-k2.7-code",
+  code:        "kimi-k2.7-code",
+  world:       "kimi-k2.7-code",
+  ui:          "kimi-k2.7-code",
+  test:        "kimi-k2.7-code",
+  reviewer:    "kimi-k2.7-code",
+  performance: "kimi-k2.7-code",
+  security:    "kimi-k2.7-code",
+  economy:     "kimi-k2.7-code",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "k2.6-code-preview-free"
+  return "kimi-k2.7-code"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -62,8 +62,13 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "k2.6-code-preview-free": {
-      name: "Kimi K2.6 Code",
+    "kimi-k2.7-code": {
+      name: "Kimi K2.7 Code",
+      provider: "aihubmix",
+      strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
+    },
+    "kimi-k3": {
+      name: "Kimi K3",
       provider: "aihubmix",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
     },
