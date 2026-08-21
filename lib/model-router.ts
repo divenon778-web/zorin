@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "YuriiFominYoung/fable-5",
-  code:        "YuriiFominYoung/fable-5",
-  world:       "YuriiFominYoung/fable-5",
-  ui:          "YuriiFominYoung/fable-5",
-  test:        "YuriiFominYoung/fable-5",
-  reviewer:    "YuriiFominYoung/fable-5",
-  performance: "YuriiFominYoung/fable-5",
-  security:    "YuriiFominYoung/fable-5",
-  economy:     "YuriiFominYoung/fable-5",
+  planner:     "minimax-m3",
+  code:        "minimax-m3",
+  world:       "minimax-m3",
+  ui:          "minimax-m3",
+  test:        "minimax-m3",
+  reviewer:    "minimax-m3",
+  performance: "minimax-m3",
+  security:    "minimax-m3",
+  economy:     "minimax-m3",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "YuriiFominYoung/fable-5"
+  return "minimax-m3"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -57,12 +57,12 @@ export function estimateCost(taskType: string): { model: string; estimatedTokens
 }
 
 export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
-  return MODEL_MAP[taskType] ?? "YuriiFominYoung/fable-5"
+  return MODEL_MAP[taskType] ?? "minimax-m3"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "YuriiFominYoung/fable-5": {
+    "minimax-m3": {
       name: "Claude Fable 5",
       provider: "ollama",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",

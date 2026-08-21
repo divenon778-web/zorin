@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "YuriiFominYoung/fable-5", label: "Fable 5", logo: "https://claude.ai/favicon.ico" },
+  { id: "minimax-m3", label: "Fable 5", logo: "/assistant/brands/claude.svg" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
@@ -1092,7 +1092,7 @@ export default function ProjectChatPage() {
               locale, language: LOCALES.find(l => l.code === locale)?.label || "English",
               mode: mode === "thinking" ? "generate" : mode,
               type: projectType,
-              model: "YuriiFominYoung/fable-5",
+              model: "minimax-m3",
               projectId: currentProjectId, projectName: currentProjectName,
               history: historyForBackend.length > 0 ? historyForBackend : undefined,
               datamodel: Object.keys(datamodelSnapshot).length > 0 ? datamodelSnapshot : undefined,
