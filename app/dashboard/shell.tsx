@@ -598,7 +598,7 @@ export default function DashboardShell({ profile, initialProjects }: { profile: 
 
 
         <header style={{
-          position: "sticky", top: 0, zIndex: 50,
+          position: "sticky", top: 0, zIndex: 1000,
           display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "0 28px",
           height: 58,
