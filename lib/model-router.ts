@@ -63,7 +63,7 @@ export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
     "gpt-5.6-sol": {
-      name: "GPT 5.6 SoL",
+      name: "GPT 5.6 Sol",
       provider: "seekai",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
     },
