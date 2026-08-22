@@ -1726,6 +1726,28 @@ local function insertLatestData()
 			local scriptName = scriptData.name or "WispScript"
 			local code       = scriptData.code or "-- Inserted by Wisp\n"
 			local parent     = resolveParentTarget(scriptData.parent, className, createdInstanceMap)
+			-- safety: LocalScript must not go to server containers -- handles AI misplacement (e.g. StarterCharacterScripts script landing in ServerScriptService)
+			local lowerType = (className or ""):lower()
+			local parentFull = ""
+			pcall(function() parentFull = parent:GetFullName():lower() end)
+			if lowerType == "localscript" and (parentFull:find("serverscriptservice") or parentFull:find("serverstorage")) then
+				local codeLower = (code or ""):lower()
+				local isChar = codeLower:find("humanoid") or codeLower:find("characteradded") or codeLower:find("startercharacterscripts") or (codeLower:find("character") and codeLower:find("humanoid"))
+				local isGui = codeLower:find("screengui") or codeLower:find("startergui") or (codeLower:find("frame") and codeLower:find("uilistlayout"))
+				if isChar then
+					parent = game:GetService("StarterPlayer").StarterCharacterScripts
+					warn("[Wisp] auto-corrected LocalScript '"..scriptName.."' from "..(scriptData.parent or "?").." ("..parentFull..") -> StarterCharacterScripts (character/humanoid code)")
+				elseif isGui then
+					parent = game:GetService("StarterGui")
+					warn("[Wisp] auto-corrected LocalScript '"..scriptName.."' from "..(scriptData.parent or "?").." -> StarterGui (UI code)")
+				else
+					parent = game:GetService("StarterPlayer").StarterPlayerScripts
+					warn("[Wisp] auto-corrected LocalScript '"..scriptName.."' from "..(scriptData.parent or "?").." ("..parentFull..") -> StarterPlayerScripts")
+				end
+			elseif lowerType == "script" and (parentFull:find("starterplayerscripts") or parentFull:find("startercharacterscripts") or parentFull:find("startergui")) then
+				parent = game:GetService("ServerScriptService")
+				warn("[Wisp] auto-corrected Script '"..scriptName.."' from "..(scriptData.parent or "?").." ("..parentFull..") -> ServerScriptService (server script cannot run in client container)")
+			end
 			local existing   = parent:FindFirstChild(scriptName)
 			if existing and existing:IsA("LuaSourceContainer") then
 				existing.Source = code; updated = updated + 1
