@@ -9,3 +9,7 @@ services:
     envVars:
       - key: NODE_OPTIONS
         value: "--max-old-space-size=4096"
+      - key: TABITOKEN_API_KEY
+        sync: false
+      - key: ORCAROUTER_API_KEY
+        sync: false

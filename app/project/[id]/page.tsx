@@ -54,7 +54,7 @@ const PROJECT_TYPES = [
 type ProjectTypeId = typeof PROJECT_TYPES[number]["id"]
 
 const AVAILABLE_MODELS = [
-  { id: "deepseek/deepseek-v4-pro-free", label: "DeepSeek V4 Pro", logo: "/assistant/brands/deepseek.svg" },
+  { id: "claude-opus-5-thinking", label: "Claude Opus 5 Thinking", logo: "/assistant/brands/claude.svg" },
 ] as const
 type ModelId = typeof AVAILABLE_MODELS[number]["id"]
 
@@ -1151,11 +1151,11 @@ export default function ProjectChatPage() {
           const res = await fetch(endpoint, {
             method: "POST", headers: { "Content-Type": "application/json" }, signal: controller.signal,
             body: JSON.stringify({
-              prompt: userPrompt,
+               prompt: userPrompt,
               locale, language: LOCALES.find(l => l.code === locale)?.label || "English",
               mode: mode === "thinking" ? "generate" : mode,
               type: projectType,
-               model: "deepseek/deepseek-v4-pro-free",
+                model: "claude-opus-5-thinking",
               projectId: currentProjectId, projectName: currentProjectName,
               history: historyForBackend.length > 0 ? historyForBackend : undefined,
               datamodel: Object.keys(datamodelSnapshot).length > 0 ? datamodelSnapshot : undefined,
@@ -1770,11 +1770,11 @@ export default function ProjectChatPage() {
               {/* model selector */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px", ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)", fontFamily: "'Inter', sans-serif" }}>
                 <img
-                  src="/assistant/brands/openai.svg"
-                  alt="Qwen 3.8 Max"
+                  src="/assistant/brands/claude.svg"
+                  alt="Claude Opus 5 Thinking"
                   style={{ width: 16, height: 16, background: "transparent" }}
                 />
-                <span>Qwen 3.8 Max</span>
+                <span>Claude Opus 5 Thinking</span>
               </div>
 
               {/* credits pill — right side */}

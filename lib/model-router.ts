@@ -12,15 +12,15 @@ export type TaskType =
   | "economy"
 
 const MODEL_MAP: Record<TaskType, string> = {
-  planner:     "qwen/qwen3.8-max-free",
-  code:        "qwen/qwen3.8-max-free",
-  world:       "qwen/qwen3.8-max-free",
-  ui:          "qwen/qwen3.8-max-free",
-  test:        "qwen/qwen3.8-max-free",
-  reviewer:    "qwen/qwen3.8-max-free",
-  performance: "qwen/qwen3.8-max-free",
-  security:    "qwen/qwen3.8-max-free",
-  economy:     "qwen/qwen3.8-max-free",
+  planner:     "claude-opus-5-thinking",
+  code:        "claude-opus-5-thinking",
+  world:       "claude-opus-5-thinking",
+  ui:          "claude-opus-5-thinking",
+  test:        "claude-opus-5-thinking",
+  reviewer:    "claude-opus-5-thinking",
+  performance: "claude-opus-5-thinking",
+  security:    "claude-opus-5-thinking",
+  economy:     "claude-opus-5-thinking",
 }
 
 const FAST_TASKS: TaskType[] = ["test", "economy"]
@@ -43,7 +43,7 @@ export function routeModel(taskType: string, preference?: string): string {
   const mapped = MODEL_MAP[taskType as TaskType]
   if (mapped) return mapped
 
-  return "qwen/qwen3.8-max-free"
+  return "claude-opus-5-thinking"
 }
 
 export function isFastTask(taskType: string): boolean {
@@ -57,15 +57,26 @@ export function estimateCost(taskType: string): { model: string; estimatedTokens
 }
 
 export function getSpecialistModel(taskType: TaskType, fast?: boolean): string {
-  return MODEL_MAP[taskType] ?? "deepseek/deepseek-v4-pro-free"
+  return MODEL_MAP[taskType] ?? "claude-opus-5-thinking"
 }
 
 export function getModelInfo(model: string): { name: string; provider: string; strengths: string } {
   const info: Record<string, { name: string; provider: string; strengths: string }> = {
-    "qwen/qwen3.8-max-free": {
-      name: "Qwen 3.8 Max",
-      provider: "tokenrouter",
+    "claude-opus-5-thinking": {
+      name: "Claude Opus 5 Thinking",
+      provider: "tabitoken",
       strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture",
+    },
+    "qwen/qwen3.8-max-free": {
+      name: "Qwen 3.8 Max (legacy)",
+      provider: "tokenrouter",
+      strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture (legacy id)",
+    },
+    // legacy alias
+    "deepseek/deepseek-v4-pro-free": {
+      name: "Claude Opus 5 Thinking",
+      provider: "tabitoken",
+      strengths: "Advanced reasoning, code generation, Luau/Roblox scripting, complex architecture (legacy id)",
     },
   }
 
