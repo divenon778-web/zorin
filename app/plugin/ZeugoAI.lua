@@ -1539,9 +1539,22 @@ end
 
 local function resolveParentTarget(parentName, className, createdInstanceMap)
 	local starterPlayer = game:GetService("StarterPlayer")
-	local normalized = (parentName or ""):lower()
-		:gsub("starterplayer/starterplayerscripts",    "starterplayerscripts")
-		:gsub("starterplayer/startercharacterscripts", "startercharacterscripts")
+	-- direct map hit for instances created in this batch (e.g. parent == "KillBrick")
+	if createdInstanceMap and parentName and createdInstanceMap[parentName] then
+		return createdInstanceMap[parentName]
+	end
+	local raw = (parentName or ""):gsub("^%s+", ""):gsub("%s+$", "")
+	if raw == "" then
+		return game:GetService("ReplicatedStorage")
+	end
+	-- normalize: strip game. prefix, convert slashes to dots
+	raw = raw:gsub("^game%.", ""):gsub("/", ".")
+	local parts = {}
+	for part in raw:gmatch("[^%.]+") do
+		part = part:gsub("^%s+", ""):gsub("%s+$", "")
+		if part ~= "" then table.insert(parts, part) end
+	end
+	if #parts == 0 then return game:GetService("ReplicatedStorage") end
 
 	local builtInParents = {
 		["replicatedstorage"]       = game:GetService("ReplicatedStorage"),
@@ -1553,21 +1566,81 @@ local function resolveParentTarget(parentName, className, createdInstanceMap)
 		["starterpack"]             = game:GetService("StarterPack"),
 		["workspace"]               = workspace,
 		["serverstorage"]           = game:GetService("ServerStorage"),
+		["lighting"]                = game:GetService("Lighting"),
+		["replicatedfirst"]         = game:GetService("ReplicatedFirst"),
+		["players"]                 = game:GetService("Players"),
 	}
 
-	if createdInstanceMap and parentName and createdInstanceMap[parentName] then
-		return createdInstanceMap[parentName]
-	end
-	if normalized == "starterplayer" then
+	-- handle dot-path like Workspace.resetblock8 or Workspace.Folder.Part
+	local firstLower = parts[1]:lower()
+	local root = builtInParents[firstLower]
+
+	-- special: StarterPlayer -> StarterPlayerScripts default for scripts
+	if firstLower == "starterplayer" then
 		local cls = (className or ""):lower()
-		if cls == "localscript" or cls == "script" or cls == "modulescript" then
+		if #parts == 1 and (cls == "localscript" or cls == "modulescript" or cls == "script") then
 			return starterPlayer.StarterPlayerScripts
 		end
+		if #parts >= 2 then
+			local secondLower = parts[2]:lower()
+			if secondLower == "starterplayerscripts" then
+				root = starterPlayer.StarterPlayerScripts
+				table.remove(parts, 1)
+				firstLower = parts[1]:lower()
+			elseif secondLower == "startercharacterscripts" then
+				root = starterPlayer.StarterCharacterScripts
+				table.remove(parts, 1)
+				firstLower = parts[1]:lower()
+			end
+		end
 	end
-	for key, target in pairs(builtInParents) do
-		if normalized == key then return target end
+
+	if not root then
+		-- try case-insensitive created map with first segment
+		if createdInstanceMap then
+			for k, v in pairs(createdInstanceMap) do
+				if k:lower() == firstLower then
+					root = v
+					table.remove(parts, 1)
+					break
+				end
+			end
+		end
+		if not root then
+			-- unknown root, attempt workspace search
+			local maybe = workspace:FindFirstChild(parts[1], true)
+			if maybe and maybe.Parent then
+				-- if found deep, return its parent if AI meant to place inside it?
+				-- we return the found instance itself if parts == 1, else its parent chain handled below
+				-- for now fallback to workspace
+			end
+			return game:GetService("ReplicatedStorage")
+		end
+	else
+		table.remove(parts, 1)
 	end
-	return game:GetService("ReplicatedStorage")
+
+	-- traverse remaining segments
+	local current = root
+	for _, seg in ipairs(parts) do
+		local child = current:FindFirstChild(seg)
+		if child then
+			current = child
+		else
+			-- case-insensitive fallback
+			local found
+			for _, c in ipairs(current:GetChildren()) do
+				if c.Name:lower() == seg:lower() then found = c; break end
+			end
+			if found then
+				current = found
+			else
+				warn("[Wisp] resolveParentTarget: segment '"..seg.."' not found under "..current:GetFullName().." (full parent='"..(parentName or "").."'), using "..current:GetFullName())
+				break
+			end
+		end
+	end
+	return current
 end
 
 local function syncRobloxUserId()
