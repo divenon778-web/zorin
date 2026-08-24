@@ -16,7 +16,6 @@ local CHECKPOINT_URL     = BASE_URL .. "/api/plugin/checkpoint"
 local MEMORY_URL         = BASE_URL .. "/api/plugin/memory"
 local SCAN_URL           = BASE_URL .. "/api/plugin/scan"
 local UNDO_URL           = BASE_URL .. "/api/plugin/undo"
-local EXPLAIN_URL        = BASE_URL .. "/api/plugin/explain"
 
 local TOKEN_KEY        = "Wisp_Token"
 local USER_KEY         = "Wisp_User"
@@ -60,8 +59,6 @@ local SETTINGS = {
 	autoInsert   = true,
 	showWarnings = true,
 }
-
-local EXPLAIN_DEPTH_LIST = { "Beginner", "Developer", "Expert" }
 
 local SCAN_TARGETS = {
 	workspace,
@@ -170,10 +167,6 @@ PickerChevron.Position = UDim2.new(1, -22, 0, 0); PickerChevron.Size = UDim2.new
 PickerChevron.Font = Enum.Font.Code; PickerChevron.Text = "▼"; PickerChevron.TextColor3 = C.subtext
 PickerChevron.TextSize = 10
 
-local ExplainBtn = makeTextButton(Topbar, "Explain Game", C.panel2, C.text)
-ExplainBtn.Position = UDim2.new(0.47, 0, 0.18, 0); ExplainBtn.Size = UDim2.new(0.095, 0, 0.64, 0)
-stroke(ExplainBtn, C.border)
-
 local RefreshBtn = makeTextButton(Topbar, "Refresh", C.panel2, C.text)
 RefreshBtn.Position = UDim2.new(0.57, 0, 0.18, 0); RefreshBtn.Size = UDim2.new(0.08, 0, 0.64, 0)
 stroke(RefreshBtn, C.border)
@@ -190,7 +183,6 @@ local DisconnectBtn = makeTextButton(Topbar, "Disconnect", C.redDark, C.text)
 DisconnectBtn.Position = UDim2.new(0.834, 0, 0.18, 0); DisconnectBtn.Size = UDim2.new(0.09, 0, 0.64, 0)
 stroke(DisconnectBtn, C.red)
 
-animatePress(ExplainBtn, C.panel3)
 animatePress(RefreshBtn, C.panel3)
 animatePress(AdvancedToggle, C.panel3)
 animatePress(DashboardBtn, C.panel3)
@@ -601,7 +593,6 @@ local isScanningGame      = false
 local isAdvancedMode      = plugin:GetSetting(ADVANCED_MODE_KEY) or false
 local lastRunId           = nil
 local lastRunData         = nil
-local explainDepth        = "Developer"
 local currentRunStartTime = nil
 local elapsedTimerThread  = nil
 
@@ -1313,90 +1304,6 @@ MemoryHeader.MouseButton1Click:Connect(function()
 	memoryOpen = not memoryOpen
 	MemoryBody.Visible = memoryOpen
 	MemoryChevron.Text = memoryOpen and "▼" or "▶"
-end)
-
--- ══════════════════════════════════════════════════════════════════════════════
--- EXPLAIN GAME SYSTEM
--- ══════════════════════════════════════════════════════════════════════════════
-
-local function explainGame()
-	if not savedToken or savedToken == "" then setStatus("Connect first.", C.red); return end
-	setStatus("Explaining game...", C.blue)
-
-	showTaskProgress("Analyzing game structure...")
-
-	task.spawn(function()
-		local ok, result = pcall(function()
-			return HttpService:RequestAsync({
-				Url    = EXPLAIN_URL,
-				Method = "POST",
-				Headers = {
-					["Authorization"] = "Bearer " .. savedToken,
-					["Content-Type"]  = "application/json",
-				},
-				Body = HttpService:JSONEncode({
-					depth = explainDepth:lower(),
-				}),
-			})
-		end)
-
-		hideTaskProgress()
-
-		if not ok then
-			setStatus("Explain request failed.", C.red)
-			return
-		end
-
-		if result.StatusCode ~= 200 then
-			setStatus("Explain failed (" .. tostring(result.StatusCode) .. ")", C.red)
-			return
-		end
-
-		local parseOk, data = pcall(function() return HttpService:JSONDecode(result.Body) end)
-		if not parseOk or not data then
-			setStatus("Bad explain response.", C.red)
-			return
-		end
-
-		clearOutput()
-
-		if data.title then
-			local lbl = Instance.new("TextLabel"); lbl.BackgroundTransparency = 1
-			lbl.Size = UDim2.new(1, 0, 0, 22); lbl.Font = Enum.Font.GothamBold
-			lbl.Text = data.title; lbl.TextColor3 = C.text; lbl.TextSize = 14
-			lbl.TextWrapped = true; lbl.TextXAlignment = Enum.TextXAlignment.Left
-			lbl.Parent = OutputScroll
-		end
-
-		if data.summary then
-			addOutputBlock("Summary", data.summary, C.accent, C.subtext, Enum.Font.Gotham)
-		end
-
-		if data.systems and #data.systems > 0 then
-			for _, system in ipairs(data.systems) do
-				local sysName = system.name or system.title or "System"
-				local sysDesc = system.description or system.details or ""
-				local dependencies = system.dependencies or {}
-				local depText = #dependencies > 0 and ("Dependencies: " .. table.concat(dependencies, ", ")) or ""
-				local body = sysDesc .. (depText ~= "" and ("\n" .. depText) or "")
-				addOutputBlock(sysName, body, C.blue, C.subtext, Enum.Font.Gotham)
-			end
-		end
-
-		if data.notes and #data.notes > 0 then
-			for _, note in ipairs(data.notes) do
-				addOutputBlock("Note", note, C.subtext, C.subtext, Enum.Font.Gotham)
-			end
-		end
-
-		setStatus("Game explained (" .. explainDepth .. ")", C.green)
-		StateTitle.Text = "Game Explained"
-		StateSub.Text = "Showing " .. explainDepth .. " level analysis."
-	end)
-end
-
-ExplainBtn.MouseButton1Click:Connect(function()
-	explainGame()
 end)
 
 -- ══════════════════════════════════════════════════════════════════════════════

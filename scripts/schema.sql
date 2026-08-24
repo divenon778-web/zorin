@@ -135,5 +135,6 @@ CREATE INDEX IF NOT EXISTS idx_change_log_user ON change_log(user_id);
 -- 8. credits — Per-user credit balance
 -- =============================================================================
 -- Run this manually in Supabase SQL Editor:
--- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS credits INTEGER DEFAULT 50;
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS credits INTEGER DEFAULT 25;
+-- For existing DBs, run: ALTER TABLE profiles ALTER COLUMN credits SET DEFAULT 25;
 -- UPDATE profiles SET credits = 70000000 WHERE id IN (SELECT id FROM profiles WHERE email = 'divenon778@gmail.com');

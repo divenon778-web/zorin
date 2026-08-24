@@ -43,7 +43,6 @@ const STORAGE_KEY_COMPACT_MODE   = "wisp_compact_mode"
 
 const MODES = [
   { id: "generate", label: "Generate", icon: "bi-stars" },
-  { id: "thinking", label: "Thinking", icon: "bi-lightbulb" },
 ] as const
 type ModeId = typeof MODES[number]["id"]
 
@@ -920,7 +919,7 @@ export default function ProjectChatPage() {
       if (prof.credits !== undefined && prof.credits !== null) {
         setCredits(prof.credits)
       } else {
-        setCredits(50)
+        setCredits(25)
       }
     })
   }, [projectId])
@@ -1121,9 +1120,7 @@ export default function ProjectChatPage() {
       }
 
       const aiBase = process.env.NEXT_PUBLIC_AI_API_URL ?? "https://wisprblx.site"
-      const endpoint = mode === "thinking"
-        ? `${aiBase}/generate/thinking`
-        : `${aiBase}/generate`
+      const endpoint = `${aiBase}/generate`
 
       abortRef.current?.abort()
       const controller = new AbortController()
@@ -1153,7 +1150,7 @@ export default function ProjectChatPage() {
             body: JSON.stringify({
                prompt: userPrompt,
               locale, language: LOCALES.find(l => l.code === locale)?.label || "English",
-              mode: mode === "thinking" ? "generate" : mode,
+              mode,
               type: projectType,
                 model: "gpt-5.6-luna",
               projectId: currentProjectId, projectName: currentProjectName,
