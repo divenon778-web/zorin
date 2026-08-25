@@ -44,8 +44,8 @@ const STORAGE_KEY_COMPACT_MODE   = "zorin_compact_mode"
 const PROMPT_LIMIT_UNCONNECTED = 3
 
 const MODES = [
-  { id: "generate", label: "Instant", icon: "bi-lightning-charge-fill" },
-  { id: "thinking", label: "Expert", icon: "bi-brain" },
+  { id: "generate", label: "Generate", icon: "bi-stars" },
+  { id: "thinking", label: "Thinking", icon: "bi-lightbulb" },
 ] as const
 type ModeId = typeof MODES[number]["id"]
 
@@ -793,7 +793,6 @@ export default function ProjectChatPage() {
   const [copiedMsgId,       setCopiedMsgId]       = useState<string | null>(null)
   const [shakeSend,         setShakeSend]         = useState(false)
   const [pluginJustChanged, setPluginJustChanged] = useState<"connected" | "disconnected" | null>(null)
-  const [sidebarOpen,      setSidebarOpen]      = useState(false)
 
   const bottomRef      = useRef<HTMLDivElement>(null)
   const scrollRef       = useRef<HTMLDivElement>(null)
@@ -1157,8 +1156,7 @@ export default function ProjectChatPage() {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #09090b; font-family: 'Inter', sans-serif; }
-        ::placeholder { color: rgba(255,255,255,0.32); }
-        textarea::placeholder { color: rgba(255,255,255,0.32); }
+        ::placeholder { color: rgba(255,255,255,0.20); }
         input:focus, textarea:focus { outline: none; box-shadow: none; }
 
         @keyframes spin            { to { transform: rotate(360deg) } }
@@ -1184,8 +1182,6 @@ export default function ProjectChatPage() {
         @keyframes sendPop         { 0%{transform:scale(1)} 40%{transform:scale(0.83) translateY(2px)} 70%{transform:scale(1.10) translateY(-2px)} 100%{transform:scale(1)} }
         @keyframes headerFadeIn    { from{opacity:0;transform:translateX(-4px)} to{opacity:1;transform:translateX(0)} }
         @keyframes tooltipDown     { from { opacity: 0; transform: translateX(-50%) translateY(-4px) scale(0.92) } to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1) } }
-        @keyframes centerFadeIn    { from { opacity: 0; transform: scale(0.97) translateY(10px) } to { opacity: 1; transform: scale(1) translateY(0) } }
-        @keyframes inputShift      { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: translateY(0) } }
 
         .script-chip:hover       { background: rgba(255,255,255,0.08) !important; transform: translateY(-2px) !important; box-shadow: 0 6px 18px rgba(0,0,0,0.35) !important; transition: all .24s cubic-bezier(.34,1.56,.64,1) !important; }
         .suggestion-chip:hover   { background: rgba(255,255,255,0.08) !important; color: #e8e9ec !important; transform: translateY(-1px) !important; transition: all .18s ease !important; }
@@ -1193,879 +1189,384 @@ export default function ProjectChatPage() {
         .clarif-opt:hover        { background: rgba(255,255,255,0.09) !important; color: #e8e9ec !important; border-color: rgba(255,255,255,0.18) !important; transform: translateY(-1px) !important; transition: all .2s cubic-bezier(.34,1.56,.64,1) !important; }
         .g-menu-item:hover       { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
         .g-signout:hover         { color: #fc8181 !important; }
-        .nav-btn:hover           { background: rgba(255,255,255,0.07) !important; color: rgba(255,255,255,0.7) !important; transition: all .15s ease !important; }
-        .send-btn:hover:not(:disabled) { transform: scale(1.06) !important; box-shadow: 0 4px 20px rgba(255,255,255,0.12) !important; transition: all .2s cubic-bezier(.34,1.56,.64,1) !important; }
+        .nav-btn:hover           { background: rgba(255,255,255,0.06) !important; transition: all .15s ease !important; }
+        .send-btn:hover:not(:disabled) { transform: scale(1.10) !important; box-shadow: 0 4px 22px rgba(255,255,255,0.18) !important; transition: all .2s cubic-bezier(.34,1.56,.64,1) !important; }
         .send-btn:active:not(:disabled) { animation: sendPop .3s ease !important; }
+        .mode-pill:hover         { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; transition: all .15s ease !important; }
+        .type-pill:hover         { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; transition: all .15s ease !important; }
+        .type-pill:hover .type-pill-icon { transform: rotate(-18deg) scale(1.18) !important; }
+        .plan-menu-item:hover .plan-icon  { transform: rotate(-18deg) scale(1.18) !important; }
+        .plan-menu-item:hover .plan-coming-soon { opacity: 1 !important; pointer-events: none; animation: tooltipDown .22s cubic-bezier(.34,1.56,.64,1) both !important; }
         .reasoning-toggle:hover  { opacity: 0.75; }
         .reasoning-row:hover     { background: rgba(255,255,255,0.018) !important; }
-        .sidebar-item:hover      { background: rgba(255,255,255,0.06) !important; color: rgba(255,255,255,0.7) !important; }
-        .mode-tab:hover          { color: rgba(255,255,255,0.82) !important; }
-        .mode-tab.active:hover   { color: #fff !important; }
-        .pill-btn:hover          { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.16) !important; color: rgba(255,255,255,0.62) !important; }
-        .pill-btn.active:hover   { background: rgba(255,255,255,0.12) !important; border-color: rgba(255,255,255,0.18) !important; color: #fff !important; }
-        .sidebarNewChat:hover    { background: rgba(255,255,255,0.09) !important; border-color: rgba(255,255,255,0.13) !important; }
       `}</style>
 
       <FeedbackModal open={feedbackOpen} onClose={() => { setFeedbackOpen(false); setFeedbackMsgId(null) }} onSubmit={submitFeedback} sending={feedbackSending} isMobile={isMobile} />
       <Settings open={settingsOpen} onClose={() => setSettingsOpen(false)} profile={profile} locale={locale} setLocale={setLocale} />
       {isAdmin && <AdminPanel open={adminOpen} onClose={() => setAdminOpen(false)} />}
 
-      {isMobile && sidebarOpen && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", zIndex: 48, animation: "fadeIn .2s ease" }}
-        />
-      )}
+      <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#09090b", fontFamily: "'Inter', sans-serif", color: "#e8e9ec" }}>
 
-      <div style={{ display: "flex", height: "100vh", background: "#0a0a0a", fontFamily: "'Inter', sans-serif", color: "#e8e9ec", overflow: "hidden" }}>
+        {/* ── HEADER ── */}
+        <header style={{
+          display: "flex", alignItems: "center",
+          padding: isMobile ? "0 14px" : "0 24px",
+          height: isMobile ? 52 : 58,
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          background: "rgba(9,9,11,0.94)",
+          backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)",
+          flexShrink: 0, zIndex: 40,
+          animation: "headerSlide .45s cubic-bezier(.16,1,.3,1) both",
+        }}>
 
-        {/* ── SIDEBAR ── */}
-        <aside
-          style={{
-            width: isMobile ? 280 : 260,
-            height: "100vh",
-            background: "#121214",
-            borderRight: "1px solid rgba(255,255,255,0.06)",
-            display: "flex",
-            flexDirection: "column",
-            flexShrink: 0,
-            ...(isMobile
-              ? {
-                  position: "fixed" as const,
-                  left: 0,
-                  top: 0,
-                  zIndex: 49,
-                  transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
-                  transition: "transform .32s cubic-bezier(.16,1,.3,1)",
-                  boxShadow: sidebarOpen ? "8px 0 40px rgba(0,0,0,0.5)" : "none",
-                }
-              : {}),
-          }}
-        >
-          {/* Sidebar header */}
-          <div style={{ height: 52, display: "flex", alignItems: "center", padding: "0 10px 0 14px", gap: 4, flexShrink: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 9, flex: 1, minWidth: 0 }}>
-              <div style={{ width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M7.5 13.8C6.2 13.2 5.2 11.9 5 10.4C4.8 8.6 5.7 6.9 7.2 6.1C8.7 5.3 10.6 5.4 12 6.5L12.6 7L13.2 6.5C14.6 5.4 16.5 5.3 18 6.1C19.5 6.9 20.4 8.6 20.2 10.4C20 11.9 19 13.2 17.7 13.8L12.6 16.2L7.5 13.8Z" fill="rgba(255,255,255,0.85)" />
-                  <path d="M12.6 7L17.2 4.6L18.2 5.7L13.6 8.6L12.6 7Z" fill="rgba(255,255,255,0.5)" />
-                </svg>
-              </div>
-              <span style={{ fontSize: 15.5, fontWeight: 700, color: "#e8e9ec", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>Zorin</span>
-            </div>
-            <button
-              type="button"
-              className="nav-btn"
-              aria-label="Search"
-              style={{ width: 30, height: 30, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.38)", background: "transparent", border: "none", cursor: "pointer", flexShrink: 0 }}
-            >
-              <i className="bi bi-search" style={{ fontSize: 14 }} />
-            </button>
-            <button
-              type="button"
-              className="nav-btn"
-              aria-label="Toggle sidebar"
-              onClick={() => isMobile && setSidebarOpen(false)}
-              style={{ width: 30, height: 30, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.38)", background: "transparent", border: "none", cursor: "pointer", flexShrink: 0 }}
-            >
-              <i className={isMobile ? "bi bi-x-lg" : "bi bi-layout-sidebar"} style={{ fontSize: 14 }} />
+          <div style={{ flex: 1 }}>
+            <button type="button" onClick={() => router.push("/")} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 9px", borderRadius: 9, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.38)", fontSize: 13, fontWeight: 500, fontFamily: "inherit", transition: "all .18s ease" }} className="nav-btn">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M9.5 11.5L5.5 7.5l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              {!isMobile && <span style={{ fontSize: 13 }}>Projects</span>}
             </button>
           </div>
 
-          {/* New chat button */}
-          <div style={{ padding: "6px 12px 14px", flexShrink: 0 }}>
-            <button
-              type="button"
-              onClick={() => router.push("/dashboard")}
-              className="sidebarNewChat"
+          <div style={{ display: "flex", alignItems: "center", gap: 9, animation: "headerFadeIn .5s .12s cubic-bezier(.16,1,.3,1) both", overflow: "hidden", maxWidth: isMobile ? "44vw" : 340 }}>
+            <span style={{ fontSize: isMobile ? 14 : 15, fontWeight: 700, color: "#e8e9ec", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", letterSpacing: "-0.018em" }}>{project.name}</span>
+            {/* Static dot — no pulse animation */}
+            <div
+              title={pluginConnected === true ? "Studio connected" : pluginConnected === null ? "Checking…" : "Studio offline"}
               style={{
-                width: "100%",
-                height: 36,
-                borderRadius: 10,
-                background: "#2a2a2e",
-                border: "1px solid rgba(255,255,255,0.07)",
-                color: "#e8e9ec",
-                fontSize: 13.5,
-                fontWeight: 600,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 7,
-                fontFamily: "inherit",
-                transition: "all .18s ease",
+                width: 7, height: 7, borderRadius: "50%", background: pluginDot, flexShrink: 0,
+                transition: "background .5s ease",
+                // Checking state: gentle opacity pulse only (no scale, no overflow)
+                animation: pluginConnected === null ? "pulse 1.4s ease-in-out infinite" : "none",
               }}
-            >
-              <span style={{ width: 18, height: 18, borderRadius: "50%", border: "1.5px solid rgba(255,255,255,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <i className="bi bi-plus-lg" style={{ fontSize: 9, color: "rgba(255,255,255,0.85)" }} />
-              </span>
-              New chat
-            </button>
+            />
           </div>
 
-          {/* Chat history area */}
-          <div style={{ flex: 1, overflowY: "auto", padding: "0 10px", display: "flex", flexDirection: "column" }}>
-            {messages.filter((m) => m.role === "user").length === 0 ? (
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingBottom: 80, gap: 12, animation: "fadeSlideUp .4s cubic-bezier(.16,1,.3,1) both" }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", border: "1.5px dashed rgba(255,255,255,0.14)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <i className="bi bi-chat" style={{ fontSize: 14, color: "rgba(255,255,255,0.18)" }} />
-                </div>
-                <span style={{ fontSize: 12.5, color: "rgba(255,255,255,0.28)", fontWeight: 500 }}>No chat history</span>
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 2, paddingBottom: 8 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.22)", padding: "8px 8px 6px", letterSpacing: "0.02em" }}>Recent</div>
-                {messages
-                  .filter((m) => m.role === "user")
-                  .slice(-12)
-                  .reverse()
-                  .map((msg, i) => (
-                    <button
-                      key={msg.id}
-                      type="button"
-                      className="sidebar-item"
-                      onClick={() => {
-                        const el = document.getElementById("msg-" + msg.id)
-                        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" })
-                      }}
-                      style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        borderRadius: 8,
-                        background: "transparent",
-                        border: "none",
-                        cursor: "pointer",
-                        textAlign: "left",
-                        fontFamily: "inherit",
-                        fontSize: 13,
-                        color: "rgba(255,255,255,0.52)",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        transition: "all .15s ease",
-                        animation: `fadeSlideUp .22s ${i * 0.02}s cubic-bezier(.16,1,.3,1) both`,
-                      }}
-                    >
-                      {msg.content.slice(0, 48)}
-                      {msg.content.length > 48 ? "…" : ""}
-                    </button>
-                  ))}
-              </div>
-            )}
-          </div>
-
-          {/* User profile */}
-          <div
-            ref={profileMenuRef}
-            style={{
-              height: 56,
-              padding: "0 10px",
-              borderTop: "1px solid rgba(255,255,255,0.06)",
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              flexShrink: 0,
-              position: "relative",
-            }}
-          >
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#2a3a3f", border: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.85)" }}>{safeDisplayName(profile).charAt(0).toUpperCase()}</span>
-            </div>
-            <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 1 }}>
-              <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.72)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", lineHeight: 1.2 }}>{safeDisplayName(profile)}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setProfileMenuOpen((v) => !v)}
-              className="nav-btn"
-              style={{ width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.32)", background: "transparent", border: "none", cursor: "pointer", flexShrink: 0 }}
-            >
-              <i className="bi bi-three-dots" style={{ fontSize: 14 }} />
+          {/* ── PROFILE MENU ── */}
+          <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }} ref={profileMenuRef}>
+            <button type="button" className="nav-btn" onClick={() => setProfileMenuOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: 7, padding: "5px 8px 5px 5px", borderRadius: 10, background: "transparent", border: "none", cursor: "pointer", fontFamily: "inherit", transition: "all .18s ease" }}>
+              <UserAvatar profile={profile} size={26} />
+              {!isMobile && <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.62)" }}>{safeDisplayName(profile).split(" ")[0]}</span>}
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" style={{ opacity: 0.3, transform: profileMenuOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .22s cubic-bezier(.34,1.56,.64,1)" }}><path d="M1.5 3.5l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
 
             {profileMenuOpen && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "calc(100% + 10px)",
-                  left: 10,
-                  right: 10,
-                  background: "rgba(20,20,22,0.98)",
-                  backdropFilter: "blur(40px)",
-                  WebkitBackdropFilter: "blur(40px)",
-                  border: "1px solid rgba(255,255,255,0.10)",
-                  borderRadius: 14,
-                  padding: 6,
-                  animation: "menuUp .22s cubic-bezier(.16,1,.3,1)",
-                  zIndex: 100,
-                  boxShadow: "0 16px 48px rgba(0,0,0,0.5)",
-                }}
-              >
+              <div style={{ position: "absolute", top: isMobile ? 52 : 58, right: isMobile ? 14 : 24, width: 210, ...glassModal, borderRadius: 14, padding: 5, animation: "menuIn .22s cubic-bezier(.16,1,.3,1)", zIndex: 100 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.07)", marginBottom: 4 }}>
-                  <UserAvatar profile={profile} size={30} />
+                  <UserAvatar profile={profile} size={32} />
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 13, fontWeight: 600, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{safeDisplayName(profile)}</div>
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.32)", marginTop: 1 }}>@{(profile as FullProfile).username || "user"}</div>
+                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 1 }}>@{(profile as FullProfile).username || "user"}</div>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  className="g-menu-item"
-                  onClick={() => {
-                    setSettingsOpen(true)
-                    setProfileMenuOpen(false)
-                  }}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 9,
-                    padding: "9px 11px",
-                    borderRadius: 8,
-                    border: "none",
-                    background: "transparent",
-                    color: "rgba(255,255,255,0.58)",
-                    fontSize: 13,
-                    fontWeight: 500,
-                    cursor: "pointer",
-                    fontFamily: "inherit",
-                    textAlign: "left",
-                    transition: "background 0.15s, color 0.15s",
-                  }}
-                >
-                  <i className="bi bi-gear" style={{ fontSize: 14 }} />
-                  Settings
+                <button type="button" className="g-menu-item" onClick={() => { setSettingsOpen(true); setProfileMenuOpen(false) }}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "9px 11px", borderRadius: 8, border: "none", background: "transparent", color: "rgba(255,255,255,0.6)", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "inherit", textAlign: "left", transition: "background 0.15s, color 0.15s" }}>
+                  <i className="bi bi-gear" style={{ fontSize: 14 }} />Settings
                 </button>
 
                 {isAdmin && (
-                  <button
-                    type="button"
-                    className="g-menu-item"
-                    onClick={() => {
-                      setAdminOpen(true)
-                      setProfileMenuOpen(false)
-                    }}
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 9,
-                      padding: "9px 11px",
-                      borderRadius: 8,
-                      border: "none",
-                      background: "transparent",
-                      color: "rgba(255,255,255,0.58)",
-                      fontSize: 13,
-                      fontWeight: 500,
-                      cursor: "pointer",
-                      fontFamily: "inherit",
-                      textAlign: "left",
-                      transition: "background 0.15s, color 0.15s",
-                    }}
-                  >
-                    <i className="bi bi-shield-check" style={{ fontSize: 14 }} />
-                    Admin Panel
+                  <button type="button" className="g-menu-item" onClick={() => { setAdminOpen(true); setProfileMenuOpen(false) }}
+                    style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "9px 11px", borderRadius: 8, border: "none", background: "transparent", color: "rgba(255,255,255,0.6)", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "inherit", textAlign: "left", transition: "background 0.15s, color 0.15s" }}>
+                    <i className="bi bi-shield-check" style={{ fontSize: 14 }} />Admin Panel
                   </button>
                 )}
 
                 <div style={{ height: 1, background: "rgba(255,255,255,0.07)", margin: "4px 0" }} />
 
-                <button
-                  type="button"
-                  className="g-menu-item g-signout"
-                  onClick={async () => {
-                    await supabase.auth.signOut()
-                    router.replace("/auth/login")
-                  }}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 9,
-                    padding: "9px 11px",
-                    borderRadius: 8,
-                    border: "none",
-                    background: "transparent",
-                    color: "rgba(255,255,255,0.38)",
-                    fontSize: 13,
-                    fontWeight: 500,
-                    cursor: "pointer",
-                    fontFamily: "inherit",
-                    textAlign: "left",
-                    transition: "background 0.15s, color 0.15s",
-                  }}
-                >
-                  <i className="bi bi-box-arrow-right" style={{ fontSize: 14 }} />
-                  Sign out
+                <button type="button" className="g-menu-item g-signout" onClick={async () => { await supabase.auth.signOut(); router.replace("/auth/login") }}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "9px 11px", borderRadius: 8, border: "none", background: "transparent", color: "rgba(255,255,255,0.38)", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "inherit", textAlign: "left", transition: "background 0.15s, color 0.15s" }}>
+                  <i className="bi bi-box-arrow-right" style={{ fontSize: 14 }} />Sign out
                 </button>
               </div>
             )}
           </div>
-        </aside>
+        </header>
 
-        {/* ── MAIN AREA ── */}
-        <main style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, position: "relative", background: "#09090b" }}>
-          {/* Mobile top bar */}
-          {isMobile && (
-            <div
-              style={{
-                height: 52,
-                display: "flex",
-                alignItems: "center",
-                padding: "0 12px",
-                gap: 10,
-                borderBottom: messages.length === 0 ? "none" : "1px solid rgba(255,255,255,0.06)",
-                background: messages.length === 0 ? "transparent" : "rgba(9,9,11,0.85)",
-                backdropFilter: messages.length === 0 ? "none" : "blur(20px)",
-                WebkitBackdropFilter: messages.length === 0 ? "none" : "blur(20px)",
-                flexShrink: 0,
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setSidebarOpen(true)}
-                className="nav-btn"
-                style={{ width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.07)", cursor: "pointer", flexShrink: 0 }}
-              >
-                <i className="bi bi-list" style={{ fontSize: 18 }} />
-              </button>
-              {messages.length > 0 && <span style={{ fontSize: 13.5, fontWeight: 600, color: "rgba(255,255,255,0.58)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{project.name}</span>}
-            </div>
-          )}
+        {/* ── MESSAGES ── */}
+        <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
+          <div style={{ maxWidth: 720, margin: "0 auto", padding: isMobile ? "24px 16px 130px" : "36px 24px 150px", display: "flex", flexDirection: "column", gap: "var(--compact-gap, 28px)" }}>
+            {loadingMsgs ? (
+              <div style={{ display: "flex", justifyContent: "center", padding: 70 }}>
+                <div style={{ width: 22, height: 22, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.08)", borderTopColor: "rgba(255,255,255,0.55)", animation: "spin .7s linear infinite" }} />
+              </div>
+            ) : messages.length === 0 && !loading ? (
+              lateHour ? (
+                <div style={{ position: "fixed", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: 16, pointerEvents: "none", animation: "lateGreetIn .6s .1s cubic-bezier(.16,1,.3,1) both" }}>
+                  <Image src={`${CDN}/icons/logo-white.png`} alt="Zorin" width={60} height={60} style={{ objectFit: "contain", opacity: 0.12, animation: "logoFloat 5s ease-in-out infinite" }} />
+                  <p style={{ fontSize: isMobile ? 28 : 38, fontWeight: 800, letterSpacing: "-0.04em", color: "#e8e9ec", margin: 0, lineHeight: 1.1 }}>{greetingText}</p>
+                  <p style={{ fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.25)", margin: 0 }}>{buildingPrompt}</p>
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "90px 20px 0", textAlign: "center", gap: 12 }}>
+                  <Image src={`${CDN}/icons/logo-white.png`} alt="Zorin" width={48} height={48} style={{ objectFit: "contain", opacity: 0.15, animation: "logoFloat 5s ease-in-out infinite" }} />
+                  <p style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, letterSpacing: "-0.032em", color: "#e8e9ec", margin: 0, animation: "fadeSlideUp .5s .1s cubic-bezier(.16,1,.3,1) both" }}>{greetingText}</p>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.30)", margin: 0, animation: "fadeSlideUp .5s .18s cubic-bezier(.16,1,.3,1) both" }}>{buildingPrompt}</p>
+                </div>
+              )
+            ) : (
+              <>
+                {messages.map((msg, idx) => {
+                  if (hiddenIndices.has(idx)) return null
+                  return (
+                    <MessageBubble
+                      key={msg.id} msg={msg} isMobile={isMobile} pluginConnected={pluginConnected}
+                      index={idx}
+                      qaHistory={buildQAChain(messages, idx)}
+                      onSuggestionClick={s => { setPrompt(s); requestAnimationFrame(() => textareaRef.current?.focus()) }}
+                      onClarificationAnswer={handleClarificationAnswer}
+                      onRetry={() => { if (lastUserPrompt) generate(lastUserPrompt) }}
+                      onFeedback={msgId => { setFeedbackMsgId(msgId); setFeedbackOpen(true) }}
+                    />
+                  )
+                })}
+                {loading && generationSteps.length > 0 && <div style={{ animation: "msgInLeft .32s cubic-bezier(.16,1,.3,1) both" }}><ThinkingPill steps={generationSteps} /></div>}
+                {loading && generationSteps.length === 0 && <TypingIndicator />}
+              </>
+            )}
+            <div ref={bottomRef} style={{ height: 1, flexShrink: 0 }} />
+          </div>
+        </div>
 
-          {/* Content – empty vs chat */}
-          {(() => {
-            const hasChat = messages.length > 0 || loadingMsgs || loading
-            if (!hasChat) {
-              return (
-                <div
+        {/* ── INPUT AREA ── */}
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 30,
+          padding: isMobile ? "10px 12px calc(14px + env(safe-area-inset-bottom))" : "12px 24px 22px",
+          background: "linear-gradient(to top, #09090b 60%, rgba(9,9,11,0.88) 85%, transparent)",
+          animation: "inputAreaIn .55s .18s cubic-bezier(.16,1,.3,1) both",
+        }}>
+          <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", flexDirection: "column", gap: 9 }}>
+
+            {/* prompt limit banner */}
+            {showLimitBanner && (
+              <PromptLimitBanner used={promptUsed} limit={PROMPT_LIMIT_UNCONNECTED} />
+            )}
+
+            {/* toolbar row */}
+            <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
+
+              {/* mode picker */}
+              <div ref={modeMenuRef} style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  onClick={() => setModeMenuOpen(v => !v)}
+                  className="mode-pill"
                   style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: isMobile ? "0 16px 20px" : "0 24px 40px",
-                    animation: "centerFadeIn .5s cubic-bezier(.16,1,.3,1) both",
-                    overflowY: "auto",
+                    display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px",
+                    ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600,
+                    cursor: "pointer", color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)",
+                    fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  {/* Logo + Instant mode */}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      marginBottom: 22,
-                      animation: "fadeSlideUp .5s .08s cubic-bezier(.16,1,.3,1) both",
-                    }}
-                  >
-                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-                      <path d="M7.6 13.7C6.3 13.1 5.3 11.8 5.1 10.3C4.9 8.5 5.8 6.8 7.3 6C8.8 5.2 10.6 5.3 12 6.4L12.6 6.9L13.2 6.4C14.6 5.3 16.5 5.2 18 6C19.5 6.8 20.4 8.5 20.2 10.3C20 11.8 19 13.1 17.7 13.7L12.65 16.15L7.6 13.7Z" fill="rgba(255,255,255,0.72)" />
-                      <path d="M12.6 6.9L17.1 4.65L18 5.65L13.35 8.45L12.6 6.9Z" fill="rgba(255,255,255,0.42)" />
-                      <circle cx="15.2" cy="9.2" r="1.1" fill="#09090b" />
-                    </svg>
-                    <span style={{ fontSize: isMobile ? 21 : 23, fontWeight: 700, color: "#e8e9ec", letterSpacing: "-0.02em", lineHeight: 1 }}>Instant mode</span>
+                  <i className={"bi " + currentMode.icon} style={{ fontSize: 12, transition: "transform .25s cubic-bezier(.34,1.56,.64,1)", transform: modeMenuOpen ? "rotate(-18deg) scale(1.18)" : "scale(1)" }} />
+                  <span>{currentMode.label}</span>
+                  <i className="bi bi-chevron-up" style={{ fontSize: 10, opacity: 0.36, transition: "transform .22s ease", transform: modeMenuOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
+                </button>
+                {modeMenuOpen && (
+                  <div style={{ position: "absolute", bottom: "calc(100% + 9px)", left: 0, width: 185, ...glassModal, borderRadius: 15, padding: 6, zIndex: 100, animation: "menuUp .22s cubic-bezier(.16,1,.3,1)", fontFamily: "'Inter', sans-serif" }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.28)", textTransform: "uppercase", letterSpacing: "0.08em", padding: "5px 10px 5px", marginBottom: 2 }}>Mode</div>
+                    {MODES.map((m, i) => (
+                      <button key={m.id} type="button" onClick={() => { setMode(m.id); setModeMenuOpen(false) }}
+                        style={{ width: "100%", padding: "9px 11px", borderRadius: 10, border: "none", background: mode === m.id ? "rgba(255,255,255,0.07)" : "transparent", cursor: "pointer", textAlign: "left", fontFamily: "'Inter', sans-serif", animation: `fadeSlideUp .18s ${i * 0.04}s cubic-bezier(.16,1,.3,1) both` }} className="g-menu-item">
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", color: "#e8e9ec" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13, fontWeight: 500 }}><i className={"bi " + m.icon} style={{ fontSize: 14 }} />{m.label}</div>
+                          {mode === m.id && <i className="bi bi-check-lg" style={{ fontSize: 13, animation: "checkPop .2s cubic-bezier(.34,1.56,.64,1) both" }} />}
+                        </div>
+                      </button>
+                    ))}
                   </div>
+                )}
+              </div>
 
-                  {/* Mode tabs – pill */}
-                  <div
+              {/* type picker */}
+              <div ref={typeMenuRef} style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  onClick={() => setTypeMenuOpen(v => !v)}
+                  className="type-pill"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 11px",
+                    ...glassPill, borderRadius: 100, fontSize: 12, fontWeight: 600,
+                    cursor: "pointer", color: "rgba(255,255,255,0.52)", border: "1px solid rgba(255,255,255,0.09)",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  <i
+                    className={"bi " + currentType.icon + " type-pill-icon"}
                     style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 2,
-                      padding: 3,
-                      background: "#1e1e1f",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                      borderRadius: 100,
-                      marginBottom: 28,
-                      animation: "fadeSlideUp .5s .14s cubic-bezier(.16,1,.3,1) both",
+                      fontSize: 12,
+                      transition: "transform .25s cubic-bezier(.34,1.56,.64,1)",
+                      transform: typeMenuOpen ? "rotate(-18deg) scale(1.18)" : "scale(1)",
                     }}
-                  >
-                    {MODES.map((m) => {
-                      const isActive = mode === m.id
+                  />
+                  <span>{currentType.label}</span>
+                  <i className="bi bi-chevron-up" style={{ fontSize: 10, opacity: 0.36, transition: "transform .22s ease", transform: typeMenuOpen ? "rotate(180deg)" : "rotate(0deg)" }} />
+                </button>
+
+                {typeMenuOpen && (
+                  <div style={{ position: "absolute", bottom: "calc(100% + 9px)", left: 0, width: 165, ...glassModal, borderRadius: 15, padding: 6, zIndex: 100, animation: "menuUp .22s cubic-bezier(.16,1,.3,1)", fontFamily: "'Inter', sans-serif" }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.28)", textTransform: "uppercase", letterSpacing: "0.08em", padding: "5px 10px 5px", marginBottom: 2 }}>Type</div>
+
+                    {PROJECT_TYPES.map((t, i) => {
+                      const isPlan = t.id === "plan"
                       return (
                         <button
-                          key={m.id}
+                          key={t.id}
                           type="button"
-                          onClick={() => setMode(m.id)}
-                          className={isActive ? "mode-tab active" : "mode-tab"}
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 6,
-                            padding: "7px 14px",
-                            borderRadius: 100,
-                            background: isActive ? "rgba(255,255,255,0.11)" : "transparent",
-                            border: isActive ? "1px solid rgba(255,255,255,0.10)" : "1px solid transparent",
-                            color: isActive ? "#fff" : "rgba(255,255,255,0.44)",
-                            fontSize: 13,
-                            fontWeight: 600,
-                            cursor: "pointer",
-                            fontFamily: "inherit",
-                            transition: "all .18s ease",
-                            whiteSpace: "nowrap",
+                          onClick={() => {
+                            if (isPlan) return
+                            setProjectType(t.id)
+                            setTypeMenuOpen(false)
                           }}
+                          onMouseEnter={() => { if (isPlan) setPlanHovered(true) }}
+                          onMouseLeave={() => { if (isPlan) setPlanHovered(false) }}
+                          style={{
+                            width: "100%", padding: "9px 11px", borderRadius: 10, border: "none",
+                            background: projectType === t.id ? "rgba(255,255,255,0.07)" : "transparent",
+                            cursor: isPlan ? "default" : "pointer",
+                            textAlign: "left", fontFamily: "'Inter', sans-serif",
+                            animation: `fadeSlideUp .18s ${i * 0.04}s cubic-bezier(.16,1,.3,1) both`,
+                            position: "relative",
+                            overflow: "visible",
+                          }}
+                          className={isPlan ? "plan-menu-item" : "g-menu-item"}
                         >
-                          <i className={"bi " + m.icon} style={{ fontSize: 12.5 }} />
-                          {m.label}
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", color: isPlan ? "rgba(255,255,255,0.38)" : "#e8e9ec" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13, fontWeight: 500 }}>
+                              <i
+                                className={"bi " + t.icon + (isPlan ? " plan-icon" : "")}
+                                style={{
+                                  fontSize: 14,
+                                  transition: "transform .25s cubic-bezier(.34,1.56,.64,1)",
+                                  transform: isPlan && planHovered ? "rotate(-18deg) scale(1.18)" : "scale(1)",
+                                }}
+                              />
+                              {t.label}
+                            </div>
+                            {projectType === t.id && !isPlan && <i className="bi bi-check-lg" style={{ fontSize: 13, animation: "checkPop .2s cubic-bezier(.34,1.56,.64,1) both" }} />}
+                          </div>
+
+                          {/* tooltip drops DOWN below the button */}
+                          {isPlan && (
+                            <div
+                              className="plan-coming-soon"
+                              style={{
+                                position: "absolute",
+                                top: "calc(100% + 8px)",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                background: "#000",
+                                color: "#fff",
+                                fontSize: 12,
+                                fontWeight: 600,
+                                padding: "6px 12px",
+                                borderRadius: 9,
+                                whiteSpace: "nowrap",
+                                pointerEvents: "none",
+                                opacity: planHovered ? 1 : 0,
+                                transition: "opacity .18s ease",
+                                animation: planHovered ? "tooltipDown .22s cubic-bezier(.34,1.56,.64,1) both" : "none",
+                                boxShadow: "0 4px 20px rgba(0,0,0,0.6)",
+                                zIndex: 200,
+                              }}
+                            >
+                              Coming soon
+                              {/* arrow points UP */}
+                              <div style={{
+                                position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)",
+                                width: 0, height: 0,
+                                borderLeft: "5px solid transparent", borderRight: "5px solid transparent", borderBottom: "5px solid #000",
+                              }} />
+                            </div>
+                          )}
                         </button>
                       )
                     })}
-                    <button
-                      type="button"
-                      disabled
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        padding: "7px 14px",
-                        borderRadius: 100,
-                        background: "transparent",
-                        border: "1px solid transparent",
-                        color: "rgba(255,255,255,0.22)",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        cursor: "default",
-                        fontFamily: "inherit",
-                        whiteSpace: "nowrap",
-                        opacity: 0.6,
-                      }}
-                    >
-                      <i className="bi bi-eye" style={{ fontSize: 12.5 }} />
-                      Vision
-                    </button>
                   </div>
-
-                  {/* Chat input card – DeepSeek style 1:1 monochrome */}
-                  <div
-                    style={{
-                      width: "100%",
-                      maxWidth: 680,
-                      background: "#1e1e1f",
-                      border: inputFocused ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(255,255,255,0.07)",
-                      borderRadius: 20,
-                      padding: isMobile ? "12px 12px 10px" : "14px 14px 10px",
-                      animation: "fadeSlideUp .5s .22s cubic-bezier(.16,1,.3,1) both",
-                      transition: "border-color .22s ease, box-shadow .22s ease",
-                      boxShadow: inputFocused ? "0 0 0 3px rgba(255,255,255,0.04), 0 10px 40px rgba(0,0,0,0.35)" : "0 4px 24px rgba(0,0,0,0.18)",
-                    }}
-                  >
-                    <textarea
-                      ref={textareaRef}
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey && sendOnEnter && !isMobile) {
-                          e.preventDefault()
-                          generate()
-                        }
-                      }}
-                      onFocus={() => setInputFocused(true)}
-                      onBlur={() => setInputFocused(false)}
-                      placeholder={isOverLimit ? "Connect Studio to keep generating…" : "Message Zorin"}
-                      disabled={loading || isOverLimit}
-                      rows={1}
-                      style={{
-                        width: "100%",
-                        background: "transparent",
-                        border: "none",
-                        outline: "none",
-                        boxShadow: "none",
-                        resize: "none",
-                        fontSize: 14.5,
-                        color: "#e8e9ec",
-                        lineHeight: 1.6,
-                        fontFamily: "inherit",
-                        minHeight: 24,
-                        maxHeight: 160,
-                        overflowY: "auto",
-                      }}
-                    />
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
-                      {/* Deep thinking */}
-                      <button
-                        type="button"
-                        onClick={() => setMode(mode === "thinking" ? "generate" : "thinking")}
-                        className={mode === "thinking" ? "pill-btn active" : "pill-btn"}
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 6,
-                          padding: "6px 11px",
-                          borderRadius: 100,
-                          background: mode === "thinking" ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.04)",
-                          border: mode === "thinking" ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(255,255,255,0.07)",
-                          color: mode === "thinking" ? "#fff" : "rgba(255,255,255,0.48)",
-                          fontSize: 12.5,
-                          fontWeight: 500,
-                          cursor: "pointer",
-                          fontFamily: "inherit",
-                          transition: "all .18s ease",
-                        }}
-                      >
-                        <i className="bi bi-stack" style={{ fontSize: 11.5 }} />
-                        Deep thinking
-                      </button>
-
-                      {/* Smart Search */}
-                      <button
-                        type="button"
-                        className="pill-btn active"
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 6,
-                          padding: "6px 11px",
-                          borderRadius: 100,
-                          background: "rgba(255,255,255,0.08)",
-                          border: "1px solid rgba(255,255,255,0.12)",
-                          color: "rgba(255,255,255,0.62)",
-                          fontSize: 12.5,
-                          fontWeight: 500,
-                          cursor: "pointer",
-                          fontFamily: "inherit",
-                          transition: "all .18s ease",
-                        }}
-                      >
-                        <i className="bi bi-globe" style={{ fontSize: 11.5 }} />
-                        Smart Search
-                      </button>
-
-                      <div style={{ flex: 1, minWidth: 6 }} />
-
-                      {showLimitBanner && !isOverLimit && (
-                        <span style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", fontWeight: 500, marginRight: 2 }}>{PROMPT_LIMIT_UNCONNECTED - promptUsed} left</span>
-                      )}
-
-                      <button
-                        type="button"
-                        aria-label="Attach"
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderRadius: "50%",
-                          background: "transparent",
-                          border: "none",
-                          color: "rgba(255,255,255,0.32)",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          transition: "all .15s ease",
-                        }}
-                        className="nav-btn"
-                      >
-                        <i className="bi bi-paperclip" style={{ fontSize: 16 }} />
-                      </button>
-
-                      {loading ? (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setStopping(true)
-                            abortRef.current?.abort()
-                          }}
-                          style={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: "50%",
-                            border: "none",
-                            cursor: "pointer",
-                            background: stopping ? "rgba(252,129,129,0.06)" : "rgba(252,129,129,0.11)",
-                            color: "#fc8181",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "all .2s ease",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {stopping ? (
-                            <div style={{ width: 14, height: 14, borderRadius: "50%", border: "2px solid rgba(252,129,129,0.25)", borderTopColor: "#fc8181", animation: "spin .7s linear infinite" }} />
-                          ) : (
-                            <i className="bi bi-stop-fill" style={{ fontSize: 13 }} />
-                          )}
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => generate()}
-                          disabled={!prompt.trim() || isOverLimit}
-                          className="send-btn"
-                          style={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: "50%",
-                            border: "none",
-                            cursor: prompt.trim() && !isOverLimit ? "pointer" : "not-allowed",
-                            background: prompt.trim() && !isOverLimit ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.07)",
-                            color: prompt.trim() && !isOverLimit ? "#fff" : "rgba(255,255,255,0.22)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transition: "all .2s cubic-bezier(.34,1.56,.64,1)",
-                            flexShrink: 0,
-                          }}
-                        >
-                          <i
-                            className="bi bi-arrow-up"
-                            style={{
-                              fontSize: 16,
-                              fontWeight: 700,
-                              transition: "transform .22s cubic-bezier(.34,1.56,.64,1)",
-                              transform: sendBtnBounce ? "translateY(-3px)" : "translateY(0)",
-                            }}
-                          />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {isOverLimit && (
-                    <div style={{ width: "100%", maxWidth: 680, marginTop: 12 }}>
-                      <PromptLimitBanner used={promptUsed} limit={PROMPT_LIMIT_UNCONNECTED} />
-                    </div>
-                  )}
-                </div>
-              )
-            }
-            return (
-              <>
-                {/* Messages */}
-                <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
-                  <div style={{ maxWidth: 720, margin: "0 auto", padding: isMobile ? "18px 16px 20px" : "28px 24px 24px", display: "flex", flexDirection: "column", gap: "var(--compact-gap, 28px)" }}>
-                    {loadingMsgs ? (
-                      <div style={{ display: "flex", justifyContent: "center", padding: 70 }}>
-                        <div style={{ width: 22, height: 22, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.08)", borderTopColor: "rgba(255,255,255,0.55)", animation: "spin .7s linear infinite" }} />
-                      </div>
-                    ) : (
-                      <>
-                        {messages.map((msg, idx) => {
-                          if (hiddenIndices.has(idx)) return null
-                          return (
-                            <div key={msg.id} id={"msg-" + msg.id}>
-                              <MessageBubble
-                                msg={msg}
-                                isMobile={isMobile}
-                                pluginConnected={pluginConnected}
-                                index={idx}
-                                qaHistory={buildQAChain(messages, idx)}
-                                onSuggestionClick={(s) => {
-                                  setPrompt(s)
-                                  requestAnimationFrame(() => textareaRef.current?.focus())
-                                }}
-                                onClarificationAnswer={handleClarificationAnswer}
-                                onRetry={() => {
-                                  if (lastUserPrompt) generate(lastUserPrompt)
-                                }}
-                                onFeedback={(msgId) => {
-                                  setFeedbackMsgId(msgId)
-                                  setFeedbackOpen(true)
-                                }}
-                              />
-                            </div>
-                          )
-                        })}
-                        {loading && generationSteps.length > 0 && (
-                          <div style={{ animation: "msgInLeft .32s cubic-bezier(.16,1,.3,1) both" }}>
-                            <ThinkingPill steps={generationSteps} />
-                          </div>
-                        )}
-                        {loading && generationSteps.length === 0 && <TypingIndicator />}
-                      </>
-                    )}
-                    <div ref={bottomRef} style={{ height: 1, flexShrink: 0 }} />
-                  </div>
-                </div>
-
-                {showScrollBtn && (
-                  <button
-                    type="button"
-                    onClick={scrollToBottom}
-                    style={{
-                      position: "absolute",
-                      bottom: 96,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: 36,
-                      height: 36,
-                      borderRadius: "50%",
-                      background: "rgba(24,24,27,0.96)",
-                      backdropFilter: "blur(20px)",
-                      WebkitBackdropFilter: "blur(20px)",
-                      border: "1px solid rgba(255,255,255,0.10)",
-                      color: "rgba(255,255,255,0.62)",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
-                      animation: "fadeSlideUp .3s cubic-bezier(.16,1,.3,1) both",
-                      zIndex: 20,
-                    }}
-                  >
-                    <i className="bi bi-chevron-down" style={{ fontSize: 16 }} />
-                    {unreadCount > 0 && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: -4,
-                          right: -4,
-                          width: 18,
-                          height: 18,
-                          borderRadius: "50%",
-                          background: "rgba(255,255,255,0.9)",
-                          color: "#09090b",
-                          fontSize: 10,
-                          fontWeight: 700,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {unreadCount > 9 ? "9+" : unreadCount}
-                      </div>
-                    )}
-                  </button>
                 )}
+              </div>
 
-                {/* Bottom input – when chatting, same card but docked */}
-                <div
+              {(Object.keys(datamodelSnapshot).length > 0 || gameModelJson) && (
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 11px", ...glassPill, borderRadius: 100, border: "1px solid rgba(74,222,128,0.16)", animation: "chipPop .38s cubic-bezier(.34,1.56,.64,1) both" }}>
+                  <i className="bi bi-diagram-3" style={{ fontSize: 11, color: "rgba(74,222,128,0.65)" }} />
+                  <span style={{ fontSize: 11, color: "rgba(74,222,128,0.65)", fontWeight: 600 }}>Game scanned</span>
+                </div>
+              )}
+            </div>
+
+            {/* text input row */}
+            <div style={{
+              display: "flex", alignItems: "flex-end", gap: 9,
+              background: inputFocused ? "rgba(255,255,255,0.055)" : "rgba(255,255,255,0.04)",
+              border: isOverLimit
+                ? "1px solid rgba(252,100,100,0.22)"
+                : inputFocused ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 18,
+              padding: isMobile ? "7px 7px 7px 13px" : "9px 9px 9px 15px",
+              boxShadow: inputFocused && !isOverLimit
+                ? "0 0 0 3px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.25)"
+                : "inset 0 1px 0 rgba(255,255,255,0.05)",
+              opacity: loading ? 0.60 : isOverLimit ? 0.55 : 1,
+              pointerEvents: loading || isOverLimit ? "none" : "auto",
+              transition: "background .24s ease, border-color .24s ease, box-shadow .3s ease, opacity .2s ease",
+            }}>
+              <textarea
+                ref={textareaRef}
+                value={prompt}
+                onChange={e => setPrompt(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey && sendOnEnter && !isMobile) { e.preventDefault(); generate() } }}
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setInputFocused(false)}
+                placeholder={isOverLimit ? "Connect Studio to keep generating…" : "Message Zorin…"}
+                disabled={loading || isOverLimit}
+                rows={1}
+                style={{
+                  flex: 1, background: "transparent", border: "none", outline: "none", boxShadow: "none",
+                  resize: "none", fontSize: 14, color: "#e8e9ec", lineHeight: 1.65,
+                  fontFamily: "inherit", minHeight: 22, maxHeight: isMobile ? 110 : 160, overflowY: "auto",
+                }}
+              />
+              {loading ? (
+                <button
+                  type="button"
+                  onClick={() => { setStopping(true); abortRef.current?.abort() }}
                   style={{
-                    position: "relative",
-                    zIndex: 30,
-                    padding: isMobile ? "10px 12px calc(12px + env(safe-area-inset-bottom))" : "12px 20px 16px",
-                    background: "linear-gradient(to top, #09090b 78%, rgba(9,9,11,0.92) 92%, transparent)",
-                    animation: "inputShift .4s cubic-bezier(.16,1,.3,1) both",
-                    flexShrink: 0,
+                    width: isMobile ? 36 : 38, height: isMobile ? 36 : 38, borderRadius: "50%",
+                    border: "none", flexShrink: 0,
+                    background: stopping ? "rgba(252,129,129,0.04)" : "rgba(252,129,129,0.09)",
+                    color: "#fc8181", cursor: "pointer",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "all .2s ease",
                   }}
                 >
-                  {showLimitBanner && (
-                    <div style={{ maxWidth: 720, margin: "0 auto 8px" }}>
-                      <PromptLimitBanner used={promptUsed} limit={PROMPT_LIMIT_UNCONNECTED} />
-                    </div>
-                  )}
-
-                  <div
-                    style={{
-                      maxWidth: 720,
-                      margin: "0 auto",
-                      display: "flex",
-                      alignItems: "flex-end",
-                      gap: 8,
-                      background: inputFocused ? "#1e1e1f" : "#1c1c1f",
-                      border: isOverLimit
-                        ? "1px solid rgba(252,100,100,0.22)"
-                        : inputFocused
-                          ? "1px solid rgba(255,255,255,0.13)"
-                          : "1px solid rgba(255,255,255,0.07)",
-                      borderRadius: 20,
-                      padding: isMobile ? "8px 8px 8px 14px" : "10px 10px 10px 16px",
-                      boxShadow: inputFocused && !isOverLimit ? "0 0 0 3px rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.32)" : "none",
-                      opacity: loading ? 0.62 : isOverLimit ? 0.55 : 1,
-                      pointerEvents: loading || isOverLimit ? "none" : "auto",
-                      transition: "background .22s ease, border-color .22s ease, box-shadow .22s ease, opacity .2s ease",
-                    }}
-                  >
-                    <textarea
-                      ref={textareaRef}
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey && sendOnEnter && !isMobile) {
-                          e.preventDefault()
-                          generate()
-                        }
-                      }}
-                      onFocus={() => setInputFocused(true)}
-                      onBlur={() => setInputFocused(false)}
-                      placeholder={isOverLimit ? "Connect Studio to keep generating…" : "Message Zorin"}
-                      disabled={loading || isOverLimit}
-                      rows={1}
-                      style={{
-                        flex: 1,
-                        background: "transparent",
-                        border: "none",
-                        outline: "none",
-                        boxShadow: "none",
-                        resize: "none",
-                        fontSize: 14.5,
-                        color: "#e8e9ec",
-                        lineHeight: 1.6,
-                        fontFamily: "inherit",
-                        minHeight: 22,
-                        maxHeight: isMobile ? 110 : 160,
-                        overflowY: "auto",
-                      }}
-                    />
-                    {loading ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setStopping(true)
-                          abortRef.current?.abort()
-                        }}
-                        style={{
-                          width: isMobile ? 34 : 36,
-                          height: isMobile ? 34 : 36,
-                          borderRadius: "50%",
-                          border: "none",
-                          flexShrink: 0,
-                          background: stopping ? "rgba(252,129,129,0.06)" : "rgba(252,129,129,0.11)",
-                          color: "#fc8181",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          transition: "all .2s ease",
-                        }}
-                      >
-                        {stopping ? (
-                          <div style={{ width: 14, height: 14, borderRadius: "50%", border: "2px solid rgba(252,129,129,0.25)", borderTopColor: "#fc8181", animation: "spin .7s linear infinite" }} />
-                        ) : (
-                          <i className="bi bi-stop-fill" style={{ fontSize: 13 }} />
-                        )}
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => generate()}
-                        disabled={!prompt.trim() || isOverLimit}
-                        className="send-btn"
-                        style={{
-                          width: isMobile ? 34 : 36,
-                          height: isMobile ? 34 : 36,
-                          borderRadius: "50%",
-                          border: "none",
-                          flexShrink: 0,
-                          background: prompt.trim() && !isOverLimit ? "#fff" : "rgba(255,255,255,0.07)",
-                          color: prompt.trim() && !isOverLimit ? "#09090b" : "rgba(255,255,255,0.22)",
-                          cursor: prompt.trim() && !isOverLimit ? "pointer" : "not-allowed",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          transition: "all .2s cubic-bezier(.34,1.56,.64,1)",
-                        }}
-                      >
-                        <i
-                          className="bi bi-arrow-up-short"
-                          style={{
-                            fontSize: 22,
-                            transition: "transform .22s cubic-bezier(.34,1.56,.64,1)",
-                            transform: sendBtnBounce ? "translateY(-4px)" : "translateY(0)",
-                          }}
-                        />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </>
-            )
-          })()}
-        </main>
+                  {stopping
+                    ? <div style={{ width: 14, height: 14, borderRadius: "50%", border: "2px solid rgba(252,129,129,0.25)", borderTopColor: "#fc8181", animation: "spin .7s linear infinite" }} />
+                    : <i className="bi bi-stop-fill" style={{ fontSize: 14 }} />}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => generate()}
+                  disabled={!prompt.trim() || isOverLimit}
+                  className="send-btn"
+                  style={{
+                    width: isMobile ? 36 : 38, height: isMobile ? 36 : 38, borderRadius: "50%",
+                    border: "none", flexShrink: 0,
+                    background: prompt.trim() && !isOverLimit ? "#fff" : "rgba(255,255,255,0.06)",
+                    color: prompt.trim() && !isOverLimit ? "#09090b" : "rgba(255,255,255,0.20)",
+                    cursor: prompt.trim() && !isOverLimit ? "pointer" : "not-allowed",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "all .2s cubic-bezier(.34,1.56,.64,1)",
+                  }}
+                >
+                  <i className="bi bi-arrow-up-short" style={{
+                    fontSize: 22,
+                    transition: "transform .22s cubic-bezier(.34,1.56,.64,1)",
+                    transform: sendBtnBounce ? "translateY(-4px)" : "translateY(0)",
+                  }} />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   )
